@@ -1,0 +1,176 @@
+[
+    [
+        {
+            "Start": [
+                "Entrance", 
+                "Chain", 
+                "Gate", 
+                "BossMini", 
+                "ItemQuest", 
+                "TestItem", 
+                "ChainFinal", 
+                "Goal"
+            ]
+        }, 
+        {
+            "Chain_Gate": [
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear"
+            ]
+        }, 
+        {
+            "Chain_Gate": [
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear"
+            ]
+        }, 
+        {
+            "Chain_Gate": [
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear"
+            ]
+        }, 
+        {
+            "Chain_Gate": [
+                "ChainParallel", 
+                "Gate"
+            ]
+        }, 
+        {
+            "ChainLinear": [
+                "Test"
+            ]
+        }, 
+        {
+            "ChainLinear": [
+                "Test", 
+                "Test", 
+                "ItemBonus"
+            ]
+        }, 
+        {
+            "ChainLinear": [
+                "TestSecret"
+            ]
+        }, 
+        {
+            "ChainLinear_ChainLinear": [
+                "Key", 
+                "Lock"
+            ]
+        }, 
+        {
+            "ChainLinear_ChainLinear": [
+                "Key", 
+                "Lock", 
+                "ChainLinear"
+            ]
+        }, 
+        {
+            "Hook": [
+                "Nothing"
+            ]
+        }, 
+        {
+            "Hook": [
+                "Test", 
+                "ItemBonus"
+            ]
+        }, 
+        {
+            "Hook": [
+                "TestSecret", 
+                "ItemBonus"
+            ]
+        }, 
+        {
+            "Fork_KeyMulti": [
+                "Fork", 
+                "Test", 
+                "KeyMulti"
+            ]
+        }, 
+        {
+            "Fork_KeyMulti": [
+                "Fork", 
+                "TestSecret", 
+                "KeyMulti"
+            ]
+        }, 
+        {
+            "Fork_Key": [
+                "Fork", 
+                "Test", 
+                "Key"
+            ]
+        }, 
+        {
+            "Fork_Key": [
+                "Fork", 
+                "TestSecret", 
+                "Key"
+            ]
+        }
+    ], 
+    [
+        {
+            "ChainFinal_Goal": [
+                {
+                    "Chain": [
+                        "Hook", 
+                        {
+                            "Gate": [
+                                {
+                                    "LockFinal": [
+                                        {
+                                            "BossLevel": [
+                                                "Goal"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }, 
+                        {
+                            "Test": [
+                                "KeyFinal", 
+                                "Hook"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "ChainParallel_Gate": [
+                {
+                    "Fork": [
+                        "KeyMulti", 
+                        "KeyMulti", 
+                        {
+                            "KeyMulti": [
+                                "LockMulti"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Fork": [
+                {
+                    "Nothing": [
+                        "Hook", 
+                        "Hook"
+                    ]
+                }
+            ]
+        }
+    ]
+]

@@ -1,0 +1,194 @@
+{
+    "BossLevel": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "BossMini": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Chain": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "ChainFinal": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "ChainLinear": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "ChainParallel": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Entrance": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Fork": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Gate": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Goal": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Hook": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "ItemBonus": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "ItemQuest": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Key": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0.6
+    }, 
+    "KeyFinal": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "KeyMulti": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0.4
+    }, 
+    "Lock": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "LockFinal": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "LockMulti": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Nothing": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Start": {
+        "backtrackable": true, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "Test": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "TestItem": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }, 
+    "TestSecret": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0
+    }
+}
