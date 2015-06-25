@@ -1,3 +1,4 @@
 {
-  "screenshot_path": "screenshots"
+  "screenshot_path": "screenshots",
+  "dungeon_tileset_path": "assets.map.dungeon.tilesets"
 }

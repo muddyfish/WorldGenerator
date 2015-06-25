@@ -50,14 +50,12 @@ def print_nodes(nodelist):
 try: id_gen
 except NameError: id_gen = id_generator()
 
-nodes_file = open("nodes.json")
-nodetype_data = json.load(nodes_file)
-nodes_file.close()
-nodetypes = {}
-for nodetype in nodetype_data:
-    nodetype_data[nodetype]["name"] = nodetype
-    nodetypes[nodetype] = type(str(nodetype), (Node,), nodetype_data[nodetype])
-
+def load_nodes(nodes_json):
+    nodetypes = {}
+    for nodetype in nodes_json:
+        nodes_json[nodetype]["name"] = nodetype
+        nodetypes[nodetype] = type(str(nodetype), (Node,), nodes_json[nodetype])
+    globals()["nodetypes"] = nodetypes
 
 if __name__ == "__main__":
     nodes = [nodetypes["Chain"]() for i in range(4)]

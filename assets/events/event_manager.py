@@ -2,9 +2,9 @@
 
 import glob, os, imp
 import event_handler
-import __main__
+from ..manager_base import ManagerBase
 
-class EventManager(object):
+class EventManager(ManagerBase):
   """A basic event manager that can have
   generic and subscription based event
   handlers. The manager will also attempt to
@@ -20,12 +20,6 @@ class EventManager(object):
     generic_events = glob.glob(os.path.join(event_path, "generic", "*_event.py"))
     generic_event_names = ["assets.events.event_generic_%s"%os.path.basename(event_file)[:-3] for event_file in generic_events]
     self.generic_events.extend(map(self.load_event_file, generic_events, generic_event_names))
-    for subscription_id in os.listdir(os.path.join(event_path, "subscription")):
-      self.subscription_events[subscription_id] = []
-      subscription_events = glob.glob(os.path.join(event_path, "subscription", subscription_id, "*_event.py"))
-      for event in subscription_events:
-        event_name = "assets.events.event_subscription_%s_%s"%(subscription_id, os.path.basename(event_file)[:-3])
-        self.subscription_events[subscription_id].append(self.load_event_file(event, event_name))
 
   def load_event_file(self, event_file, event_name):
     event_handler = imp.load_source(event_name, event_file)
@@ -34,6 +28,12 @@ class EventManager(object):
         if issubclass(c, event_handler.EventHandler) and c is not event_handler.EventHandler:
           return c()
       except TypeError: pass
+
+  def add_subscription_event(self, subscription_class, handler):
+    subscription_id = subscription_class.subscription_id
+    if subscription_id not in self.subscription_events:
+      self.subscription_events[subscription_id] = []
+    self.subscription_events[subscription_id].append(handler(subscription_class))
 
   def parse_events(self, events):
     """Given a list of events, call the
@@ -54,14 +54,14 @@ class EventManager(object):
       
   def get_event_name(self, event):
     """Given an event, find its name"""
-    return __main__.pygame.event.event_name(event.type)
+    return self.get_pygame().event.event_name(event.type)
     
   def call_event(self, handler, event):
     """Attempt to call an event handler with
     an event."""
     scopes = [locals(),
-              __main__.__dict__,
-              __main__.main_class.__dict__]
+              self.get_main_dict(),
+              self.get_main_class().__dict__]
     scopes.extend(handler.get_scopes())
     func = handler.call_event
     var_names = func.func_code.co_varnames[1:func.func_code.co_argcount]

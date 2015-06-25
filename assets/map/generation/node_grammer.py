@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 
 import json, random
+from ..extendable_map import ExtendableMap
 import nodes
-import mapper
-import tilearray
 
 class Nodes(object):
-    def __init__(self):
-        chain_f = open("chains.json")
+    def __init__(self, chains_json, nodes_json):
+        nodes.load_nodes(nodes_json)
         self.chains = []
-        for chainlist in json.load(chain_f):
-            self.chains.extend(chainlist) # Add all chains to the list 
-        chain_f.close()
+        for chainlist in chains_json:
+            self.chains.extend(chainlist) # Add all chains to the list
         self.keys = [] # A list of every set of replacements
         self.start_keys = [] # A list of every node that can be replaced
         for chain in self.chains:
@@ -74,7 +72,7 @@ class Nodes(object):
         done = False
         repeats = 0
         while (not done) and repeats != 10:
-            self.map = mapper.ExtendableMap(self.entrance)
+            self.map = ExtendableMap(self.entrance)
             self.add_map(self.entrance)
             count = filter(None, [filter(None, i) for i in self.map.map])
             done = sum([len(i) for i in count]) == self.count_nodes(self.entrance)
