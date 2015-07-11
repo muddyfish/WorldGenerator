@@ -5,7 +5,6 @@ import json
 import os
 from ..manager_base import ManagerBase
 
-
 class ConfigManager(ManagerBase):
   def __init__(self):
     self.config_location = os.path.dirname(os.path.abspath(__file__))
@@ -37,4 +36,7 @@ class ConfigManager(ManagerBase):
   
   def get_screen_properties(self):
     props = self["video_config", "screen_properties"]
-    return props["size"], props["fullscreen"]
+    fs = 0
+    if props["fullscreen"]:
+      fs = self.get_pygame().FULLSCREEN
+    return props["size"], fs

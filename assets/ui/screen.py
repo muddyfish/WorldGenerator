@@ -18,5 +18,5 @@ class Screen(object):
     self.blit_rects.append(self.blit_func(*args, **kargs))
     
   def blit_all(self):
-    self.blit_rects=[((0,0), self.size)]
+    self.blit_rects=[self.get_rect()]
     

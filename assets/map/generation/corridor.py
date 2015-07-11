@@ -20,8 +20,8 @@ class Corridor(object):
                 corridor_space.append(space)
                 #self.set_space(space, 3)
         #print len(corridor_space)
-        if random.randrange(DOOR_CHANCE) == 0:
-            self.tilearray.set_space(random.choice(corridor_space), DOOR)
+        #if random.randrange(DOOR_CHANCE) == 0:
+        #    self.tilearray.set_space(random.choice(corridor_space), DOOR)
         self.corridor_space = corridor_space
     
     def get_corridor(self):

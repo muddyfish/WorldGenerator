@@ -3,6 +3,7 @@
 from bounding_box import BBox
 from room import Room
 from corridor import Corridor
+from coord import Coord
 from constants import *
 
 class TileArray(object):
@@ -15,6 +16,7 @@ class TileArray(object):
         self.input_array = input_array
         self.add_rooms()
         self.add_corridors()
+        self.smooth()
                     
     def __str__(self):
         "A visual representation of the map"
@@ -49,6 +51,19 @@ class TileArray(object):
             for conn in node.connections:
                 if conn not in donenodes:
                     self.corridors.append(Corridor(self, node.room, conn.room))
+    
+    def smooth(self):
+        smoothed = False
+        for y in range(len(self.map)):
+            for x in range(len(self.map[y])):
+                try:
+                    n,e,s,w,c = self.get_neswc(Coord(x,y))
+                except IndexError: pass
+                else:
+                    if n+e+s+w == 3-c*2:
+                        self.map[y][x] = 1-c
+                        smoothed = True
+        if smoothed: self.smooth()
     
     def set_space(self, space, value):
         self.map[space.y][space.x] = value

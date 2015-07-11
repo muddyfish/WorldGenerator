@@ -1,0 +1,12 @@
+{
+  "cell_x": 23,
+  "cell_y": 23,
+  "room_offset": 2,
+  "room_bound_rect": 2,
+  "max_room_x": 18,
+  "max_room_y": 18,
+  "min_room_x": 15,
+  "min_room_y": 15,
+  "points_per_rect": 3,
+  "door_chance": 1.0
+}

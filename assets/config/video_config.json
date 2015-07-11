@@ -1,7 +1,8 @@
 {
   "screen_properties": {
     "size": [640,480],
-    "fullscreen": true
+    "fullscreen": false
   },
-  "fps_limit": 0
+  "fps_limit": 0,
+  "show_fps": true
 }

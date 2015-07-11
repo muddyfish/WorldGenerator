@@ -1,0 +1,16 @@
+{
+    "DOOR": 2,
+    "CELL_Y": 23,
+    "SPACE": 0,
+    "WALL": 1,
+    "ROOM_BOUND_RECT": 2,
+    "DOOR_CHANCE": 1,
+    "MAX_ROOM_Y": 18,
+    "MAX_ROOM_X": 18,
+    "CORRIDOR": 3,
+    "CELL_X": 23,
+    "MIN_ROOM_Y": 15,
+    "MIN_ROOM_X": 15,
+    "POINTS_PER_RECT": 3,
+    "ROOM_OFFSET": 2
+}
