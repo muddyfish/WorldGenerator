@@ -4,12 +4,12 @@ from bounding_box import BBox
 from room import Room
 from corridor import Corridor
 from coord import Coord
-from constants import *
 
 class TileArray(object):
     """The map of the dungeon tiles. Takes a dungeon map style ExtendableMap,
     Spits out a full map of rooms with attached corridors"""
-    def __init__(self, input_array):
+    def __init__(self, input_array, config_manager):
+        self.config_manager = config_manager
         self.map = \
         [[WALL for i in range(len(input_array[0])*(CELL_X+ROOM_OFFSET)+1)]
             for j in range(len(input_array)*(CELL_Y+ROOM_OFFSET)+1)]

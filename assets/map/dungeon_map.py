@@ -6,16 +6,19 @@ import random
 from generation.node_grammer import Nodes
 from generation.tilearray import TileArray
 
+
 class DungeonMap(object):
   def __init__(self, config_manager):
     self.config_manager = config_manager
+    self.tile_manager = config_manager.get_main_class().tile_manager
     self.chains_json = self.config_manager["dungeon_chains"]
     self.nodes_json = self.config_manager["dungeon_nodes"]
     self.tileset_path = self.config_manager.parse_path(self.config_manager["path_config", "dungeon_tileset_path"])
     self.sprite_info = self.config_manager["dungeon_tile_config"]
     self.sprite_tilemap = self.sprite_info["tilemap"]
-    self.map_constants = self.config_manager["dungeon_tile_config"]
-
+    self.setup_tilemap()
+    
+  def setup_tilemap(self):
     self.tile_values = {}
     for k,v in self.sprite_info["tile_values"].iteritems():
       mask = 0
@@ -35,7 +38,7 @@ class DungeonMap(object):
     
     self.nodes = Nodes(self.chains_json, self.nodes_json)
     self.nodes.create_dungeon()
-    self.tile_array = TileArray(self.nodes.map.map)
+    self.tile_array = TileArray(self.nodes.map.map, self.config_manager)
   
   def load_sprites(self):
     self.tilesets = glob.glob(self.config_manager.get_path(self.tileset_path, "tileset_*.png"))
