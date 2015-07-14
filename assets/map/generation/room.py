@@ -67,7 +67,7 @@ class Room(object):
         self.map[y][x] = self.tile_manager.space
         
     def floodfill(self, pos):
-        if self.map[pos[1]][pos[0]].collides:
+        if not self.map[pos[1]][pos[0]].collides:
             return
         self.map[pos[1]][pos[0]] = self.tile_manager.space
         for x in [-1,1]:

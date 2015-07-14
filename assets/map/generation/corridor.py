@@ -14,7 +14,7 @@ class Corridor(object):
         raw_spaces = self.get_corridor() # Find the actual corridor spaces
         corridor_space = []
         for space in raw_spaces: # Setup for door sweeper
-            if self.map[space.y][space.x] == 1:
+            if self.map[space.y][space.x].collides:
                 self.tilearray.set_space(space, self.tile_manager.space)
         for space in raw_spaces:
             if self.door_allowed(space): 
@@ -29,9 +29,9 @@ class Corridor(object):
         #Find the start and end of the corridor
         start = Coord(0,0) # Setup start
         end = Coord(0,0) # Setup end
-        while not self.map[start.y][start.x].collides:
+        while self.map[start.y][start.x].collides:
             start = self.start_room.get_random_point() # Find a random spot in the start room
-        while not self.map[end.y][end.x].collides:
+        while self.map[end.y][end.x].collides:
             end = self.end_room.get_random_point() # Find a random spot in the end room        
 
         door_spaces = []
@@ -47,8 +47,7 @@ class Corridor(object):
         start_pos = 0 # Setup
         for current_pos, space in enumerate(corridor): 
             #print "SET", self.tilearray.get_neswc(space)
-            #assert(self.tilearray.get_room(space.get_room_pos()) in [start_room, end_room])
-            if set(self.tilearray.get_neswc(space))!={self.tile_manager.wall}: # If touching a not wall
+            if set(self.tilearray.get_neswc(space))!={True}: # If touching a not wall
                 if space.get_room_pos() == start.get_room_pos():
                     start_pos = current_pos # Start the corridor here
                 else:

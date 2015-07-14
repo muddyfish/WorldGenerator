@@ -58,7 +58,8 @@ class TileArray(object):
                 except IndexError: pass
                 else:
                     if n+e+s+w == 3-c*2:
-                        self.map[y][x] = 1-c
+                        if c == 1: self.map[y][x] = self.tile_manager.space
+                        else: self.map[y][x] = self.tile_manager.wall
                         smoothed = True
         if smoothed: self.smooth()
     
