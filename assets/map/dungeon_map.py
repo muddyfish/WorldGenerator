@@ -17,6 +17,10 @@ class DungeonMap(object):
     self.sprite_info = self.config_manager["dungeon_tile_config"]
     self.sprite_tilemap = self.sprite_info["tilemap"]
     self.setup_tilemap()
+    self.nodes = Nodes(self.chains_json, self.nodes_json)
+    self.nodes.create_dungeon()
+    self.tile_array = TileArray(self.nodes.map.map, self.config_manager, self.tile_manager)
+  
     
   def setup_tilemap(self):
     self.tile_values = {}
@@ -31,15 +35,9 @@ class DungeonMap(object):
             bit_field |= v[y][x]<<cur_bit
       self.tile_values[(mask, bit_field)] = int(k)
     self.tile_keys = self.tile_values.keys()
-    
     self.tiles_lookup = {}
-    
     self.load_sprites()
     
-    self.nodes = Nodes(self.chains_json, self.nodes_json)
-    self.nodes.create_dungeon()
-    self.tile_array = TileArray(self.nodes.map.map, self.config_manager)
-  
   def load_sprites(self):
     self.tilesets = glob.glob(self.config_manager.get_path(self.tileset_path, "tileset_*.png"))
     self.tile_size = 24
@@ -66,7 +64,7 @@ class DungeonMap(object):
     for dy in [-1,0,1]:
       for dx in [-1,0,1]:
         try:
-          value = self.tile_array[y+dy,x+dx]
+          value = self.tile_array[y+dy,x+dx].collides
         except IndexError:
           value = 1
         tiles |= value<<bit

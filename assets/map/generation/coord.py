@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-from constants import *
-
 class Coord(object):
     """A coordinate that has methods to get and set it's position,
     work out equality with other types of coordinate and get the
@@ -29,5 +27,5 @@ class Coord(object):
         return self.x, self.y
     
     def get_room_pos(self):
-        return (self.x-1)/(CELL_X+ROOM_OFFSET), \
-               (self.y-1)/(CELL_Y+ROOM_OFFSET)
+        return (self.x-1)/(self.CELL_X+self.ROOM_OFFSET), \
+               (self.y-1)/(self.CELL_Y+self.ROOM_OFFSET)

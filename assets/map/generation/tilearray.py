@@ -8,23 +8,20 @@ from coord import Coord
 class TileArray(object):
     """The map of the dungeon tiles. Takes a dungeon map style ExtendableMap,
     Spits out a full map of rooms with attached corridors"""
-    def __init__(self, input_array, config_manager):
+    def __init__(self, input_array, config_manager, tile_manager):
         self.config_manager = config_manager
+        self.config = self.config_manager["dungeon_map_config"]
+        self.tile_manager = tile_manager
+        Coord.CELL_X = self.config["cell_x"]
+        Coord.CELL_Y = self.config["cell_y"]
+        Coord.ROOM_OFFSET = self.config["room_offset"]
         self.map = \
-        [[WALL for i in range(len(input_array[0])*(CELL_X+ROOM_OFFSET)+1)]
-            for j in range(len(input_array)*(CELL_Y+ROOM_OFFSET)+1)]
+        [[self.tile_manager.wall for i in range(len(input_array[0])*(self.config["cell_x"]+self.config["room_offset"])+1)]
+            for j in range(len(input_array)*(self.config["cell_y"]+self.config["room_offset"])+1)]
         self.input_array = input_array
         self.add_rooms()
         self.add_corridors()
         self.smooth()
-                    
-    def __str__(self):
-        "A visual representation of the map"
-        chars = {SPACE: " ", WALL: "#", DOOR: "D", CORRIDOR: "C"}
-        out = ""
-        for row in self.map:
-            out += "".join([chars[i] for i in row])+"\n"
-        return out
     
     def __getitem__(self, index):
         if not isinstance(index, tuple):
@@ -73,15 +70,15 @@ class TileArray(object):
         
     def get_neswc(self, space):
         x,y = space.get_pos()
-        n = self.map[y-1][x]
-        s = self.map[y+1][x]
-        w = self.map[y][x-1]
-        e = self.map[y][x+1]
-        c = self.map[y][x]
+        n = self.map[y-1][x].collides
+        s = self.map[y+1][x].collides
+        w = self.map[y][x-1].collides
+        e = self.map[y][x+1].collides
+        c = self.map[y][x].collides
         return n,e,s,w,c
         
     def is_wall(self, value):
-        return value == WALL
+        return value == self.tile_manager.wall
     
     def get_room(self, room_pos):
         return filter(lambda node: node.room.x==room_pos[0] and node.room.y==room_pos[1], self.rooms)[0]

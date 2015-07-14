@@ -2,20 +2,21 @@
 
 import random
 from coord import Coord
-from constants import *
 
 class Room(object):
     def __init__(self, tilearray, x, y):
         self.tilearray = tilearray
+        self.config = self.tilearray.config
+        self.tile_manager = self.tilearray.tile_manager
         self.map = self.tilearray.map
         self.x = x
         self.y = y
-        x_pos = x*(CELL_X+ROOM_OFFSET)+ROOM_BOUND_RECT
-        y_pos = y*(CELL_Y+ROOM_OFFSET)+ROOM_BOUND_RECT
-        room_size = [random.randint(MIN_ROOM_X, MAX_ROOM_X),
-                     random.randint(MIN_ROOM_Y, MAX_ROOM_Y)]
-        self.offsets = [x_pos+random.randrange(CELL_X-room_size[0]-ROOM_BOUND_RECT),
-                        y_pos+random.randrange(CELL_Y-room_size[1]-ROOM_BOUND_RECT)]
+        x_pos = x*(self.config["cell_x"]+self.config["room_offset"])+self.config["room_bound_rect"]
+        y_pos = y*(self.config["cell_y"]+self.config["room_offset"])+self.config["room_bound_rect"]
+        room_size = [random.randint(self.config["min_room_x"], self.config["max_room_x"]),
+                     random.randint(self.config["min_room_y"], self.config["max_room_y"])]
+        self.offsets = [x_pos+random.randrange(self.config["cell_x"]-room_size[0]-self.config["room_bound_rect"]),
+                        y_pos+random.randrange(self.config["cell_y"]-room_size[1]-self.config["room_bound_rect"])]
         self.offsets.insert(1, self.offsets[0]+room_size[0])
         self.offsets.insert(4, self.offsets[2]+room_size[1])
         self.clear_space()
@@ -29,7 +30,7 @@ class Room(object):
         points = []
         for num, rect in enumerate(rects):
             rect_points = []
-            for i in range(POINTS_PER_RECT):
+            for i in range(self.config["points_per_rect"]):
                 rect_points.append((random.randint(*rect[0]), random.randint(*rect[1])))
             rect_points.sort(key=lambda x: x[num%2], reverse = bool(num/2))
             points.extend(rect_points)
@@ -48,7 +49,7 @@ class Room(object):
         if dx > dy:
             err = dx / 2.0
             while x != x1:
-                self.map[y][x] = SPACE
+                self.map[y][x] = self.tile_manager.space
                 err -= dy
                 if err < 0:
                     y += sy
@@ -57,18 +58,18 @@ class Room(object):
         else:
             err = dy / 2.0
             while y != y1:
-                self.map[y][x] = SPACE
+                self.map[y][x] = self.tile_manager.space
                 err -= dx
                 if err < 0:
                     x += sx
                     err += dy
                 y += sy        
-        self.map[y][x] = SPACE
+        self.map[y][x] = self.tile_manager.space
         
     def floodfill(self, pos):
-        if not self.map[pos[1]][pos[0]]:
+        if self.map[pos[1]][pos[0]].collides:
             return
-        self.map[pos[1]][pos[0]] = SPACE
+        self.map[pos[1]][pos[0]] = self.tile_manager.space
         for x in [-1,1]:
             self.floodfill((pos[0], pos[1]+x))
         for y in [-1,1]:
