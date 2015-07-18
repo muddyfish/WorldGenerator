@@ -10,6 +10,8 @@ class SubscriptionManager(ManagerBase):
     self.subscription_folders = [dir for dir in os.listdir(self.subscription_path) if os.path.isdir(os.path.join(self.subscription_path,dir))]
     self.subscriptions = dict(map(self.load_subscription_folder, self.subscription_folders))
     self.current_subscription_id = self.get_default_subscription_id()
+    
+  def load_subscription(self):
     self.current_subscription = self.subscriptions[self.current_subscription_id]()
     
   def get_default_subscription_id(self):

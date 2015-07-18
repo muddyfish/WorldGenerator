@@ -1,4 +1,5 @@
 import json
+import random
 
 def id_generator():
     i = 0
@@ -11,8 +12,8 @@ class Node(object):
         self.connections = []
         self.id = id_gen.next()
         self.transversed = False
-        self.bbox = []
-
+        self.seed = random.random()
+        
     def __str__(self):
         return "%s (%s): %s"%(self.id, self.name, [conn.id for conn in self.connections])
 

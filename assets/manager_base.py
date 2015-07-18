@@ -2,7 +2,6 @@
 
 import __main__
 
-
 class ManagerBase(object):
     def get_main_class(self):
         return __main__.main_class
