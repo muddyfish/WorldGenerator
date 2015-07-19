@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os, sys, inspect
 import __main__
 
 class Entity(__main__.pygame.sprite.Sprite):
@@ -9,11 +10,13 @@ class Entity(__main__.pygame.sprite.Sprite):
     self.x = self.pos[0]
     self.y = self.pos[1]
     self.dirty = True
-    self.surf = self.load_surf(self.get_pygame().surface.Surface((32,32)))
+    if not hasattr(self, "surf"):
+      self.surf = self.load_surf(self.get_pygame().surface.Surface((32,32)))
     self.rect = self.surf.get_rect()
     self.rect.x = self.pos[0]
     self.rect.y = self.pos[1]
     self.get_entities().append(self)
+    self.groups = [cls.__name__ for cls in inspect.getmro(self.__class__)[:-2]]
   
   def __getattribute__(self, attr):
     if attr == "image": return self.surf
@@ -37,7 +40,11 @@ class Entity(__main__.pygame.sprite.Sprite):
     return self.get_main().screen.blit_func
   
   def load_surf(self, surf):
-    return surf  
+    return surf
+  
+  def get_path(self):
+    return os.path.dirname(inspect.getfile(self.__class__))
+  
   
   def blit(self):
     self.get_blit()(self.surf, (self.x, self.y))
