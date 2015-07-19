@@ -52,7 +52,7 @@ class Moveable(Entity):
   
   def normalise(self, val, amount):
     orig_sign = cmp(val, 0)
-    print amount
+    #print amount
     final = val-orig_sign*amount*self.speed_loss
     new_sign = cmp(final, 0)
     #print val, final, orig_sign, new_sign
