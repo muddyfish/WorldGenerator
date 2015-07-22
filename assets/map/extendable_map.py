@@ -57,6 +57,7 @@ class ExtendableMap(object):
         self._autocrop_dim()
         self.map = zip(*self.map) # Rotate the map
         self._autocrop_dim()
+        self.get_map_size()
         
     def _autocrop_dim(self):
         j = len(self.map)

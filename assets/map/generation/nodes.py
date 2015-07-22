@@ -13,6 +13,7 @@ class Node(object):
         self.id = id_gen.next()
         self.transversed = False
         self.seed = random.random()
+        self.locked = self.name.startswith("Lock")
         
     def __str__(self):
         return "%s (%s): %s"%(self.id, self.name, [conn.id for conn in self.connections])

@@ -60,5 +60,6 @@ class Moveable(Entity):
     return final
   
   def load_surf(self, surf):
+    surf = super(Moveable, self).load_surf(surf)
     return SubPixelSurface(surf, self.sub_level)
   

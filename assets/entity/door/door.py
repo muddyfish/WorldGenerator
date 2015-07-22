@@ -6,24 +6,34 @@ import glob, os
 
 class Door(Entity):
   finished_anim = 12.5
-  def __init__(self, pos_id, door_id = 1):
-    self.door_id = door_id
+  def __init__(self, pos_id, room, door_id = 1):
     self.pos_id = pos_id
+    self.room = room
+    self.door_id = door_id
     super(Door, self).__init__(0,0)
     self.config_manager = self.get_main().config_manager
-    self.open = False
-    self.locked = False
-    self.anim_state = 0
+    self.anim_state = self.finished_anim
     self.load_door_surfs()
-    self.load_state(0)
-    pos = [100,100]
-    coord = 1-pos_id%2
+    self.locked = self.room.locked
+    self.open = False
+    self.set_pos()
+  
+  def __setattr__(self, attr, val):
+    super(Door, self).__setattr__(attr, val)
+    if attr == "open":
+      d_time = 0
+      if val: d_time = 0.0001
+      self.load_state(d_time)
+  
+  def set_pos(self):
+    pos = [0,0]
+    coord = 1-self.pos_id%2
     screen = self.get_main().screen
-    if pos_id>>1:
+    if self.pos_id>>1:
       pos[coord] = screen.get_size()[coord]-self.surf.get_size()[coord]/2-12
     else:
       pos[coord] = 12
-    coord = pos_id%2
+    coord = 1-coord
     pos[coord] = screen.get_center()[coord]-self.surf.get_size()[coord]/4
     self.x, self.y = pos
     #print self.x, self.y, pos_id>>1, pos_id%2
@@ -31,12 +41,14 @@ class Door(Entity):
   def run(self, d_time):
     if self.anim_state != 0 and self.anim_state < self.finished_anim:
       self.load_state(d_time)
-    elif not self.open:
-      self.open = True
-      self.load_state(d_time)
+    #elif not self.open:
+    #  self.open = True
+    #  self.load_state(d_time)
     
   def load_state(self, d_time):
     pygame = self.get_pygame()
+    door_r = self.door_r
+    if self.locked: door_r = self.door_lock
     if self.open:
       self.anim_state += 40*d_time
       #print self.anim_state
@@ -44,15 +56,23 @@ class Door(Entity):
       self.surf.set_clip((40,36), (50,42))
       self.surf.blit(self.open_surf, (0,0))
       self.surf.blit(self.door_l, (-2*self.anim_state,0))
-      self.surf.blit(self.door_r, (2*self.anim_state,0))
+      self.surf.blit(door_r, (2*self.anim_state,0))
       self.surf.set_clip()
       self.surf.blit(self.frame_surf, (0,0))
     else:
       self.surf = pygame.surface.Surface((128,128), pygame.SRCALPHA)
       self.surf.blit(self.door_l, (0,0))
-      self.surf.blit(self.door_r, (0,0))
+      self.surf.blit(door_r, (0,0))
       self.surf.blit(self.frame_surf, (0,0))
     self.surf = pygame.transform.rotate(self.surf, 90*self.pos_id)
+    #self.surf.fill((0,0,128))
+    self.update_collision()
+    if self.pos_id%2:
+      self.rect.y = self.get_main().screen.get_center()[1]-6
+      self.rect.height = 11
+    else:
+      self.rect.x = self.get_main().screen.get_center()[0]-6
+      self.rect.width = 11
     
   def load_door_surfs(self):
     im_path = self.config_manager.get_path(self.get_path(), "door_%02d.png"%self.door_id)
@@ -61,3 +81,4 @@ class Door(Entity):
     self.open_surf = surf.subsurface(((128,0),(128,128)))
     self.door_l = surf.subsurface(((0,128),(128,128)))
     self.door_r = surf.subsurface(((128,128),(128,128)))
+    self.door_lock = surf.subsurface((128,256), (128,128))

@@ -2,5 +2,6 @@
   "move_up": "up",
   "move_down": "down",
   "move_left": "left",
-  "move_right": "right"
+  "move_right": "right",
+  "open_doors": "o"
 }
