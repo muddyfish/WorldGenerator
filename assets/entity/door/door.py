@@ -19,11 +19,16 @@ class Door(Entity):
     self.set_pos()
   
   def __setattr__(self, attr, val):
+    old_val = getattr(self, attr, None)
     super(Door, self).__setattr__(attr, val)
-    if attr == "open":
-      d_time = 0
-      if val: d_time = 0.0001
-      self.load_state(d_time)
+    if attr in ["open", "locked"]:
+      d_time = 0.0001
+      if attr == "locked":
+        if old_val: self.anim_state = 0.0
+        self.room.locked = val
+      try:
+        self.load_state(d_time)
+      except AttributeError: pass
   
   def set_pos(self):
     pos = [0,0]
@@ -49,7 +54,7 @@ class Door(Entity):
     pygame = self.get_pygame()
     door_r = self.door_r
     if self.locked: door_r = self.door_lock
-    if self.open:
+    if self.open and not self.locked:
       self.anim_state += 40*d_time
       #print self.anim_state
       self.surf = pygame.surface.Surface((128,128), pygame.SRCALPHA)

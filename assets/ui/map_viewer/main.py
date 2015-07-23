@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import random, time
+import random, time, math
 
 from ..ui import UI
 from assets.map.dungeon_map import DungeonMap
@@ -18,6 +18,7 @@ class MapUI(UI):
     self.map = DungeonMap(self.config_manager)
     self.dirty = True
     self.scrolling = []
+    self.shaking = 0
     self.init_scrolling = False
     self.event_funcs = {
       "move_up":    [self.move, (0,-1)],
@@ -84,10 +85,11 @@ class MapUI(UI):
       if (not door.locked) or all_:
         door.open = True
 
-  def calc_scroll(self):
+  def calc_scroll(self, x_mod, y_mod):
+    x_mod += self.scrolling[0]
+    y_mod += self.scrolling[1]
     sign = map(lambda i: cmp(i, 0), self.scrolling)
     self.scrolling = [i+sign[j]*(200*self.d_time) for j, i in enumerate(self.scrolling)]
-    x_mod, y_mod = self.scrolling
     self.screen.blit(self.bg_image, (x_mod,y_mod))
     x_mod -= cmp(x_mod, 0)*self.screen.get_size()[0]
     y_mod -= cmp(y_mod, 0)*self.screen.get_size()[1]
@@ -98,8 +100,13 @@ class MapUI(UI):
   def draw(self):
     x_mod = 0
     y_mod = 0
+    if self.shaking > 0:
+      rs = math.ceil(self.shaking)
+      x_mod += random.randrange(-rs,rs)
+      y_mod += random.randrange(-rs,rs)
+      self.shaking -= self.d_time
     if self.scrolling:
-      x_mod, y_mod = self.calc_scroll()
+      x_mod, y_mod = self.calc_scroll(x_mod, y_mod)
     for entity in self.get_entities():
       if not (self.scrolling or self.init_scrolling) or entity is not self.player:
         self.get_blit(entity.dirty)(entity.surf, (entity.x+x_mod,entity.y+y_mod))

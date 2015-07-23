@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Komodo Project File - DO NOT EDIT -->
 <project id="4ddeda13-de1c-4985-94f8-284ec6a4d22b" kpf_version="5" name="Dungeon.komodoproject">
+<preference-set idref="4ddeda13-de1c-4985-94f8-284ec6a4d22b" id="project" preftype="project">
+  <boolean id="editUseEdge">1</boolean>
+  <long id="indentWidth">2</long>
+  <string id="jshint_linter_chooser">default</string>
+  <string id="jslint_linter_chooser">default</string>
+  <long id="tabWidth">2</long>
+</preference-set>
 </project>

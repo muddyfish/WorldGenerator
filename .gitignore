@@ -1,0 +1,7 @@
+*.py[cod]
+
+*.log
+*.sav
+settings.json
+*.png
+*.anm2
