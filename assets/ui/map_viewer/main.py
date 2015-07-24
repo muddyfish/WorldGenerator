@@ -5,9 +5,9 @@ import random, time, math
 from ..ui import UI
 from assets.map.dungeon_map import DungeonMap
 from event_handler import KeyboardHandler
-from ...entity.backdrop.backdrop import Backdrops
+from ...entity.backdrop import Backdrops
 from ...entity.moveable.living.player.player import Player
-from ...entity.door.door import Door
+from ...entity.door import Door
 
 class MapUI(UI):
   def __init__(self):

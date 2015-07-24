@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from ..entity_base import Entity
+from entity_base import Entity
 
 import glob, os
 
@@ -80,7 +80,7 @@ class Door(Entity):
       self.rect.width = 11
     
   def load_door_surfs(self):
-    im_path = self.config_manager.get_path(self.get_path(), "door_%02d.png"%self.door_id)
+    im_path = glob.glob(self.config_manager.get_path(self.get_path("grid"), "door_%02d*.png"%self.door_id))[0]
     surf = self.load_surf(self.get_pygame().image.load(im_path))
     self.frame_surf = surf.subsurface(((0,0),(128,128)))
     self.open_surf = surf.subsurface(((128,0),(128,128)))

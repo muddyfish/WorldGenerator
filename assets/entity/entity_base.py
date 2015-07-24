@@ -60,8 +60,9 @@ class Entity(__main__.pygame.sprite.Sprite):
     except AttributeError: pass
     return surf
   
-  def get_path(self):
-    return os.path.dirname(inspect.getfile(self.__class__))
+  def get_path(self, dirname = None):
+    if dirname is None: dirname = self.__class__.__module__.split(".")[-1]
+    return os.path.join(os.path.dirname(__main__.__file__), "assets", "gfx", dirname)+os.sep
   
   
   def blit(self):

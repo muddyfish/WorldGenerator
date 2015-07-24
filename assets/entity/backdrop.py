@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from ..entity_base import Entity
+from entity_base import Entity
 import glob, random, os
 
 class Backdrops(Entity):
@@ -19,10 +19,13 @@ class Backdrops(Entity):
     
   def load_backdrops(self):
     self.backdrop_sheets = {}
-    backdrop_ids = glob.glob(self.config_manager.parse_path(self.get_path()+".*_*png"))
+    backdrop_ids = glob.glob(self.get_path()+"*_*png")
     for backdrop in backdrop_ids:
-      key = int(os.path.basename(backdrop)[:2], 16)
-      self.backdrop_sheets[key] = self.pygame.image.load(backdrop)
+      try:
+        key = int(os.path.basename(backdrop)[:2], 16)
+      except ValueError: pass
+      else:
+        self.backdrop_sheets[key] = self.pygame.image.load(backdrop)
   
   def load_new_backdrop(self):
     self.backdrop_spritesheet = random.choice(self.backdrop_sheets.values())
