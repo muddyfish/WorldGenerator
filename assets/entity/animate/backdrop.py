@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from entity_base import Entity
+from animate import Animation
 import glob, random, os
 
-class Backdrops(Entity):
+class Backdrops(Animation):
   def __init__(self):
     super(Backdrops, self).__init__(0,0)
     self.pygame = self.get_pygame()

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from entity_base import Entity
+from animate import Animation
 
 import glob, os
 
-class Door(Entity):
+class Door(Animation):
   finished_anim = 12.5
   def __init__(self, pos_id, room, door_id = 1):
     self.pos_id = pos_id

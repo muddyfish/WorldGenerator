@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from ..entity_base import Entity
-from ...ui.subpixelsurface import SubPixelSurface
+from ..animate import Animation
+from assets.ui.subpixelsurface import SubPixelSurface
 
-class Moveable(Entity):
+class Moveable(Animation):
   speed_loss = 4
   def __init__(self, x,y, max_d=64, max_dd = 8, sub_level = 3):
     self.sub_level = sub_level
