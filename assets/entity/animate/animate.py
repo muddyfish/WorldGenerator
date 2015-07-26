@@ -2,4 +2,6 @@
 
 from ..entity_base import Entity
 
-class Animation(Entity): pass
+class Animation(Entity):
+  def load_animation(self, anim_name):
+    print anim_name
