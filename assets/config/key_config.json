@@ -3,5 +3,6 @@
   "move_down": "down",
   "move_left": "left",
   "move_right": "right",
-  "open_doors": "o"
+  "open_doors": "o",
+  "toggle_rects": "t"
 }

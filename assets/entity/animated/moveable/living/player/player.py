@@ -6,6 +6,7 @@ class Player(Living):
   def __init__(self, parent):
     self.parent = parent
     super(Player, self).__init__(0,0, 20)
+    self.persistant = True
     self.x,self.y = self.get_main().screen.get_center()
     self.config_manager = self.get_main().config_manager
     self.keys = 0
@@ -21,12 +22,15 @@ class Player(Living):
         if door and door.locked and self.keys != 0:
           self.keys -= 1
           door.locked = False
+          door.open = True
+          door.current_anim = "KeyOpen"
           self.ddx = self.ddy = 0
         elif door and door.open and not door.locked:
           self.parent.load_room(door.room, door.pos_id)
   
   def door_collide(self, s, door):
-    return s.rect.clip(door.rect).size[door.pos_id%2]>=3
+    #print s.rect.clip(door.rect).size[door.pos_id%2]
+    return s.rect.clip(door.rect).size[door.pos_id%2]>=8
     
   #def load_surfs(self):
   #  im_path = self.config_manager.get_path(self.get_path(), "frames.png")

@@ -1,14 +1,6 @@
 {
-    "BossLevel": {
-        "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
-        "returnchance": 0
-    }, 
-    "BossMini": {
-        "backtrackable": false, 
+    "Start": {
+        "backtrackable": true, 
         "forceconnect": [
             false, 
             false
@@ -47,14 +39,6 @@
         ], 
         "returnchance": 0
     }, 
-    "Entrance": {
-        "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
-        "returnchance": 0
-    }, 
     "Fork": {
         "backtrackable": true, 
         "forceconnect": [
@@ -71,14 +55,6 @@
         ], 
         "returnchance": 0
     }, 
-    "Goal": {
-        "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
-        "returnchance": 0
-    }, 
     "Hook": {
         "backtrackable": true, 
         "forceconnect": [
@@ -87,13 +63,18 @@
         ], 
         "returnchance": 0
     }, 
+
     "ItemBonus": {
         "backtrackable": true, 
         "forceconnect": [
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "ItemQuest": {
         "backtrackable": false, 
@@ -101,7 +82,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "Key": {
         "backtrackable": true, 
@@ -109,7 +94,11 @@
             false, 
             false
         ], 
-        "returnchance": 0.6
+        "returnchance": 0.6,
+        "entities": {
+            "animated.key": 1.0
+        },
+        "door_id": 1
     }, 
     "KeyFinal": {
         "backtrackable": true, 
@@ -117,7 +106,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "KeyMulti": {
         "backtrackable": true, 
@@ -125,7 +118,11 @@
             false, 
             false
         ], 
-        "returnchance": 0.4
+        "returnchance": 0.4,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "Lock": {
         "backtrackable": false, 
@@ -133,7 +130,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "LockFinal": {
         "backtrackable": false, 
@@ -141,7 +142,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "LockMulti": {
         "backtrackable": false, 
@@ -149,7 +154,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "Nothing": {
         "backtrackable": true, 
@@ -157,15 +166,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
-    }, 
-    "Start": {
-        "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "Test": {
         "backtrackable": false, 
@@ -173,7 +178,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "TestItem": {
         "backtrackable": false, 
@@ -181,7 +190,11 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
     }, 
     "TestSecret": {
         "backtrackable": false, 
@@ -189,6 +202,58 @@
             false, 
             false
         ], 
-        "returnchance": 0
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
+    },
+    "BossLevel": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 9
+    }, 
+    "BossMini": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 3
+    }, 
+    "Entrance": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 1
+    }, 
+    "Goal": {
+        "backtrackable": false, 
+        "forceconnect": [
+            false, 
+            false
+        ], 
+        "returnchance": 0,
+        "entities": {
+            
+        },
+        "door_id": 26
     }
 }

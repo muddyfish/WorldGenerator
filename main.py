@@ -9,6 +9,7 @@ import assets.ui.subscription_manager
 import assets.ui.screen
 import assets.ui.keyboard_injector
 import assets.map.tiles.tile_manager
+import assets.entity.entity_manager
 import assets.databin
 
 #import random
@@ -41,11 +42,15 @@ class Main(object):
     pygame.init()
     self.screen = assets.ui.screen.Screen(pygame.display.set_mode(*self.config_manager.get_screen_properties()), pygame)
     pygame.display.set_caption(CAPTION)
+    self.screen.blit(pygame.image.load(os.path.join("assets", "loading.png")), (0,0))
+    self.update_screen()
     self.clock = pygame.time.Clock()
-    self.screen.blit_all()
   
   def init_tile_manager(self):
     self.tile_manager = assets.map.tiles.tile_manager.TileManager()
+  
+  def init_entity_manager(self):
+    self.entity_manager = assets.entity.entity_manager.EntityManager()
   
   def init_font_manager(self):
     self.fonts = assets.font.font_manager.FontManager()
@@ -83,10 +88,11 @@ def main():
   main_class = Main()
   main_class.init_databin()
   main_class.init_config_manager()
+  main_class.init_screen()
   main_class.init_event_manager()
   main_class.init_keyboard_injector()
-  main_class.init_screen()
   main_class.init_tile_manager()
+  main_class.init_entity_manager()
   main_class.init_font_manager()
   main_class.init_subscription_manager()
   main_class.run()

@@ -5,6 +5,9 @@ from assets.ui.subpixelsurface import SubPixelSurface
 
 class Moveable(Animation):
   speed_loss = 4
+  clamp_cache = {}
+  normalise_cache = {}
+  
   def __init__(self, x,y, max_d=64, max_dd = 8, sub_level = 3):
     self.sub_level = sub_level
     super(Moveable, self).__init__(x,y)
@@ -48,15 +51,26 @@ class Moveable(Animation):
     self.surf = self.subsurf.at(self.x, self.y)
   
   def clamp(self, clamp, val):
-    return max(-clamp, min(clamp, val))
+    h = hash((clamp, val))
+    if h in Moveable.clamp_cache:
+      return Moveable.clamp_cache[h]
+    rtn = max(-clamp, min(clamp, val))
+    Moveable.clamp_cache[h] = rtn
+    return rtn
   
   def normalise(self, val, amount):
+    h = hash((val, amount))
+    if h in Moveable.normalise_cache:
+      return Moveable.normlise_cache[h]
     orig_sign = cmp(val, 0)
     #print amount
     final = val-orig_sign*amount*self.speed_loss
     new_sign = cmp(final, 0)
     #print val, final, orig_sign, new_sign
-    if new_sign != orig_sign: return 0
+    if new_sign != orig_sign:
+      Moveable.clamp_cache[h] = 0
+      return 0
+    Moveable.clamp_cache[h] = final
     return final
   
   def load_surf(self, surf):

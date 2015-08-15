@@ -5,9 +5,6 @@ import random, time, math
 from ..ui import UI
 from assets.map.dungeon_map import DungeonMap
 from event_handler import KeyboardHandler
-from assets.entity.animate.backdrop import Backdrops
-from assets.entity.animate.moveable.living.player.player import Player
-from assets.entity.animate.door import Door
 
 class MapUI(UI):
   def __init__(self):
@@ -16,23 +13,29 @@ class MapUI(UI):
     self.get_main().fonts.register_font("debug")
     self.debug_font = self.get_main().fonts["debug"]
     self.map = DungeonMap(self.config_manager)
+    self.draw_rects = False
+    self.draw_debug = True
     self.dirty = True
     self.scrolling = []
     self.shaking = 0
     self.init_scrolling = False
     self.event_funcs = {
-      "move_up":    [self.move, (0,-1)],
-      "move_down":  [self.move, (0,1)],
-      "move_left":  [self.move, (-1,0)],
-      "move_right": [self.move, (1,0)],
-      "open_doors": [self.open_doors, True]
+      "move_up":     [self.move, (0,-1)],
+      "move_down":   [self.move, (0,1)],
+      "move_left":   [self.move, (-1,0)],
+      "move_right":  [self.move, (1,0)],
+      "open_doors":  [self.open_doors, True],
+      "toggle_rects":[self.toggle_draw_rects]
     }
     self.event_manager = self.get_main().event_manager
     self.event_manager.add_subscription_event(self, KeyboardHandler)
     self.event_manager.subscriber = self.subscription_id
     self.get_main().databin.entity_data.entities = []
-    self.backdrop_ui = Backdrops()
-    self.player = Player(self)
+    self.entity_manager = self.get_main().entity_manager
+    self.entity_list = self.entity_manager.entities
+    self.backdrop_ui = self.entity_list["animated.backdrop"]()
+    self.player = self.entity_list["animated.moveable.living.player"](self)
+    self.door = self.entity_list["animated.door"]
     self.load_dungeon()
     self.old_time = time.clock()
     
@@ -54,6 +57,7 @@ class MapUI(UI):
     random.seed(self.current_room.seed)
     self.backdrop_ui.load_current_room()
     self.clean_entities()
+    self.load_entities()
     self.add_doors()
     self.old_time = time.clock()
 
@@ -62,15 +66,18 @@ class MapUI(UI):
     for pos_id, d_coord in enumerate(((0,1),(-1,0),(0,-1),(1,0))):
       room = self.map.get_room(map(int.__add__, coords, d_coord))
       if room and room in self.current_room.connections:
-        d = Door(pos_id, room)
-        d.open = True
+        d = self.door(pos_id, room, self.current_room)
+        d.run_anim(0)
 
   def clean_entities(self):
     for entity in self.get_entities():
-      if "player" not in entity.groups and \
-         "backdrops" not in entity.groups:
+      if not entity.persistant:
           entity.__del__()
-    
+  
+  def load_entities(self):
+    for entity in self.current_room.get_entities():
+      self.entity_list[entity]()
+  
   def call_key_event(self, event_name):
     for event in event_name:
       assert(event in self.event_funcs)
@@ -83,7 +90,15 @@ class MapUI(UI):
   def open_doors(self, all_ = False):
     for door in self.get_main().databin.entity_data.door:
       if (not door.locked) or all_:
+        door.auto_update = False
+        door.locked = False
         door.open = True
+        door.current_anim = "Open"
+        door.auto_update = True
+        door.load_animation()
+        
+  def toggle_draw_rects(self):
+    self.draw_rects = not self.draw_rects
 
   def calc_scroll(self, x_mod, y_mod):
     x_mod += self.scrolling[0]
@@ -110,8 +125,15 @@ class MapUI(UI):
     for entity in self.get_entities():
       if not (self.scrolling or self.init_scrolling) or entity is not self.player:
         self.get_blit(entity.dirty)(entity.surf, (entity.x+x_mod,entity.y+y_mod))
+        if self.draw_rects: self.draw_rect(entity.rect)
+    if self.draw_debug:
+      self.draw_debug_text()
+      
+  def draw_debug_text(self):
     cur_room = self.debug_font.render("Current room: %s"%self.current_room, True, (255,255,255))
     self.screen.blit(cur_room, (10,50))
+    cur_room = self.debug_font.render("Keys: %d"%self.player.keys, True, (255,255,255))
+    self.screen.blit(cur_room, (10,70))
     
   def run(self):
     self.d_time = time.clock() - self.old_time
@@ -126,6 +148,15 @@ class MapUI(UI):
     if dirty:
       return self.screen.blit
     return self.screen.blit_func
+  
+  def draw_rect(self, o_rect):
+    rect = o_rect.copy()
+    rect.x*=2
+    rect.y*=2
+    rect.height*=2
+    rect.width*=2
+    self.screen.fill((0,0,0), rect)
+    self.screen.blit_rects.append(rect)
   
   def blit_bg_im(self, surf, pos):
     self.bg_image.blit(surf, (pos[0]*2, pos[1]*2))

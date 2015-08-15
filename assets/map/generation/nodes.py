@@ -13,10 +13,10 @@ class Node(object):
         self.id = id_gen.next()
         self.transversed = False
         self.seed = random.random()
-        self.locked = self.name.startswith("Lock")
+        self.locked = self.name == "Lock" #self.name.startswith("Lock")
         
     def __str__(self):
-        return "%s (%s): %s"%(self.id, self.name, [conn.id for conn in self.connections])
+        return "%s (%s): %s"%(self.id, self.name, ", ".join(["(%d: %s)"%(conn.id, conn.name) for conn in self.connections]))
 
     def connect(self, node):
         if node not in self.connections:
@@ -45,6 +45,13 @@ class Node(object):
         for conn in self.connections[:]:
             self.disconnect(conn)
             conn.kill_conns()
+
+    def get_entities(self):
+        entities = []
+        for entity in self.entities:
+            if random.random() <= self.entities[entity]:
+                entities.append(entity)
+        return entities
 
 def print_nodes(nodelist):
     for node in nodelist: print node

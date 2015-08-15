@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-from animate import Animation
+from ..animate import Animation
 import glob, random, os
 
-class Backdrops(Animation):
+class Backdrop(Animation):
   def __init__(self):
-    super(Backdrops, self).__init__(0,0)
+    super(Backdrop, self).__init__(0,0)
+    self.persistant = True
     self.pygame = self.get_pygame()
     self.config_manager = self.get_main().config_manager
     self.load_backdrops()
@@ -19,8 +20,8 @@ class Backdrops(Animation):
     
   def load_backdrops(self):
     self.backdrop_sheets = {}
-    backdrop_ids = glob.glob(self.get_path()+"*_*png")
-    for backdrop in backdrop_ids:
+    self.backdrop_ids = glob.glob(os.path.join(self.get_path(),"gfx","backdrops","*_*.png"))
+    for backdrop in self.backdrop_ids:
       try:
         key = int(os.path.basename(backdrop)[:2], 16)
       except ValueError: pass

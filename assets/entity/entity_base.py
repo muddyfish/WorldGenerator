@@ -4,9 +4,11 @@ import os, sys, inspect
 import __main__
 
 class Entity(__main__.pygame.sprite.Sprite):
+  group_spawn = 1
   def __init__(self, x,y):
     self.get_pygame().sprite.Sprite.__init__(self)
     self.dirty = True
+    self.persistant = False
     if not hasattr(self, "surf"):
       self.surf = self.load_surf(self.get_pygame().surface.Surface((32,32)))
     self.pos = [x,y]
@@ -19,8 +21,7 @@ class Entity(__main__.pygame.sprite.Sprite):
       if isinstance(attr, self.get_main().databin.__class__):
         attr = self.get_pygame().sprite.LayeredUpdates()
         setattr(self.get_entity_data(), group, attr)
-      attr.add(self)
-      
+      attr.add(self)      
   
   def __getattribute__(self, attr):
     if attr == "image": return self.surf
@@ -61,9 +62,7 @@ class Entity(__main__.pygame.sprite.Sprite):
     return surf
   
   def get_path(self, dirname = None):
-    if dirname is None: dirname = self.__class__.__module__.split(".")[-1]
-    return os.path.join(os.path.dirname(__main__.__file__), "assets", "gfx", dirname)+os.sep
-  
+    return os.path.join(*[os.path.dirname(__main__.__file__)]+self.__class__.__module__.split(".")[:-1])+os.sep
   
   def blit(self):
     self.get_blit()(self.surf, (self.x, self.y))
@@ -73,6 +72,11 @@ class Entity(__main__.pygame.sprite.Sprite):
     self.rect.width/=2
     self.rect.height/=2
 
+  def get_collide(self, entities = None):
+    if entities == None: entities = self.get_entity_data().entity
+    collide = self.get_pygame().sprite.spritecollide(self, entities, False)
+    collide.remove(self)
+    return collide
 
 
 
