@@ -5,10 +5,11 @@ import __main__
 
 class Entity(__main__.pygame.sprite.Sprite):
   group_spawn = 1
+  persistant = False
+  
   def __init__(self, x,y):
     self.get_pygame().sprite.Sprite.__init__(self)
     self.dirty = True
-    self.persistant = False
     if not hasattr(self, "surf"):
       self.surf = self.load_surf(self.get_pygame().surface.Surface((32,32)))
     self.pos = [x,y]
@@ -48,6 +49,9 @@ class Entity(__main__.pygame.sprite.Sprite):
   def get_entity_data(self):
     return self.get_main().databin.entity_data
   
+  def get_player(self):
+    return self.get_main().databin.entity_data.player.sprites()[0]
+  
   def get_blit(self):
     if self.dirty:
       return self.get_main().screen.blit
@@ -75,7 +79,9 @@ class Entity(__main__.pygame.sprite.Sprite):
   def get_collide(self, entities = None):
     if entities == None: entities = self.get_entity_data().entity
     collide = self.get_pygame().sprite.spritecollide(self, entities, False)
-    collide.remove(self)
+    try:
+      collide.remove(self)
+    except ValueError: pass
     return collide
 
 

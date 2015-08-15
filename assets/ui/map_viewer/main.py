@@ -35,6 +35,9 @@ class MapUI(UI):
     self.entity_list = self.entity_manager.entities
     self.backdrop_ui = self.entity_list["animated.backdrop"]()
     self.player = self.entity_list["animated.moveable.living.player"](self)
+    for k,v in self.entity_manager.get_persistant_entities().iteritems():
+      if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud"]:
+        v()
     self.door = self.entity_list["animated.door"]
     self.load_dungeon()
     self.old_time = time.clock()
@@ -123,9 +126,16 @@ class MapUI(UI):
     if self.scrolling:
       x_mod, y_mod = self.calc_scroll(x_mod, y_mod)
     for entity in self.get_entities():
-      if not (self.scrolling or self.init_scrolling) or entity is not self.player:
+      if (entity not in self.get_main().databin.entity_data.hud) and (\
+           (not (self.scrolling or self.init_scrolling)) or \
+           (self.scrolling and entity is not self.player) or \
+           (self.init_scrolling and entity is not self.player)
+          ):
         self.get_blit(entity.dirty)(entity.surf, (entity.x+x_mod,entity.y+y_mod))
         if self.draw_rects: self.draw_rect(entity.rect)
+    if not self.init_scrolling:
+      for entity in self.get_main().databin.entity_data.hud:
+        self.get_blit(entity.dirty)(entity.surf, (entity.x,entity.y))
     if self.draw_debug:
       self.draw_debug_text()
       

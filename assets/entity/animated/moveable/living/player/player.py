@@ -3,10 +3,11 @@
 from ..living_base import Living
 
 class Player(Living):
+  persistant = True
+  
   def __init__(self, parent):
     self.parent = parent
     super(Player, self).__init__(0,0, 20)
-    self.persistant = True
     self.x,self.y = self.get_main().screen.get_center()
     self.config_manager = self.get_main().config_manager
     self.keys = 0
@@ -25,7 +26,7 @@ class Player(Living):
           door.open = True
           door.current_anim = "KeyOpen"
           self.ddx = self.ddy = 0
-        elif door and door.open and not door.locked:
+        elif door and door.current_anim == "Opened":
           self.parent.load_room(door.room, door.pos_id)
   
   def door_collide(self, s, door):

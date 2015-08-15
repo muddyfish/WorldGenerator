@@ -4,9 +4,10 @@ from ..animate import Animation
 import glob, random, os
 
 class Backdrop(Animation):
+  persistant = True
+  
   def __init__(self):
     super(Backdrop, self).__init__(0,0)
-    self.persistant = True
     self.pygame = self.get_pygame()
     self.config_manager = self.get_main().config_manager
     self.load_backdrops()

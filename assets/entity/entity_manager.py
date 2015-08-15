@@ -28,8 +28,8 @@ class EntityManager(ManagerBase):
           return ".".join(import_path.split(".")[2:]), c
       except TypeError: pass
       
-      
-      
+  def get_persistant_entities(self):
+    return {k:v for k,v in self.entities.iteritems() if v.persistant}
       
       
       

@@ -25,7 +25,7 @@ class Door(Animation):
     }
     self.load_door_surfs()
     self.locked = self.room.locked
-    self.open = False#not self.room.locked
+    self.open = not self.room.locked
     self.set_pos()
     self.current_anim = "Opened"
     if self.locked: self.current_anim = "KeyClosed"
