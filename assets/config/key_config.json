@@ -4,5 +4,6 @@
   "move_left": "left",
   "move_right": "right",
   "open_doors": "o",
-  "toggle_rects": "t"
+  "toggle_rects": "t",
+  "place_bomb": "space"
 }

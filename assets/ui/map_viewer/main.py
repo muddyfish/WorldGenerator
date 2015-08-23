@@ -14,7 +14,7 @@ class MapUI(UI):
     self.debug_font = self.get_main().fonts["debug"]
     self.map = DungeonMap(self.config_manager)
     self.draw_rects = False
-    self.draw_debug = True
+    self.draw_debug = False
     self.dirty = True
     self.scrolling = []
     self.shaking = 0
@@ -25,7 +25,8 @@ class MapUI(UI):
       "move_left":   [self.move, (-1,0)],
       "move_right":  [self.move, (1,0)],
       "open_doors":  [self.open_doors, True],
-      "toggle_rects":[self.toggle_draw_rects]
+      "toggle_rects":[self.toggle_draw_rects],
+      "place_bomb":  [self.place_bomb]
     }
     self.event_manager = self.get_main().event_manager
     self.event_manager.add_subscription_event(self, KeyboardHandler)
@@ -102,6 +103,9 @@ class MapUI(UI):
         
   def toggle_draw_rects(self):
     self.draw_rects = not self.draw_rects
+    
+  def place_bomb(self):
+    pass#rint "Bomb!"
 
   def calc_scroll(self, x_mod, y_mod):
     x_mod += self.scrolling[0]

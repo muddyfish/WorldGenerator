@@ -42,7 +42,7 @@ class Main(object):
     pygame.init()
     self.screen = assets.ui.screen.Screen(pygame.display.set_mode(*self.config_manager.get_screen_properties()), pygame)
     pygame.display.set_caption(CAPTION)
-    self.screen.blit(pygame.image.load(os.path.join("assets", "loading.png")), (0,0))
+    self.screen.blit(self.screen.old_im_load(os.path.join("assets", "loading.png")), (0,0))
     self.update_screen()
     self.clock = pygame.time.Clock()
   

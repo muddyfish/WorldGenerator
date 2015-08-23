@@ -18,6 +18,7 @@ class Key(HUD):
       super(Key, self).__init__(12+24*self.key_id,self.screen.get_height()/2-48)
       self.load_animation_sheet("key.anm2")
       self.current_anim = "Appear"
+      self.run_anim(0)
     
   def run(self, d_time):
     keys = self.get_player().keys

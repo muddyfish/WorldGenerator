@@ -68,7 +68,8 @@ class Animation(Entity):
       size = map(max, zip(*[frame.surf.get_size() for frame in frames]))
       self.surf = pygame.surface.Surface(size, pygame.SRCALPHA)
       for frame in frames: self.surf.blit(frame.surf, [i[0]/2+i[1] for i in zip(size, frame.blit_pos)])
-      self.surf = pygame.transform.rotate(self.surf, self.rotate_amount)
+      if self.rotate_amount != 0:
+        self.surf = pygame.transform.rotate(self.surf, self.rotate_amount)
       self.update_collision()
       self.old_anim = self.current_anim
     else:
@@ -160,9 +161,17 @@ class AnimationFrame(object):
                                                    self.attributes["Height"]*2))).copy()      
       self.surf.set_colorkey(self.transparent_colour)
       scale = self.attributes["XScale"], self.attributes["YScale"]
-      if self.attributes["AlphaTint"] != 255 or scale != (100,100):
+      if (  self.attributes["RedTint"],
+            self.attributes["GreenTint"],
+            self.attributes["BlueTint"],
+            self.attributes["AlphaTint"],
+            scale) != \
+         (255, 255, 255, 255, (100,100)):
         self.surf = self.surf.convert_alpha()
-        self.surf.set_alpha(self.attributes["AlphaTint"])
+        self.surf.fill((self.attributes["RedTint"],
+                        self.attributes["GreenTint"],
+                        self.attributes["BlueTint"],
+                        self.attributes["AlphaTint"]), None, pygame.BLEND_RGBA_MULT)
       if scale != (100, 100):
         self.surf = pygame.transform.smoothscale(self.surf,
                                              [int(i[1]/100.0*i[0]) for i in zip(scale, self.surf.get_size())])
