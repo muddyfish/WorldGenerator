@@ -11,24 +11,15 @@ try:
 except ImportError:    
     try:
         import Numeric
-    except ImportError, e:
-        print "Requires NumPy or Numeric!"
-        raise e
-    BYTE = Numeric.UnsignedInt8
-    DWORD = Numeric.Int32
+    except ImportError:
+        print "NumPy or Numeric are used to create sub-pixel surfaces.\nNeither of these modules have been  found."
+    else:
+        BYTE = Numeric.UnsignedInt8
+        DWORD = Numeric.Int32
     
 
 class SubPixelSurface(object):  
     def __init__(self, surface, x_level=3, y_level=None):
-        
-        """Creates a sub pixel surface object.
-        
-        surface -- A PyGame surface
-        x_level -- Number of sub-pixel levels in x
-        y_level -- Number of sub-pixel levels in y (same as x if omited)        
-        
-        """
-                
         self.x_level = x_level
         self.y_level = y_level or x_level
         
@@ -77,10 +68,10 @@ class SubPixelSurface(object):
         sc = int( frac_x * (1.-frac_y) * 255. )
         sd = int( (frac_x * frac_y) * 255. )
         
-        a = s[ :-1:, :-1:] * sa
-        b = s[ 1::,  :-1:] * sb
-        c = s[ :-1:, 1:: ] * sc
-        d = s[ 1::,  1:: ] * sd
+        a = s[:-1:, :-1:] * sa
+        b = s[1::, :-1:] * sb
+        c = s[:-1:, 1::] * sc
+        d = s[1::, 1::] * sd
         
         a += b
         a += c
@@ -90,20 +81,21 @@ class SubPixelSurface(object):
         rgba_data = a.astype(BYTE).tostring()
         pygame_surface = pygame.image.fromstring(rgba_data, a.shape[:2][::-1], "RGBA")
         pygame_surface = pygame.transform.rotate(pygame_surface, 270)
-        
         return pygame_surface
         
         
     def at(self, x, y):
-        
-        """Gets a sub-pixel surface for a given coordinate.
-        
-        x -- X coordinate
-        y -- Y coordinate
-        
-        """
-        
-        surf_x = int( (x - floor(x)) * self.x_level )
-        surf_y = int( (y - floor(y)) * self.y_level )
-        
+        surf_x = int((x-floor(x))*self.x_level)
+        surf_y = int((y-floor(y))*self.y_level)
         return self.surfaces[surf_y][surf_x]
+
+try:
+    Numeric
+except NameError:
+    del SubPixelSurface
+    class SubPixelSurface(object):  
+        def __init__(self, surface, x_level=3, y_level=None):
+            self.surface = surface
+        
+        def at(self, x, y):
+            return self.surfaces

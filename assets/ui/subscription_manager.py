@@ -22,6 +22,7 @@ class SubscriptionManager(ManagerBase):
     self.current_subscription.draw()
   
   def load_subscription_folder(self, subscription):
+    if self.get_config_manager()["subscription_config", "show_subscriptions"]: print "Loading subscription:", subscription
     __import__("assets.ui.%s"%subscription)
     path_var = "assets.ui.%s.main"%subscription
     file_path = os.path.join(self.subscription_path, subscription, "main.py")

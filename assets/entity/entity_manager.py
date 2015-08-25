@@ -27,6 +27,7 @@ class EntityManager(ManagerBase):
         if issubclass(c, entity_base.Entity) and c.__name__.lower() == mod_name.lower():
           return ".".join(import_path.split(".")[2:]), c
       except TypeError: pass
+    raise TypeError("Entity %s does not have class of same name."%entity)
       
   def get_persistant_entities(self):
     return {k:v for k,v in self.entities.iteritems() if v.persistant}

@@ -11,8 +11,8 @@ class Player(Living):
     super(Player, self).__init__(0,0, 20)
     self.x,self.y = self.get_main().screen.get_center()
     self.config_manager = self.get_main().config_manager
-    self.keys = 0
-    #self.load_surfs()
+    self.keys = 1
+    self.bombs = 5
     
   def move_pos(self, d_time):
     #print self.ddx, self.ddy
@@ -34,8 +34,3 @@ class Player(Living):
   def door_collide(self, s, door):
     #print s.rect.clip(door.rect).size[door.pos_id%2]
     return s.rect.clip(door.rect).size[door.pos_id%2]>=8
-    
-  #def load_surfs(self):
-  #  im_path = self.config_manager.get_path(self.get_path(), "frames.png")
-  #  surf = self.load_surf(self.get_pygame().image.load(im_path))
-  #  self.subsurf = self.load_surf(surf.subsurface(((64,0),(64,64))))

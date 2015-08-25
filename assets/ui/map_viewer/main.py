@@ -88,8 +88,8 @@ class MapUI(UI):
       self.event_funcs[event][0](*self.event_funcs[event][1:])
     
   def move(self, delta_offset):
-    self.player.ddx += delta_offset[0]
-    self.player.ddy += delta_offset[1]
+    self.player.ddx += delta_offset[0]*self.player.ddd
+    self.player.ddy += delta_offset[1]*self.player.ddd
     
   def open_doors(self, all_ = False):
     for door in self.get_main().databin.entity_data.door:

@@ -5,10 +5,11 @@ from assets.ui.subpixelsurface import SubPixelSurface
 
 class Moveable(Animation):
   speed_loss = 12
+  ddd = 2
   clamp_cache = {}
   normalise_cache = {}
   
-  def __init__(self, x,y, max_d=80, max_dd = 10, sub_level = 4):
+  def __init__(self, x,y, max_d=64, max_dd = 10, sub_level = 3):
     self.sub_level = sub_level
     super(Moveable, self).__init__(x,y)
     self.subsurf = self.surf

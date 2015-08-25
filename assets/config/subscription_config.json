@@ -1,3 +1,4 @@
 {
-  "default": "startup_logo"
+  "default": "map_viewer",
+  "show_subscriptions": false
 }
