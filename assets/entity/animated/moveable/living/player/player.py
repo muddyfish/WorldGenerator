@@ -11,7 +11,7 @@ class Player(Living):
     super(Player, self).__init__(0,0, 20)
     self.x,self.y = self.get_main().screen.get_center()
     self.config_manager = self.get_main().config_manager
-    self.keys = 1
+    self.keys = 0
     self.bombs = 5
     
   def move_pos(self, d_time):

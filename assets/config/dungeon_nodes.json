@@ -96,7 +96,7 @@
         ], 
         "returnchance": 0.6,
         "entities": {
-            "animated.key": 1.0
+            "animated.collectable.key": 1.0
         },
         "door_id": 1
     }, 

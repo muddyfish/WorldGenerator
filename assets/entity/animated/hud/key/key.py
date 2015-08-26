@@ -15,7 +15,7 @@ class Key(HUD):
       self.finish_anim_funcs = {
         "Appear": lambda: self.load_animation("Idle")
       }
-      super(Key, self).__init__(12+24*self.key_id,self.screen.get_height()/2-48)
+      super(Key, self).__init__(7+24*self.key_id,self.screen.get_height()/2-48)
       self.load_animation_sheet("key.anm2")
       self.current_anim = "Appear"
       self.run_anim(0)

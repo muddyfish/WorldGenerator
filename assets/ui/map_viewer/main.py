@@ -81,6 +81,7 @@ class MapUI(UI):
   def load_entities(self):
     for entity in self.current_room.get_entities():
       self.entity_list[entity]()
+    self.entity_list["animated.collectable.bomb"]()
   
   def call_key_event(self, event_name):
     for event in event_name:
