@@ -14,20 +14,11 @@ class MapUI(UI):
     self.debug_font = self.get_main().fonts["debug"]
     self.map = DungeonMap(self.config_manager)
     self.draw_rects = False
-    self.draw_debug = False
+    self.draw_debug = True
     self.dirty = True
     self.scrolling = []
     self.shaking = 0
     self.init_scrolling = False
-    self.event_funcs = {
-      "move_up":     [self.move, (0,-1)],
-      "move_down":   [self.move, (0,1)],
-      "move_left":   [self.move, (-1,0)],
-      "move_right":  [self.move, (1,0)],
-      "open_doors":  [self.open_doors, True],
-      "toggle_rects":[self.toggle_draw_rects],
-      "place_bomb":  [self.place_bomb]
-    }
     self.event_manager = self.get_main().event_manager
     self.event_manager.add_subscription_event(self, KeyboardHandler)
     self.event_manager.subscriber = self.subscription_id
@@ -35,10 +26,21 @@ class MapUI(UI):
     self.entity_manager = self.get_main().entity_manager
     self.entity_list = self.entity_manager.entities
     self.backdrop_ui = self.entity_list["animated.backdrop"]()
+    self.backdrop_ui.spawn()
     self.player = self.entity_list["animated.moveable.living.player"](self)
+    self.player.spawn()
+    self.event_funcs = {
+      "move_up":     [self.move, (0,-1)],
+      "move_down":   [self.move, (0,1)],
+      "move_left":   [self.move, (-1,0)],
+      "move_right":  [self.move, (1,0)],
+      "open_doors":  [self.open_doors, True],
+      "toggle_rects":[self.toggle_draw_rects],
+      "place_bomb":  [self.player.place_bomb]
+    }
     for k,v in self.entity_manager.get_persistant_entities().iteritems():
       if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud"]:
-        v()
+        v().spawn()
     self.door = self.entity_list["animated.door"]
     self.load_dungeon()
     self.old_time = time.clock()
@@ -71,17 +73,17 @@ class MapUI(UI):
       room = self.map.get_room(map(int.__add__, coords, d_coord))
       if room and room in self.current_room.connections:
         d = self.door(pos_id, room, self.current_room)
+        d.spawn()
         d.run_anim(0)
 
   def clean_entities(self):
     for entity in self.get_entities():
       if not entity.persistant:
-          entity.__del__()
+          entity.despawn()
   
   def load_entities(self):
-    for entity in self.current_room.get_entities():
-      self.entity_list[entity]()
-    self.entity_list["animated.collectable.bomb"]()
+    for entity in self.current_room.entity_list:
+      entity.spawn()
   
   def call_key_event(self, event_name):
     for event in event_name:
@@ -104,9 +106,6 @@ class MapUI(UI):
         
   def toggle_draw_rects(self):
     self.draw_rects = not self.draw_rects
-    
-  def place_bomb(self):
-    pass#rint "Bomb!"
 
   def calc_scroll(self, x_mod, y_mod):
     x_mod += self.scrolling[0]
@@ -136,11 +135,11 @@ class MapUI(UI):
            (self.scrolling and entity is not self.player) or \
            (self.init_scrolling and entity is not self.player)
           ):
-        self.get_blit(entity.dirty)(entity.surf, (entity.x+x_mod,entity.y+y_mod))
+        entity.blit(x_mod,y_mod)
         if self.draw_rects: self.draw_rect(entity.rect)
     if not self.init_scrolling:
       for entity in self.get_main().databin.entity_data.hud:
-        self.get_blit(entity.dirty)(entity.surf, (entity.x,entity.y))
+        entity.blit()
     if self.draw_debug:
       self.draw_debug_text()
       

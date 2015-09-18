@@ -1,5 +1,5 @@
-import json
-import random
+import json, random
+import __main__
 
 def id_generator():
     i = 0
@@ -14,6 +14,11 @@ class Node(object):
         self.transversed = False
         self.seed = random.random()
         self.locked = self.name == "Lock" #self.name.startswith("Lock")
+        self.cleared = False
+        try:
+            self.entity_list = self.get_entities()
+        except AttributeError:
+            self.entity_list = []
         
     def __str__(self):
         return "%s (%s): %s"%(self.id, self.name, ", ".join(["(%d: %s)"%(conn.id, conn.name) for conn in self.connections]))
@@ -50,7 +55,7 @@ class Node(object):
         entities = []
         for entity in self.entities:
             if random.random() <= self.entities[entity]:
-                entities.append(entity)
+                entities.append(__main__.main_class.entity_manager.entities[entity]())
         return entities
 
 def print_nodes(nodelist):

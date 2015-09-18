@@ -20,16 +20,21 @@ class Bomb(HUD):
     self.update_surf()
     
   def run(self, d_time):
-    updated = self.run_anim(d_time)
+    updated = False
+    if self.old_bombs != 0:
+      updated = self.run_anim(d_time)
     bombs = self.get_player().bombs
+    if bombs > self.old_bombs:
+      self.current_anim = "Collect_Pulse"
     if bombs != self.old_bombs:
+      updated = True
       self.old_bombs = bombs
       self.update_surf()
-      updated = True
-      self.current_anim = "Collect_Pulse"
-    if updated:
-      self.surf.blit(self.amount, (8,32))
-    #print bombs
     
   def update_surf(self):
     self.amount = self.get_main().fonts["bomb_count"].render("%d"%self.old_bombs, True, (255,255,255))
+      
+  def blit(self, x_mod=0, y_mod=0):
+    if self.old_bombs != 0:
+      self.get_blit()(self.surf, (self.x+x_mod, self.y+y_mod))
+      self.get_blit()(self.amount, (self.x+x_mod+4, self.y+y_mod+16))

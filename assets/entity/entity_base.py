@@ -16,13 +16,15 @@ class Entity(__main__.pygame.sprite.Sprite):
     self.x = self.pos[0]
     self.y = self.pos[1]
     self.update_collision()
+    
+  def spawn(self):
     self.groups = [cls.__name__.lower() for cls in inspect.getmro(self.__class__)[:-2]]
     for group in self.groups:
       attr = getattr(self.get_entity_data(), group)
       if isinstance(attr, self.get_main().databin.__class__):
         attr = self.get_pygame().sprite.LayeredUpdates()
         setattr(self.get_entity_data(), group, attr)
-      attr.add(self)      
+      attr.add(self)
   
   def __getattribute__(self, attr):
     if attr == "image": return self.surf
@@ -34,7 +36,7 @@ class Entity(__main__.pygame.sprite.Sprite):
       self.pos[attr=="y"] = val
     super(Entity, self).__setattr__(attr, val)
   
-  def __del__(self):
+  def despawn(self):
     self.kill()
   
   def run(self, d_time):
@@ -68,8 +70,8 @@ class Entity(__main__.pygame.sprite.Sprite):
   def get_path(self, dirname = None):
     return os.path.join(*[os.path.dirname(__main__.__file__)]+self.__class__.__module__.split(".")[:-1])+os.sep
   
-  def blit(self):
-    self.get_blit()(self.surf, (self.x, self.y))
+  def blit(self, x_mod=0, y_mod=0):
+    self.get_blit()(self.surf, (self.x+x_mod, self.y+y_mod))
     
   def update_collision(self):
     self.rect.size = self.surf.get_size()

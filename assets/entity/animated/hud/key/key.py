@@ -23,8 +23,8 @@ class Key(HUD):
   def run(self, d_time):
     keys = self.get_player().keys
     if keys > self.old_keys and self.key_id == 0:
-      Key()
-    elif keys < self.key_id: self.__del__()
+      Key().spawn()
+    elif keys < self.key_id: self.despawn()
     if self.key_id != 0:
       self.run_anim(d_time)
     self.old_keys = keys

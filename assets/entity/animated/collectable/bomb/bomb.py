@@ -8,7 +8,7 @@ class Bomb(Collectable):
     super(Bomb, self).__init__(0,0)
     self.finish_anim_funcs = {
       "Appear": lambda: self.load_animation("Idle"),
-      "Collect": lambda: self.__del__()
+      "Collect": self.despawn
     }
     self.load_animation_sheet("bomb.anm2")
     self.current_anim = "Appear"

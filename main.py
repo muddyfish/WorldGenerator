@@ -81,8 +81,8 @@ class Main(object):
     pygame.display.update(self.screen.blit_rects_old)
     pygame.display.update(self.screen.blit_rects)
     self.screen.blit_rects_old = self.screen.blit_rects
-    self.screen.blit_rects = [] 
-
+    self.screen.blit_rects = []
+    
 def main():
   global main_class
   main_class = Main()
