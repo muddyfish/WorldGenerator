@@ -36,5 +36,5 @@ class Bomb(HUD):
       
   def blit(self, x_mod=0, y_mod=0):
     if self.old_bombs != 0:
-      self.get_blit()(self.surf, (self.x+x_mod, self.y+y_mod))
+      super(Bomb, self).blit(x_mod, y_mod)
       self.get_blit()(self.amount, (self.x+x_mod+4, self.y+y_mod+16))

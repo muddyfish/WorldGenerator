@@ -72,10 +72,8 @@ class Animation(Entity):
         self.surf = pygame.transform.rotate(self.surf, self.rotate_amount)
       self.update_collision()
       self.old_anim = self.current_anim
-      return True
     else:
       self.old_anim = self.current_anim
-    return False
   
   def on_finish_anim(self):
     curr = self.current_anim
@@ -166,23 +164,14 @@ class AnimationFrame(object):
       if (  self.attributes["RedTint"],
             self.attributes["GreenTint"],
             self.attributes["BlueTint"],
-            self.attributes["AlphaTint"]) != \
-         (255, 255, 255, 255):
+            self.attributes["AlphaTint"],
+            scale) != \
+         (255, 255, 255, 255, (100,100)):
         self.surf = self.surf.convert_alpha()
         self.surf.fill((self.attributes["RedTint"],
                         self.attributes["GreenTint"],
                         self.attributes["BlueTint"],
                         self.attributes["AlphaTint"]), None, pygame.BLEND_RGBA_MULT)
-      if (  self.attributes["RedOffset"],
-            self.attributes["GreenOffset"],
-            self.attributes["BlueOffset"]) != \
-         (255,255,255):
-        self.ra=self.rs=self.ga=self.gs=self.ba=self.bs=0
-        setattr(self, ["ra","rs"][cmp(self.attributes["RedOffset"],0)], abs(self.attributes["RedOffset"]))
-        setattr(self, ["ga","gs"][cmp(self.attributes["GreenOffset"],0)], abs(self.attributes["GreenOffset"]))
-        setattr(self, ["ba","bs"][cmp(self.attributes["BlueOffset"],0)], abs(self.attributes["BlueOffset"]))
-        self.surf.fill((self.ra,self.ga,self.ba), None, pygame.BLEND_RGB_ADD)
-        self.surf.fill((self.rs,self.gs,self.bs), None, pygame.BLEND_RGB_SUB)
       if scale != (100, 100):
         self.surf = pygame.transform.smoothscale(self.surf,
                                              [int(i[1]/100.0*i[0]) for i in zip(scale, self.surf.get_size())])
