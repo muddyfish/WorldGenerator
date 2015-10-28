@@ -6,6 +6,8 @@ import __main__
 class Entity(__main__.pygame.sprite.Sprite):
   group_spawn = 1
   persistant = False
+  no_spawn = False
+  no_respawn = True
   
   def __init__(self, x,y):
     self.get_pygame().sprite.Sprite.__init__(self)
@@ -18,6 +20,7 @@ class Entity(__main__.pygame.sprite.Sprite):
     self.update_collision()
     
   def spawn(self):
+    if self.no_spawn: return
     self.groups = [cls.__name__.lower() for cls in inspect.getmro(self.__class__)[:-2]]
     for group in self.groups:
       attr = getattr(self.get_entity_data(), group)
@@ -37,6 +40,7 @@ class Entity(__main__.pygame.sprite.Sprite):
     super(Entity, self).__setattr__(attr, val)
   
   def despawn(self):
+    if self.no_respawn: self.no_spawn = True
     self.kill()
   
   def run(self, d_time):
