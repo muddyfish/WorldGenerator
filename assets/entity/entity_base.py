@@ -48,16 +48,20 @@ class Entity(__main__.pygame.sprite.Sprite):
   def get_main(self):
     return __main__.main_class
 
+  def get_databin(self):
+    return self.get_main().databin
+  
+  def get_subscription(self):
+    return self.get_main().databin.current_subscription
+  
   def get_entity_data(self):
-    return self.get_main().databin.entity_data
+    return self.get_databin().entity_data
   
   def get_player(self):
     return self.get_main().databin.entity_data.player.sprites()[0]
   
   def get_blit(self):
-    if self.dirty:
-      return self.get_main().screen.blit
-    return self.get_main().screen.blit_func
+    return self.get_subscription().get_blit(self.dirty)
   
   def load_surf(self, surf):
     self.rect = surf.get_rect()

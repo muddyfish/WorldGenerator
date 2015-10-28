@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from ..entity_base import Entity
+from .resizable_surface import ResizableSurface
 import xml.etree.ElementTree as ElementTree
 import os, ast
 import __main__
@@ -14,6 +15,10 @@ class Animation(Entity):
   def __setattr__(self, attr, value):
     super(Animation, self).__setattr__(attr, value)
     if attr == "current_anim" and hasattr(self, "spritesheets") and self.auto_update: self.load_animation()
+  
+  def blit(self, x_mod=0, y_mod=0):
+    try: self.get_blit()(self.surf, (self.x+x_mod, self.y+y_mod))
+    except TypeError: self.get_blit()(self.surf.surf, (self.x+x_mod, self.y+y_mod))
   
   def load_animation_sheet(self, anim_name):
     config_manager = self.get_main().config_manager
@@ -66,10 +71,10 @@ class Animation(Entity):
             f_id = j
           frames.append(self.frames[frame][f_id])
       size = map(max, zip(*[frame.surf.get_size() for frame in frames]))
-      self.surf = pygame.surface.Surface(size, pygame.SRCALPHA)
+      self.surf = ResizableSurface(pygame.surface.Surface(size, pygame.SRCALPHA))
       for frame in frames: self.surf.blit(frame.surf, [i[0]/2+i[1] for i in zip(size, frame.blit_pos)])
       if self.rotate_amount != 0:
-        self.surf = pygame.transform.rotate(self.surf, self.rotate_amount)
+        self.surf = ResizableSurface(pygame.transform.rotate(self.surf.surf, self.rotate_amount))
       self.update_collision()
       self.old_anim = self.current_anim
     else:
