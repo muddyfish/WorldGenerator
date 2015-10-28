@@ -4,6 +4,7 @@ from ..animate import Animation
 import os, __main__
 
 class Logo(Animation):
+  auto_resize = False
   def __init__(self, parent):
     self.screen = self.get_main().screen
     super(Logo, self).__init__(0,0)

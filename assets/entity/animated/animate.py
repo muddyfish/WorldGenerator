@@ -11,6 +11,7 @@ class Animation(Entity):
   finish_anim_funcs = {}
   auto_update = True
   transparent_colour = (255,255,255)
+  auto_resize = True
 
   def __setattr__(self, attr, value):
     super(Animation, self).__setattr__(attr, value)
@@ -71,10 +72,12 @@ class Animation(Entity):
             f_id = j
           frames.append(self.frames[frame][f_id])
       size = map(max, zip(*[frame.surf.get_size() for frame in frames]))
-      self.surf = ResizableSurface(pygame.surface.Surface(size, pygame.SRCALPHA))
+      self.surf = pygame.surface.Surface(size, pygame.SRCALPHA)
+      if self.auto_resize: self.surf = ResizableSurface(self.surf)
       for frame in frames: self.surf.blit(frame.surf, [i[0]/2+i[1] for i in zip(size, frame.blit_pos)])
       if self.rotate_amount != 0:
-        self.surf = ResizableSurface(pygame.transform.rotate(self.surf.surf, self.rotate_amount))
+        self.surf = pygame.transform.rotate(self.surf.surf, self.rotate_amount)
+        if self.auto_resize: self.surf = ResizableSurface(self.surf)
       self.update_collision()
       self.old_anim = self.current_anim
     else:
