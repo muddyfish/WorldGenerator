@@ -4,7 +4,7 @@ from ..animate import Animation
 from assets.ui.subpixelsurface import SubPixelSurface
 
 class Moveable(Animation):
-  speed_loss = 120
+  speed_loss = 160
   dd = 64
   clamp_cache = {}
   
