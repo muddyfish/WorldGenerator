@@ -5,11 +5,11 @@ import os, __main__
 
 class Logo(Animation):
   auto_resize = False
-  def __init__(self, parent):
+  def __init__(self):
     self.screen = self.get_main().screen
     super(Logo, self).__init__(0,0)
     self.finish_anim_funcs = {
-      "Run": lambda: parent.finish()
+      "Run": lambda: self.get_main().databin.current_subscription.finish()
     }
     self.load_animation_sheet("logo.anm2")
     self.run_anim(0)

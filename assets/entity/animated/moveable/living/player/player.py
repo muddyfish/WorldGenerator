@@ -5,7 +5,7 @@ from ...bomb.bomb import Bomb
 
 class Player(Living):
   persistant = True
-  door_dd = 6
+  door_d = 6
   
   def __init__(self, parent):
     self.parent = parent
@@ -28,7 +28,7 @@ class Player(Living):
     old_x, old_y =  self.x, self.y
     super(Player, self).move_pos(d_time)
     if old_x != self.x or old_y != self.y: return
-    for axis in ((self.ddx, self.door_dd), (self.ddy, self.door_dd)):
+    for axis in ((self.dx, self.door_d), (self.dy, self.door_d)):
       if abs(axis[0]) >= axis[1]:
         door = self.get_pygame().sprite.spritecollideany(self, self.get_entity_data().door, self.door_collide)
         if door and door.locked and self.keys != 0:
@@ -36,7 +36,10 @@ class Player(Living):
           door.locked = False
           door.open = True
           door.current_anim = "KeyOpen"
-          self.ddx = self.ddy = 0
+          self.dx = 0
+          self.dy = 0
+          self.ddx = 0
+          self.ddy = 0
         elif door and door.current_anim == "Opened":
           self.parent.load_room(door.room, door.pos_id)
   
@@ -48,3 +51,5 @@ class Player(Living):
     if self.bombs != 0 and self.cooldown_timers["bomb"][0] == 0:
       self.cooldown_timers["bomb"][0] = self.cooldown_timers["bomb"][1]
       self.bombs -= 1
+      bomb = Bomb(self.x, self.y)
+      bomb.spawn()

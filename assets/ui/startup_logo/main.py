@@ -9,7 +9,7 @@ class MapUI(UI):
     super(MapUI, self).__init__()
     self.config_manager = self.get_main().config_manager
     self.old_time = time.clock()
-    self.logo = Logo(self)
+    self.logo = Logo()
     
   def draw(self):
     self.screen.fill((0,0,0))

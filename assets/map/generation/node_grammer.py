@@ -65,6 +65,7 @@ class Nodes(object):
     def create_dungeon(self):
         self.core_grammer()
         self.entrance = filter(lambda x: x.name == "Entrance", self.nodes)[0]
+        self.exit = filter(lambda x: x.name == "Goal", self.nodes)[0]
         self.nodes = self.shuffle_nodes([self.entrance])[0]
         self.entrance.untransverse()
         self.entrance.kill_conns()

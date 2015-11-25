@@ -94,7 +94,7 @@
             false, 
             false
         ], 
-        "returnchance": 0.6,
+        "returnchance": 0.5,
         "entities": {
             "animated.collectable.key": 1.0
         },
@@ -240,7 +240,7 @@
         ], 
         "returnchance": 0,
         "entities": {
-            
+            "animated.collectable.bomb": 1.0
         },
         "door_id": 1
     }, 
@@ -252,7 +252,7 @@
         ], 
         "returnchance": 0,
         "entities": {
-            
+            "animated.moveable.key": 0.0
         },
         "door_id": 26
     }

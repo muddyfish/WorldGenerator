@@ -4,5 +4,6 @@
     "fullscreen": false
   },
   "fps_limit": 0,
-  "show_fps": true
+  "show_fps": true,
+  "speedup": 1.0
 }

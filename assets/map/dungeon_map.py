@@ -14,6 +14,7 @@ class DungeonMap(object):
     self.nodes.create_dungeon()
     self.map = self.nodes.map.map
     self.start_node = self.nodes.entrance
+    self.end_node = self.nodes.exit
     
   def get_coords(self, node):
     return self.nodes.map.find_obj(node)

@@ -118,6 +118,12 @@
         }, 
         {
             "Hook": [
+                "Hook",
+                "Hook"
+            ]
+        }, 
+        {
+            "Hook": [
                 "Test", 
                 "ItemBonus"
             ]

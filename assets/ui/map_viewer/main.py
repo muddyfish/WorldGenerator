@@ -16,6 +16,7 @@ class MapUI(UI):
     self.draw_rects = False
     self.draw_debug = True
     self.dirty = True
+    self.speedup = self.config_manager.config_data["video_config"]["speedup"]
     self.scrolling = []
     self.shaking = 0
     self.init_scrolling = False
@@ -36,7 +37,8 @@ class MapUI(UI):
       "move_right":  [self.move, (1,0)],
       "open_doors":  [self.open_doors, True],
       "toggle_rects":[self.toggle_draw_rects],
-      "place_bomb":  [self.player.place_bomb]
+      "place_bomb":  [self.player.place_bomb],
+      "shake":       [lambda:setattr(self, "shaking", 1)]
     }
     for k,v in self.entity_manager.get_persistant_entities().iteritems():
       if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud"]:
@@ -48,7 +50,7 @@ class MapUI(UI):
   def load_dungeon(self):
     self.map.load_dungeon()
     self.backdrop_ui.load_new_backdrop()
-    self.load_room(self.map.nodes.entrance, 0, no_scroll = True)
+    self.load_room(self.map.start_node, 0, no_scroll = True)
     
   def load_room(self, current_room, room_id, no_scroll = False):
     if not no_scroll:
@@ -91,8 +93,10 @@ class MapUI(UI):
       self.event_funcs[event][0](*self.event_funcs[event][1:])
     
   def move(self, delta_offset):
-    self.player.ddx += delta_offset[0]*self.player.ddd
-    self.player.ddy += delta_offset[1]*self.player.ddd
+    if delta_offset[0]:
+      self.player.ddx = delta_offset[0]*self.player.dd
+    if delta_offset[1]:
+      self.player.ddy = delta_offset[1]*self.player.dd
     
   def open_doors(self, all_ = False):
     for door in self.get_main().databin.entity_data.door:
@@ -151,6 +155,7 @@ class MapUI(UI):
     
   def run(self):
     self.d_time = time.clock() - self.old_time
+    self.d_time *= self.speedup
     self.old_time = time.clock()
     if self.scrolling: return
     for entity in self.get_entities():
