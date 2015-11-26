@@ -39,6 +39,8 @@ class Screen(object):
     self.pygame.image.load = self.im_load_patch
   
   def im_load_patch(self, *args, **kwargs):
+    args = list(args)
+    args[0] = args[0].lower()
     surf = self.old_im_load(*args, **kwargs)
     surf = self.pygame.transform.scale2x(surf)
     return surf

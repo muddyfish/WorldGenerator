@@ -94,9 +94,21 @@ class Entity(__main__.pygame.sprite.Sprite):
     except ValueError: pass
     return collide
 
-
-
-
+  @staticmethod
+  def memoize(func):
+    def mem_func(*args, **kwargs):
+      memory_name = func.__name__ + "_memory"
+      if memory_name not in globals():
+        globals()[memory_name] = {}
+      h = hash((args, frozenset(kwargs.items())))
+      if h not in globals()[memory_name]:
+        globals()[memory_name][h] = func(*args, **kwargs)
+        print "not remembered!", len(globals()[memory_name])
+      else:
+        print "remembered"
+      return globals()[memory_name][h]
+    return mem_func
+  
 
 
 

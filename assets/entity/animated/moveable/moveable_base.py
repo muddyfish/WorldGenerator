@@ -4,8 +4,8 @@ from ..animate import Animation
 from assets.ui.subpixelsurface import SubPixelSurface
 
 class Moveable(Animation):
-  speed_loss = 160
-  dd = 64
+  speed_loss = 1600
+  dd = 128
   clamp_cache = {}
   
   def __init__(self, x,y, max_d=96, sub_level = 3):

@@ -51,8 +51,7 @@ class MapUI(UI):
     self.map.load_dungeon()
     self.backdrop_ui.load_new_backdrop()
     self.load_room(self.map.start_node, 0, no_scroll = True)
-    self.player.x = self.screen.get_width()/4
-    self.player.y = self.screen.get_height()/4
+    self.player.x, self.player.y = self.screen.get_center()
     
   def load_room(self, current_room, room_id, no_scroll = False):
     if not no_scroll:

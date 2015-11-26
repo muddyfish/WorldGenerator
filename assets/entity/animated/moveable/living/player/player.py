@@ -10,7 +10,7 @@ class Player(Living):
   def __init__(self, parent):
     self.parent = parent
     super(Player, self).__init__(0,0, 20)
-    self.x,self.y = self.get_main().screen.get_center()
+    self.screen = self.get_main().screen
     self.config_manager = self.get_main().config_manager
     self.keys = 0
     self.bombs = 2
