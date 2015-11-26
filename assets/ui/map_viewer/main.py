@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-import random, time, math
+import random, math
 
 from ..ui import UI
 from assets.map.dungeon_map import DungeonMap
 from event_handler import KeyboardHandler
+from assets.events.clock import Clock
 
 class MapUI(UI):
   def __init__(self):
@@ -44,8 +45,8 @@ class MapUI(UI):
       if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud"]:
         v().spawn()
     self.door = self.entity_list["animated.door"]
+    self.clock = Clock()
     self.load_dungeon()
-    self.old_time = time.clock()
     
   def load_dungeon(self):
     self.map.load_dungeon()
@@ -68,7 +69,7 @@ class MapUI(UI):
     self.clean_entities()
     self.load_entities()
     self.add_doors()
-    self.old_time = time.clock()
+    self.clock.tick()
 
   def add_doors(self):
     coords = self.map.get_coords(self.current_room)
@@ -155,9 +156,8 @@ class MapUI(UI):
     self.screen.blit(cur_room, (10,70))
     
   def run(self):
-    self.d_time = time.clock() - self.old_time
+    self.d_time = self.clock.tick()
     self.d_time *= self.speedup
-    self.old_time = time.clock()
     if self.scrolling: return
     for entity in self.get_entities():
       entity.run(self.d_time)

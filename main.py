@@ -8,7 +8,6 @@ import assets.font.font_manager
 import assets.ui.subscription_manager
 import assets.ui.screen
 import assets.ui.keyboard_injector
-import assets.map.tiles.tile_manager
 import assets.entity.entity_manager
 import assets.databin
 
@@ -45,9 +44,6 @@ class Main(object):
     self.screen.blit(self.screen.old_im_load(os.path.join("assets", "loading.png")), (0,0))
     self.update_screen()
     self.clock = pygame.time.Clock()
-  
-  def init_tile_manager(self):
-    self.tile_manager = assets.map.tiles.tile_manager.TileManager()
   
   def init_entity_manager(self):
     self.entity_manager = assets.entity.entity_manager.EntityManager()
@@ -91,7 +87,6 @@ def main():
   main_class.init_screen()
   main_class.init_event_manager()
   main_class.init_keyboard_injector()
-  main_class.init_tile_manager()
   main_class.init_entity_manager()
   main_class.init_font_manager()
   main_class.init_subscription_manager()
