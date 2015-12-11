@@ -25,11 +25,12 @@ class Moveable(Animation):
     
   def move(self, d_time):
     if self.ddx == self.ddy == self.dx == self.dy == 0: return False
-    
+    if cmp(self.ddx,0) != cmp(self.dx, 0): self.dx = 0 # Stop if moving the opposite direction
+    if cmp(self.ddy,0) != cmp(self.dy, 0): self.dy = 0
     self.dx+=self.ddx*d_time
     self.dy+=self.ddy*d_time
-    self.dx = self.normalise(self.dx, d_time, dd=False)
-    self.dy = self.normalise(self.dy, d_time, dd=False,y=True)
+    self.dx = self.normalise(self.dx, d_time)
+    self.dy = self.normalise(self.dy, d_time,y=True)
     self.dx = self.clamp(self.max_dx, self.dx)
     self.dy = self.clamp(self.max_dy, self.dy)
     
@@ -52,7 +53,7 @@ class Moveable(Animation):
     Moveable.clamp_cache[h] = rtn
     return rtn
   
-  def normalise(self, val, amount, dd, y=False):
+  def normalise(self, val, amount, y=False):
     if getattr(self, ["ddx","ddy"][y]) != 0.0:
       return val
     orig_sign = cmp(val, 0)

@@ -140,6 +140,14 @@
                 "Test", 
                 "KeyMulti"
             ]
+        },
+        {
+            "Fork_KeyMulti": [
+                "Fork",
+                "ChainLinear",
+                "ChainLinear",
+                "KeyMulti"
+            ]
         }, 
         {
             "Fork_KeyMulti": [
