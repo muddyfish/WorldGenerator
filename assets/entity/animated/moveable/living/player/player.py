@@ -14,7 +14,7 @@ class Player(Living):
     self.config_manager = self.get_main().config_manager
     self.keys = 0
     self.multi_keys = 0
-    self.boss_key = 1
+    self.boss_key = 0
     self.bombs = 2
     self.cooldown_timers = {
       "bomb": [0,0.5]

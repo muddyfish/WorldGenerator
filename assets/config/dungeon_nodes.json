@@ -119,7 +119,7 @@
         ], 
         "returnchance": 0,
         "entities": {
-            
+            "animated.collectable.bosskey": 1.0
         },
         "door_id": 1,
         "locked": false
