@@ -19,6 +19,7 @@ CAPTION = "Mystery Dungeon"
 class Main(object):
   def __init__(self):
     self.args = sys.argv
+    self.debug = "debug" in self.args
   
   def init_databin(self):
     self.databin = assets.databin.Databin()

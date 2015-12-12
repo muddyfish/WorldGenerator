@@ -6,5 +6,6 @@
   "open_doors": "o",
   "toggle_rects": "t",
   "place_bomb": "space",
-  "shake": "s"
+  "shake": "s",
+  "show_databin": "q"
 }

@@ -13,7 +13,6 @@ class Node(object):
         self.id = id_gen.next()
         self.transversed = False
         self.seed = random.random()
-        self.locked = self.name == "Lock" #self.name.startswith("Lock")
         self.cleared = False
         try:
             self.entity_list = self.get_entities()

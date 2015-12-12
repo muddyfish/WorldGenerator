@@ -24,7 +24,8 @@ class Door(Animation):
       "Break": lambda: self.load_animation("BrokenOpen")
     }
     self.load_door_surfs()
-    self.locked = self.room.locked
+    self.locked = bool(self.room.locked)
+    self.keytype = room.locked
     self.open = not self.room.locked
     self.set_pos()
     self.current_anim = "Opened"
@@ -34,7 +35,7 @@ class Door(Animation):
   def __setattr__(self, attr, val):
     super(Door, self).__setattr__(attr, val)
     if attr in ["open", "locked"] and self.auto_update:
-      if attr == "locked":
+      if attr == "locked" and val == False:
         self.room.locked = val
       try:
         self.get_anim_state()
@@ -70,6 +71,23 @@ class Door(Animation):
     if self.first_tick:
       self.first_tick = False
       self.get_anim_state()
+      
+  def unlockable(self):
+    player = self.get_databin().entity_data.player.get_sprite(0)
+    required = 1
+    if self.keytype == "multi_keys":
+      required = 3
+    amount = getattr(player,self.keytype)
+    if amount >= required:
+      setattr(player, self.keytype, amount-required)
+      self.unlock()
+      return True
+    return False
+      
+  def unlock(self):
+    self.locked = False
+    self.open = True
+    self.current_anim = "KeyOpen"
     
   def update_collision(self):
     if not hasattr(self, "frames"): return

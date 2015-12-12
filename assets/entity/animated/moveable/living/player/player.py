@@ -14,7 +14,7 @@ class Player(Living):
     self.config_manager = self.get_main().config_manager
     self.keys = 0
     self.multi_keys = 0
-    self.boss_key = True
+    self.boss_key = 1
     self.bombs = 2
     self.cooldown_timers = {
       "bomb": [0,0.5]
@@ -33,11 +33,7 @@ class Player(Living):
     for axis in ((self.dx, self.door_d), (self.dy, self.door_d)):
       if abs(axis[0]) >= axis[1]:
         door = self.get_pygame().sprite.spritecollideany(self, self.get_entity_data().door, self.door_collide)
-        if door and door.locked and self.keys != 0:
-          self.keys -= 1
-          door.locked = False
-          door.open = True
-          door.current_anim = "KeyOpen"
+        if door and door.locked and door.unlockable():
           self.dx = 0
           self.dy = 0
           self.ddx = 0

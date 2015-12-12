@@ -14,6 +14,8 @@ class EntityManager(ManagerBase):
       if import_name in files:
         k,v = self.load_entity(root, import_name[:-3])
         self.entities[k] = v
+      elif __main__.main_class.debug:
+        print "%s has no entity with same name"%root
 
   def load_entity(self, path, entity):
     import_path = os.path.relpath(path, os.path.split(__main__.__file__)[0]).replace(os.sep, ".")

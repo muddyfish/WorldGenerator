@@ -180,12 +180,8 @@
                         {
                             "Gate": [
                                 {
-                                    "LockFinal": [
-                                        {
-                                            "BossLevel": [
-                                                "Goal"
-                                            ]
-                                        }
+                                    "BossLevel": [
+                                        "Goal"
                                     ]
                                 }
                             ]
@@ -220,6 +216,26 @@
                 {
                     "Nothing": [
                         "Hook", 
+                        "Hook"
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Fork": [
+                {
+                    "Nothing": [
+                        "Hook", 
+                        "Hook", 
+                        "Hook"
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Fork": [
+                {
+                    "Nothing": [
                         "Hook"
                     ]
                 }

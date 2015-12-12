@@ -9,5 +9,8 @@ class Databin(object):
             super(Databin, self).__setattr__(attr, db)
             return db
 
-    def __setattr__(self, name, value):
-        super(Databin, self).__setattr__(name, value)
+    def __repr__(self):
+        result = ""
+        for k,v in self.__dict__.iteritems():
+            result += "%s:\t%s\n"%(k,v)
+        return result
