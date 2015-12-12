@@ -57,5 +57,3 @@ class Key(HUD):
     for key in self.get_entity_data().key:
       if key.key_id > 0:
         key.x += 24
-      if key.key_id == self.get_player().keys:
-        key.current_anim = "Appear"
