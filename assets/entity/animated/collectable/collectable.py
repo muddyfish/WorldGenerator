@@ -8,8 +8,7 @@ class Collectable(Animation):
   
   def run(self, d_time):
     self.run_anim(d_time)
-    self.x = self.x_pos-self.surf.get_width()/4
-    self.y = self.y_pos-self.surf.get_height()/4
+    self.center(self.x_pos, self.y_pos)
     if "Collect" != self.current_anim:
       for entity in self.get_collide():
         if "player" in entity.groups:

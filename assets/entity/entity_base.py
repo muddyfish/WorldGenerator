@@ -46,6 +46,14 @@ class Entity(__main__.pygame.sprite.Sprite):
   def run(self, d_time):
     pass
   
+  def center(self, x_pos = None, y_pos = None):
+    if x_pos == None:
+      x_pos = self.screen.get_width()/4
+    if y_pos == None:
+      y_pos = self.screen.get_height()/4
+    self.x = x_pos-self.surf.get_width()/4
+    self.y = y_pos-self.surf.get_height()/4
+  
   def get_pygame(self):
     return __main__.pygame
   
