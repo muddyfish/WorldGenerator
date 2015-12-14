@@ -180,11 +180,14 @@ class Nodes(object):
                         self.remove_map(cur_node, ignore)
                         return False
                     success = True
-                    if self.map.append(cur_node, node, pref[dir]) is True:
-                        if not self.add_map(node, cur_node):
-                            self.map.remove_obj(node)
+                    try:
+                        if self.map.append(cur_node, node, pref[dir]) is True:
+                            if not self.add_map(node, cur_node):
+                                self.map.remove_obj(node)
+                                success = False
+                        else:
                             success = False
-                    else:
+                    except AssertionError:
                         success = False
                     dir+=1
         #print "END NODE", cur_node

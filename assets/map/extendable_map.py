@@ -30,6 +30,7 @@ class ExtendableMap(object):
     def append(self, comp, obj, dir):
         assert(dir in "NESW")
         pos = self.find_obj(comp)
+        assert(pos is not None)
         if   dir == "N": pos[0]-=1
         elif dir == "E": pos[1]+=1
         elif dir == "S": pos[0]+=1
