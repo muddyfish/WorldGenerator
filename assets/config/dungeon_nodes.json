@@ -105,9 +105,9 @@
             false
         ], 
         "returnchance": 0.5,
-        "entities": {
-            "animated.collectable.key": 1.0
-        },
+        "entities": [
+            [1, {"animated.collectable.key": 1}]
+        ],
         "door_id": 1,
         "locked": false
     }, 
@@ -118,9 +118,9 @@
             false
         ], 
         "returnchance": 0,
-        "entities": {
-            "animated.collectable.bosskey": 1.0
-        },
+        "entities": [
+            [1, {"animated.collectable.bosskey": 1}]
+        ],
         "door_id": 1,
         "locked": false
     }, 
@@ -248,8 +248,11 @@
             false
         ], 
         "returnchance": 0,
-        "entities": {
-        },
+        "entities": [
+            [0.1, {"animated.moveable.living.npc.hostile.charger.snake": 5}],
+            [0.3, {"animated.moveable.living.npc.hostile.charger.snake": 7}],
+            [0.6, {"animated.moveable.living.npc.hostile.charger.snake": 10}]
+        ],
         "door_id": 1,
         "locked": false
     }, 
@@ -260,9 +263,9 @@
             false
         ], 
         "returnchance": 0,
-        "entities": {
-            "animated.warpdown": 1.0
-        },
+        "entities": [
+            [1, {"animated.warpdown": 1}]
+        ],
         "door_id": 26,
         "locked": false
     }

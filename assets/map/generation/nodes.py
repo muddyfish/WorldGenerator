@@ -14,10 +14,9 @@ class Node(object):
         self.transversed = False
         self.seed = random.random()
         self.cleared = False
-        try:
+        self.entity_list = []
+        if hasattr(self, "entities"):
             self.entity_list = self.get_entities()
-        except AttributeError:
-            self.entity_list = []
         
     def __str__(self):
         return "%s (%s): %s"%(self.id, self.name, ", ".join(["(%d: %s)"%(conn.id, conn.name) for conn in self.connections]))
@@ -52,9 +51,22 @@ class Node(object):
 
     def get_entities(self):
         entities = []
-        for entity in self.entities:
-            if random.random() <= self.entities[entity]:
-                entities.append(__main__.main_class.entity_manager.entities[entity]())
+        seed = random.random()
+        # Get the probability for a group to spawn
+        chances = [group[0]for group in self.entities]
+        # Which groups have a toatl probability above the seed chosen?
+        groups = [sum(chances[:i+1]) > seed for i in range(len(chances))]
+        # If none, no entities
+        if groups == []: return []
+        # The group chosen is the one with the lowest total chance that got chosen
+        group_id = groups.index(True)
+        for entity, amount in self.entities[group_id][1].iteritems():
+            cls = __main__.main_class.entity_manager.entities[entity]
+            try:
+                entities.extend(cls.spawn_group(amount))    
+            except AttributeError:
+                for i in range(amount):
+                    entities.append(cls())
         return entities
 
 def print_nodes(nodelist):

@@ -98,4 +98,4 @@ except NameError:
             self.surface = surface
         
         def at(self, x, y):
-            return self.surfaces
+            return self.surface

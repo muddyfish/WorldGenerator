@@ -1,20 +1,30 @@
 #!/usr/bin/env python
-
 from ..moveable_base import Moveable
+import random, math, __main__
 
 class Living(Moveable):
-  def __init__(self, x,y, max_life = 10):
+  max_life = 16
+  min_life = 16
+  vulnerable = []
+  ineffective = []
+  immune = []
+  no_respawn = False
+  
+  def __init__(self, x,y):
     super(Living, self).__init__(x,y)
-    self.max_life = max_life
-    self.life = self.max_life
-    self.damage_mult = {
-      "sword": 1.0,
-      "heal":  1.0,
-      "magic": 1.0,
-      "fire":  1.0,
-      "ice":   1.0,
-      "light": 1.0,
-      "shadow":1.0,
-      "spirit":1.0,
-      "air":   1.0,
-      "water": 1.0}
+    self.life = random.randrange(self.min_life, self.max_life+1)  
+  
+  @classmethod
+  def spawn_group(cls, amount):
+    return cls.spawn_method()(amount)
+    
+  @classmethod
+  def circular(cls, amount):
+    entities = []
+    screen = __main__.main_class.screen
+    center = [screen.get_width()/4, screen.get_height()/4]
+    for i in range(amount):
+      x = cls.circle_radius * math.sin((2*math.pi*i)/amount)
+      y = cls.circle_radius * math.cos((2*math.pi*i)/amount)
+      entities.append(cls(center[0]+x,center[1]+y))
+    return entities

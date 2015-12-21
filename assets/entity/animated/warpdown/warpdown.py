@@ -18,7 +18,5 @@ class WarpDown(Animation):
   def run(self, d_time):
     self.run_anim(d_time)
     self.center()
-    if self.current_anim == "Opened":
-      for entity in self.get_collide():
-        if "player" in entity.groups:
-          self.get_databin().current_subscription.load_dungeon()
+    if self.current_anim == "Opened" and self.touching_player():
+      self.get_databin().current_subscription.load_dungeon()

@@ -49,18 +49,20 @@ class Animation(Entity):
     #print self.frames
     
   def run_anim(self, d_time):
-    old = self.anim_time <= self.anim_speed*int(self.animation_xml[self.current_anim].FrameNum)
+    total_anim_time = self.anim_speed*int(self.animation_xml[self.current_anim].FrameNum)
+    old = self.anim_time <= total_anim_time
     self.anim_time += d_time
-    new = self.anim_time <= self.anim_speed*int(self.animation_xml[self.current_anim].FrameNum)
+    new = self.anim_time <= total_anim_time
     if old and not new: # Has the animation just finished
       self.on_finish_anim()
+      return
     elif self.old_anim != self.current_anim or new: # Is the current animation still playing
-      pygame = self.get_pygame()
       if self.old_anim != self.current_anim:
         self.anim_state = 0
         self.anim_time = 0
       else:
         self.anim_state = int(self.anim_time/self.anim_speed)
+      pygame = self.get_pygame()
       frames = []
       for frame in self.frames:
         if self.frames[frame]:
@@ -78,10 +80,10 @@ class Animation(Entity):
       if self.rotate_amount != 0:
         self.surf = pygame.transform.rotate(self.surf.surf, self.rotate_amount)
         if self.auto_resize: self.surf = ResizableSurface(self.surf)
+    self.old_anim = self.current_anim
+    if d_time == 0:
+      self.bounding_rect = self.surf.get_bounding_rect()
       self.update_collision()
-      self.old_anim = self.current_anim
-    else:
-      self.old_anim = self.current_anim
   
   def on_finish_anim(self):
     curr = self.current_anim
@@ -89,6 +91,7 @@ class Animation(Entity):
       self.finish_anim_funcs[curr]()
     if self.animation_xml[curr].Loop == "True":
       self.load_animation(curr)
+    self.run_anim(0)
   
   def load_animation(self, new = None):
     self.frames = {}
@@ -182,7 +185,9 @@ class AnimationFrame(object):
                         self.attributes["AlphaTint"]), None, pygame.BLEND_RGBA_MULT)
       if scale != (100, 100):
         self.surf = pygame.transform.smoothscale(self.surf,
-                                             [int(i[1]/100.0*i[0]) for i in zip(scale, self.surf.get_size())])
+                                             [abs(int(i[1]/100.0*i[0])) for i in zip(scale, self.surf.get_size())])
+        if -1 in map(cmp, scale, (0,0)):
+          self.surf = pygame.transform.flip(self.surf, scale[0]<0, scale[1]<0)
     else:
       self.surf = self.spritesheet.subsurface((0,0,0,0))
     self.blit_pos = (self.attributes["XPosition"]*2-self.surf.get_width()/2,

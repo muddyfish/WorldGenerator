@@ -4,7 +4,6 @@ import os, sys, inspect
 import __main__
 
 class Entity(__main__.pygame.sprite.Sprite):
-  group_spawn = 1
   persistant = False
   no_spawn = False
   no_respawn = True
@@ -12,45 +11,35 @@ class Entity(__main__.pygame.sprite.Sprite):
   def __init__(self, x,y):
     self.get_pygame().sprite.Sprite.__init__(self)
     self.dirty = True
+    #self.bounding_rect = None
     if not hasattr(self, "surf"):
       self.surf = self.load_surf(self.get_pygame().surface.Surface((32,32)))
-    self.pos = [x,y]
-    self.x = self.pos[0]
-    self.y = self.pos[1]
+    self.x = x
+    self.y = y
     self.update_collision()
     
   def spawn(self):
     if self.no_spawn: return
+    #Add this entity to it's parents groups
     self.groups = [cls.__name__.lower() for cls in inspect.getmro(self.__class__)[:-2]]
     for group in self.groups:
       attr = getattr(self.get_entity_data(), group)
+      #If any of this entities parents haven't been added before, add them to to the databin
       if isinstance(attr, self.get_main().databin.__class__):
         attr = self.get_pygame().sprite.LayeredUpdates()
         setattr(self.get_entity_data(), group, attr)
       attr.add(self)
-  
-  def __getattribute__(self, attr):
-    if attr == "image": return self.surf
-    return super(Entity, self).__getattribute__(attr)
-  
-  def __setattr__(self, attr, val):
-    if attr in ["x", "y"]:
-      setattr(self.rect, attr, val)
-      self.pos[attr=="y"] = val
-    super(Entity, self).__setattr__(attr, val)
   
   def despawn(self):
     if self.no_respawn: self.no_spawn = True
     self.kill()
   
   def run(self, d_time):
-    pass
+    self.update_collision()
   
   def center(self, x_pos = None, y_pos = None):
-    if x_pos == None:
-      x_pos = self.screen.get_width()/4
-    if y_pos == None:
-      y_pos = self.screen.get_height()/4
+    if None==x_pos==y_pos:
+      x_pos,y_pos = self.screen.get_center()
     self.x = x_pos-self.surf.get_width()/4
     self.y = y_pos-self.surf.get_height()/4
   
@@ -64,23 +53,27 @@ class Entity(__main__.pygame.sprite.Sprite):
     return self.get_main().databin
   
   def get_subscription(self):
-    return self.get_main().databin.current_subscription
+    return self.get_databin().current_subscription
   
   def get_entity_data(self):
     return self.get_databin().entity_data
   
   def get_player(self):
-    return self.get_main().databin.entity_data.player.sprites()[0]
+    return self.get_entity_data().player.sprites()[0]
+  
+  def touching_player(self):
+    return self.get_collide([self.get_player()])
   
   def get_blit(self):
     return self.get_subscription().get_blit(self.dirty)
   
   def load_surf(self, surf):
-    self.rect = surf.get_rect()
+    self.bounding_rect = surf.get_bounding_rect()
+    self.rect = self.bounding_rect
     try:
-      self.rect.x = self.x
-      self.rect.y = self.y
-    except AttributeError: pass
+      self.update_collision()
+    except AttributeError:
+      pass
     return surf
   
   def get_path(self, dirname = None):
@@ -90,7 +83,9 @@ class Entity(__main__.pygame.sprite.Sprite):
     self.get_blit()(self.surf, (self.x+x_mod, self.y+y_mod))
     
   def update_collision(self):
-    self.rect.size = self.surf.get_size()
+    self.rect.x = self.x + self.bounding_rect.x/2
+    self.rect.y = self.y + self.bounding_rect.y/2
+    self.rect.size = self.bounding_rect.size
     self.rect.width/=2
     self.rect.height/=2
 
