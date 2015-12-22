@@ -49,13 +49,23 @@ class Moveable(Animation):
   
   def move_pos(self, d_time):
     if hasattr(self, "x_pos"):
-      self.x_pos=max(Moveable.LEFT_BOUND, min(Moveable.RIGHT_BOUND-self.rect.width, self.x_pos+self.dx*d_time))
-      self.y_pos=max(Moveable.UP_BOUND, min(Moveable.DOWN_BOUND-self.rect.height, self.y_pos+self.dy*d_time))
+      #x_pos and y_pos are the center of the image so take that into account
+      
+      x,y = self.x_pos+self.dx*d_time, self.y_pos+self.dy*d_time
+      self.x_pos=max(Moveable.LEFT_BOUND+self.rect.width *1.25, min(Moveable.RIGHT_BOUND+self.rect.width/4,  x))
+      self.y_pos=max(Moveable.UP_BOUND  +self.rect.height*1.25, min(Moveable.DOWN_BOUND +self.rect.height/4, y))
       self.surf = self.subsurf.at(self.x_pos, self.y_pos)
+      if x!=self.x_pos or y!=self.y_pos:
+        self.get_databin().ai_events.collide_wall.is_called(self)
     else:
-      self.x=max(Moveable.LEFT_BOUND, min(Moveable.RIGHT_BOUND-self.rect.width, self.x+self.dx*d_time))
-      self.y=max(Moveable.UP_BOUND, min(Moveable.DOWN_BOUND-self.rect.height, self.y+self.dy*d_time))
+      #Otherwise just do a straight transformation on x and y which are based on (0,0) coords
+      x,y = self.x+self.dx*d_time, self.y+self.dy*d_time
+      self.x=max(Moveable.LEFT_BOUND, min(Moveable.RIGHT_BOUND-self.rect.width,  x))
+      self.y=max(Moveable.UP_BOUND,   min(Moveable.DOWN_BOUND- self.rect.height, y))
       self.surf = self.subsurf.at(self.x, self.y)
+      if x!=self.x or y!=self.y:
+        self.get_databin().ai_events.collide_wall.is_called(self)
+    self.get_databin().ai_events.player_xy.is_called(self)
   
   def clamp(self, clamp, val):
     h = hash((clamp, val))

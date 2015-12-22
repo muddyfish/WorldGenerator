@@ -6,12 +6,12 @@ import __main__
 class Entity(__main__.pygame.sprite.Sprite):
   persistant = False
   no_spawn = False
-  no_respawn = True
+  no_respawn = False
   
   def __init__(self, x,y):
-    self.get_pygame().sprite.Sprite.__init__(self)
+    super(Entity, self).__init__()
     self.dirty = True
-    #self.bounding_rect = None
+    self.ai_events = []
     if not hasattr(self, "surf"):
       self.surf = self.load_surf(self.get_pygame().surface.Surface((32,32)))
     self.x = x
@@ -33,6 +33,10 @@ class Entity(__main__.pygame.sprite.Sprite):
   def despawn(self):
     if self.no_respawn: self.no_spawn = True
     self.kill()
+  
+  def register_event(self, event, *args, **kwargs):
+    handler = getattr(self.get_databin().ai_events, event)
+    self.ai_events.append(handler.add_listener(*([self]+list(args)), **kwargs))
   
   def run(self, d_time):
     self.update_collision()

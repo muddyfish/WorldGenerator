@@ -6,6 +6,9 @@ class ManagerBase(object):
     def get_main_class(self):
         return __main__.main_class
     
+    def get_databin(self):
+        return self.get_main_class().databin
+    
     def get_pygame(self):
         return __main__.pygame
     

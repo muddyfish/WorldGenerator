@@ -62,9 +62,9 @@ class Node(object):
         group_id = groups.index(True)
         for entity, amount in self.entities[group_id][1].iteritems():
             cls = __main__.main_class.entity_manager.entities[entity]
-            try:
+            if hasattr(cls, "spawn_group"):
                 entities.extend(cls.spawn_group(amount))    
-            except AttributeError:
+            else:
                 for i in range(amount):
                     entities.append(cls())
         return entities

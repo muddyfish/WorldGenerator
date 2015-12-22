@@ -8,7 +8,6 @@ class Living(Moveable):
   vulnerable = []
   ineffective = []
   immune = []
-  no_respawn = False
   
   def __init__(self, x,y):
     super(Living, self).__init__(x,y)

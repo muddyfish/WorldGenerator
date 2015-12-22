@@ -4,6 +4,7 @@ import sys, os
 
 import assets.config.config_manager
 import assets.events.event_manager
+import assets.events.ai_event_manager
 import assets.font.font_manager
 import assets.ui.subscription_manager
 import assets.ui.screen
@@ -34,6 +35,10 @@ class Main(object):
   def init_event_manager(self):
     self.event_manager = assets.events.event_manager.EventManager()
     self.event_manager.add_events()
+    
+  def init_ai_event_manager(self):
+    self.ai_event_manager = assets.events.ai_event_manager.AiEventManager()
+    self.ai_event_manager.add_events()
   
   def init_keyboard_injector(self):
     self.keyboard_injector = assets.ui.keyboard_injector.KeyboardInjector()
@@ -88,6 +93,7 @@ def main():
   main_class.init_screen()
   main_class.init_event_manager()
   main_class.init_keyboard_injector()
+  main_class.init_ai_event_manager()
   main_class.init_entity_manager()
   main_class.init_font_manager()
   main_class.init_subscription_manager()
