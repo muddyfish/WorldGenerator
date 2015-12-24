@@ -11,13 +11,13 @@ class Snake(Charger):
   speed_normal = SNAKE_NORMAL_SPEED
   speed_attack = SNAKE_NORMAL_SPEED*3
   circle_radius = 80
-  spawn_method = staticmethod(lambda: Snake.circular)
+  spawn_method = staticmethod(lambda: Snake.spawn_circular)
   
   def __init__(self,x,y):
     super(Snake, self).__init__(x,y)
     self.load_animation_sheet("snake.anm2")
     self.finish_anim_funcs = {
-        "Appear":      lambda: self.choose_direction()
+        "Appear":      lambda: self.choose_direction(0)
       }
     self.run_anim(0)
     self.center(self.x_pos,self.y_pos)

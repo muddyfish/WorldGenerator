@@ -166,7 +166,11 @@ class MapUI(UI):
     self.d_time *= self.speedup
     if self.scrolling: return
     for entity in self.get_entities():
-      entity.run(self.d_time)
+      try:
+        entity.run(self.d_time)
+      except:
+        print "Exception raised in %r whilst running"%entity
+        raise
     #print d_time
   
   def get_blit(self, dirty):

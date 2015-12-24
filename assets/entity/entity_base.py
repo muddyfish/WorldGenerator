@@ -7,6 +7,7 @@ class Entity(__main__.pygame.sprite.Sprite):
   persistant = False
   no_spawn = False
   no_respawn = False
+  update_bounding_box = True
   
   def __init__(self, x,y):
     super(Entity, self).__init__()
@@ -72,8 +73,9 @@ class Entity(__main__.pygame.sprite.Sprite):
     return self.get_subscription().get_blit(self.dirty)
   
   def load_surf(self, surf):
-    self.bounding_rect = surf.get_bounding_rect()
-    self.rect = self.bounding_rect
+    if self.update_bounding_box:
+      self.bounding_rect = surf.get_bounding_rect()
+      self.rect = self.bounding_rect
     try:
       self.update_collision()
     except AttributeError:

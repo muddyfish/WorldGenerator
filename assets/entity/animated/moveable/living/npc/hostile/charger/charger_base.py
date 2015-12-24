@@ -15,7 +15,7 @@ class Charger(NPCHostile):
     self.register_event("player_xy", self.player_direction)
     self.mode = "move"
     
-  def choose_direction(self):
+  def choose_direction(self, wall_id):
     self.direction = random.choice(Charger.directions.keys())
     self.mode = "move"
     self.speed = self.speed_normal

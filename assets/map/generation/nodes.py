@@ -49,18 +49,21 @@ class Node(object):
             self.disconnect(conn)
             conn.kill_conns()
 
-    def get_entities(self):
+    @classmethod
+    def get_entities(cls):
+        if issubclass(cls.entities.__class__, basestring):
+            return nodetypes[cls.entities].get_entities()
         entities = []
         seed = random.random()
         # Get the probability for a group to spawn
-        chances = [group[0]for group in self.entities]
+        chances = [group[0]for group in cls.entities]
         # Which groups have a toatl probability above the seed chosen?
         groups = [sum(chances[:i+1]) > seed for i in range(len(chances))]
         # If none, no entities
         if groups == []: return []
         # The group chosen is the one with the lowest total chance that got chosen
         group_id = groups.index(True)
-        for entity, amount in self.entities[group_id][1].iteritems():
+        for entity, amount in cls.entities[group_id][1].iteritems():
             cls = __main__.main_class.entity_manager.entities[entity]
             if hasattr(cls, "spawn_group"):
                 entities.extend(cls.spawn_group(amount))    

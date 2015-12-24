@@ -82,8 +82,9 @@ class Animation(Entity):
         if self.auto_resize: self.surf = ResizableSurface(self.surf)
     self.old_anim = self.current_anim
     if d_time == 0:
-      self.bounding_rect = self.surf.get_bounding_rect()
-      self.update_collision()
+      if self.update_bounding_box:
+        self.bounding_rect = self.surf.get_bounding_rect()
+        self.update_collision()
   
   def on_finish_anim(self):
     curr = self.current_anim

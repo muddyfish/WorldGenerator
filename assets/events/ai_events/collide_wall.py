@@ -9,6 +9,6 @@ class collide_wall(AiEventHandler):
     self.listeners.append(entity)
     self.listener_funcs.append(on_called)
     
-  def is_called(self, entity):
+  def is_called(self, entity, wall_id):
     if entity not in self.listeners: return False
-    self.listener_funcs[self.listeners.index(entity)]()
+    self.listener_funcs[self.listeners.index(entity)](wall_id)

@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 from ..animate import Animation
-from assets.ui.subpixelsurface import SubPixelSurface
 
 class Moveable(Animation):
   speed_loss = 1600
-  dd = 128
+  max_d = 96
+  dd = 96
+  no_acc = False
+  auto_clamp = True
   clamp_cache = {}
   
   LEFT_BOUND  = 32
@@ -13,17 +15,16 @@ class Moveable(Animation):
   UP_BOUND    = 32
   DOWN_BOUND  = 240
   
-  def __init__(self, x,y, max_d=96, sub_level = 3):
-    self.sub_level = sub_level
+  def __init__(self, x,y):
     super(Moveable, self).__init__(x,y)
     self.subsurf = self.surf
     self.dx = self.ddx = self.dy = self.ddy = 0
-    self.max_d = max_d
-    self.max_dx = max_d
-    self.max_dy = max_d
+    self.max_dx = self.max_d
+    self.max_dy = self.max_d
     self.cddx = 0
     self.cddy = 0
-    self.move_pos(0)
+    if self.auto_clamp: self.move_pos(0)
+    if self.no_acc: self.move = self.move_speed
     
   def run(self, d_time):
     super(Moveable, self).run(d_time)
@@ -40,9 +41,11 @@ class Moveable(Animation):
     self.dy+=self.ddy*d_time
     self.dx = self.normalise(self.dx, d_time)
     self.dy = self.normalise(self.dy, d_time,y=True)
+    return self.move_speed(d_time)
+  
+  def move_speed(self, d_time):
     self.dx = self.clamp(self.max_dx, self.dx)
     self.dy = self.clamp(self.max_dy, self.dy)
-    
     moved = self.dx!=0 or self.dy!=0
     if moved: self.move_pos(d_time)
     return moved
@@ -52,19 +55,35 @@ class Moveable(Animation):
       #x_pos and y_pos are the center of the image so take that into account
       
       x,y = self.x_pos+self.dx*d_time, self.y_pos+self.dy*d_time
-      self.x_pos=max(Moveable.LEFT_BOUND+self.rect.width *1.25, min(Moveable.RIGHT_BOUND+self.rect.width/4,  x))
-      self.y_pos=max(Moveable.UP_BOUND  +self.rect.height*1.25, min(Moveable.DOWN_BOUND +self.rect.height/4, y))
-      self.surf = self.subsurf.at(self.x_pos, self.y_pos)
+      max_x = Moveable.LEFT_BOUND+self.rect.width *1.25 + self.bounding_rect.x/2
+      min_x = Moveable.RIGHT_BOUND+self.rect.width/4 + self.bounding_rect.x/2
+      max_y = Moveable.UP_BOUND  +self.rect.height*1.25 + self.bounding_rect.y/2
+      min_y = Moveable.DOWN_BOUND +self.rect.height/4+ self.bounding_rect.y/2
+      self.x_pos=max(max_x, min(min_x,  x))
+      self.y_pos=max(max_y, min(min_y, y))
+      #self.surf = self.subsurf.at(self.x_pos, self.y_pos)
       if x!=self.x_pos or y!=self.y_pos:
-        self.get_databin().ai_events.collide_wall.is_called(self)
+        if y!=self.y_pos:
+          if self.y_pos == max_x:wall_id = 0
+          else:                  wall_id = 1
+        else:
+          if self.x_pos == max_y:wall_id = 2
+          else:                  wall_id = 3
+        self.get_databin().ai_events.collide_wall.is_called(self, wall_id)
     else:
       #Otherwise just do a straight transformation on x and y which are based on (0,0) coords
       x,y = self.x+self.dx*d_time, self.y+self.dy*d_time
       self.x=max(Moveable.LEFT_BOUND, min(Moveable.RIGHT_BOUND-self.rect.width,  x))
       self.y=max(Moveable.UP_BOUND,   min(Moveable.DOWN_BOUND- self.rect.height, y))
-      self.surf = self.subsurf.at(self.x, self.y)
+      #self.surf = self.subsurf.at(self.x, self.y)
       if x!=self.x or y!=self.y:
-        self.get_databin().ai_events.collide_wall.is_called(self)
+        if y!=self.y:
+          if self.y == Moveable.UP_BOUND:   wall_id = 0
+          else:                             wall_id = 1
+        else:
+          if self.x == Moveable.LEFT_BOUND: wall_id = 2
+          else:                             wall_id = 3
+        self.get_databin().ai_events.collide_wall.is_called(self, wall_id)
     self.get_databin().ai_events.player_xy.is_called(self)
   
   def clamp(self, clamp, val):
@@ -84,8 +103,4 @@ class Moveable(Animation):
     if new_sign != orig_sign:
       return 0
     return final
-  
-  def load_surf(self, surf):
-    surf = super(Moveable, self).load_surf(surf)
-    return SubPixelSurface(surf, self.sub_level)
   
