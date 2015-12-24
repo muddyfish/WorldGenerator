@@ -102,7 +102,9 @@
         ], 
         "returnchance": 0.5,
         "entities": [
-            [1, {"animated.collectable.key": 1}]
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.key": 1}],
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 3, "animated.collectable.key": 1}],
+            [0.2, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 1, "animated.collectable.key": 1}]
         ],
         "door_id": 1,
         "locked": false
@@ -235,7 +237,6 @@
         ], 
         "returnchance": 0,
         "entities": [
-            
         ],
         "door_id": 1,
         "locked": false

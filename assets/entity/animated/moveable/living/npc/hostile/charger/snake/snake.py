@@ -13,7 +13,7 @@ class Snake(Charger):
   circle_radius = 80
   spawn_method = staticmethod(lambda: Snake.spawn_circular)
   
-  def __init__(self,x,y):
+  def __init__(self,x,y, spawn_id):
     super(Snake, self).__init__(x,y)
     self.load_animation_sheet("snake.anm2")
     self.finish_anim_funcs = {

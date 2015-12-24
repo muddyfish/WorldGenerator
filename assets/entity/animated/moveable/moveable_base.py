@@ -4,7 +4,7 @@ from ..animate import Animation
 
 class Moveable(Animation):
   speed_loss = 1600
-  max_d = 96
+  max_d = 128
   dd = 96
   no_acc = False
   auto_clamp = True

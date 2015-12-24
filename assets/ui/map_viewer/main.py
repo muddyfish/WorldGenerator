@@ -16,7 +16,7 @@ class MapUI(UI):
     self.debug_font = self.get_main().fonts["debug"]
     self.map = DungeonMap(self.config_manager)
     self.draw_rects = False
-    self.draw_debug = True
+    self.draw_debug = self.config_manager.config_data["subscription_config"]["draw_debug"]
     self.dirty = True
     self.speedup = self.config_manager.config_data["video_config"]["speedup"]
     self.scrolling = []

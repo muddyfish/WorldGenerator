@@ -9,6 +9,7 @@ class Living(Moveable):
   ineffective = []
   immune = []
   invincible = False
+  use_random = True
   
   def __init__(self, x,y):
     super(Living, self).__init__(x,y)
@@ -22,12 +23,15 @@ class Living(Moveable):
   def spawn_circular(cls, amount):
     entities = []
     screen = __main__.main_class.screen
-    center = [screen.get_width()/4, screen.get_height()/4]
-    offset = random.random()*2*math.pi
+    center = screen.get_center()
+    if cls.use_random:
+      offset = random.random()*2*math.pi
+    else:
+      offset = 0
     for i in range(amount):
       x = cls.circle_radius * math.sin((2*math.pi*i+offset)/amount)
       y = cls.circle_radius * math.cos((2*math.pi*i+offset)/amount)
-      entities.append(cls(center[0]+x,center[1]+y))
+      entities.append(cls(center[0]+x,center[1]+y, spawn_id = i))
     return entities
   
   @classmethod
@@ -38,7 +42,10 @@ class Living(Moveable):
     perimeter = (y_length)*2 + \
                 (x_length)*2
     #Get a random point on the perimeter
-    current_pos = random.randrange(perimeter)
+    if cls.use_random:
+      current_pos = random.randrange(perimeter)
+    else:
+      current_pos = 0
     for i in range(amount):
       x_pos = 0
       y_pos = 0
