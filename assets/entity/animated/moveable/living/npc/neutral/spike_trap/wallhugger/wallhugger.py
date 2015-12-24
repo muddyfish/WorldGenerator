@@ -16,6 +16,7 @@ class WallHugger(SpikeTrap):
     self.rect = self.bounding_rect.copy()
     super(WallHugger, self).__init__(x,y)
     self.load_animation_sheet("wall hugger.anm2")
+    self.load_animation("No-Spikes")
     self.register_event("collide_wall", self.choose_direction)
     self.x_pos += self.surf.get_width()*1.5
     self.y_pos += self.surf.get_height()*1.5

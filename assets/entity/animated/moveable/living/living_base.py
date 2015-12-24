@@ -23,21 +23,22 @@ class Living(Moveable):
     entities = []
     screen = __main__.main_class.screen
     center = [screen.get_width()/4, screen.get_height()/4]
+    offset = random.random()*2*math.pi
     for i in range(amount):
-      x = cls.circle_radius * math.sin((2*math.pi*i)/amount)
-      y = cls.circle_radius * math.cos((2*math.pi*i)/amount)
+      x = cls.circle_radius * math.sin((2*math.pi*i+offset)/amount)
+      y = cls.circle_radius * math.cos((2*math.pi*i+offset)/amount)
       entities.append(cls(center[0]+x,center[1]+y))
     return entities
   
   @classmethod
   def spawn_wall(cls, amount):
     entities = []
-    x_length = Living.RIGHT_BOUND - Living.LEFT_BOUND# - cls.surf_perm/2
-    y_length = Living.DOWN_BOUND - Living.UP_BOUND #- cls.surf_perm/2
+    x_length = Living.RIGHT_BOUND - Living.LEFT_BOUND
+    y_length = Living.DOWN_BOUND - Living.UP_BOUND
     perimeter = (y_length)*2 + \
                 (x_length)*2
     #Get a random point on the perimeter
-    current_pos = 0#random.randrange(perimeter)
+    current_pos = random.randrange(perimeter)
     for i in range(amount):
       x_pos = 0
       y_pos = 0
