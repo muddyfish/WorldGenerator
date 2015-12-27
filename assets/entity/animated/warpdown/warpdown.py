@@ -14,6 +14,7 @@ class WarpDown(Animation):
       }
     self.current_anim = "Open Animation"
     self.run_anim(0)
+    self.center()
     
   def run(self, d_time):
     self.run_anim(d_time)

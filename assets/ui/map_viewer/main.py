@@ -25,7 +25,6 @@ class MapUI(UI):
     self.event_manager = self.get_main().event_manager
     self.event_manager.add_subscription_event(self, KeyboardHandler)
     self.event_manager.subscriber = self.subscription_id
-    self.get_main().databin.entity_data.entities = []
     self.entity_manager = self.get_main().entity_manager
     self.entity_list = self.entity_manager.entities
     self.backdrop_ui = self.entity_list["animated.backdrop"]()
@@ -44,15 +43,21 @@ class MapUI(UI):
       "show_databin":[self.print_databin]
     }
     for k,v in self.entity_manager.get_persistant_entities().iteritems():
-      if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud"]:
+      if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud", "animated.hud.map"]:
         v().spawn()
     self.door = self.entity_list["animated.door"]
     self.clock = Clock()
     self.load_dungeon()
     
   def load_dungeon(self):
+    try:
+      map_entity = self.get_main().databin.entity_data.map.sprites()[0]
+    except TypeError:pass
+    else:
+      map_entity.despawn()
     self.map.load_dungeon()
     self.backdrop_ui.load_new_backdrop()
+    self.entity_list["animated.hud.map"](self).spawn()
     self.load_room(self.map.start_node, 0, no_scroll = True)
     self.player.x, self.player.y = self.screen.get_center()
     
@@ -66,11 +71,13 @@ class MapUI(UI):
     axis = 1-room_id%2
     setattr(self.player, "xy"[axis], self.screen.get_size()[axis]*(1-(room_id>>1))+52*cmp(room_id>>1, 0.5))
     self.current_room = current_room
+    self.current_room.visited = True
     random.seed(self.current_room.seed)
     self.backdrop_ui.load_current_room()
     self.clean_entities()
     self.load_entities()
     self.add_doors()
+    self.get_main().databin.entity_data.map.sprites()[0].update_room()
     self.clock.tick()
 
   def add_doors(self):
@@ -157,9 +164,18 @@ class MapUI(UI):
     cur_room = self.debug_font.render("Keys: %d"%self.player.keys, True, (255,255,255))
     self.screen.blit(cur_room, (10,70))
     
-  def print_databin(self):
-    print self.get_main().databin
-    time.sleep(0.5)
+  def print_databin(self, databin = None, no_tabs = 0):
+    if databin is None: databin = self.get_main().databin
+    for k,v in databin.__dict__.iteritems():
+      if isinstance(v, databin.__class__):
+        print "%s%s: {"%(" "*no_tabs,k)
+        self.print_databin(v, no_tabs+2)
+        print "%s}"%(" "*no_tabs)
+      elif isinstance(v, self.get_pygame().sprite.LayeredUpdates):
+        print "%s%s: %s"%(" "*no_tabs, k,v.sprites())
+      else:
+        print "%s%s: %s"%(" "*no_tabs, k,v)
+    
     
   def run(self):
     self.d_time = self.clock.tick()

@@ -13,6 +13,12 @@ class Animation(Entity):
   transparent_colour = (255,255,255)
   auto_resize = True
 
+  def __repr__(self):
+    try:
+      return "%s(%d,%d,%s)"%(self.__class__.__name__, self.x, self.y, self.current_anim)
+    except AttributeError:
+      return super(Animation, self).__repr__()
+  
   def __setattr__(self, attr, value):
     super(Animation, self).__setattr__(attr, value)
     if attr == "current_anim" and hasattr(self, "spritesheets") and self.auto_update: self.load_animation()

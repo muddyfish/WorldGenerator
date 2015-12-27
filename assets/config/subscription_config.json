@@ -1,5 +1,5 @@
 {
-  "default": "startup_logo",
+  "default": "map_viewer",
   "show_subscriptions": false,
-  "draw_debug": false
+  "draw_debug": true
 }

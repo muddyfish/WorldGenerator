@@ -12,6 +12,9 @@ class Collectable(Animation):
     if "Collect" != self.current_anim:
       for entity in self.get_collide():
         if "player" in entity.groups:
-          setattr(entity, self.setter, self.function(getattr(entity, self.setter)))
-          self.current_anim = "Collect"        
+          self.collected(entity)
+          self.current_anim = "Collect"
           self.no_respawn = True
+  
+  def collected(self, entity):
+    setattr(entity, self.setter, self.function(getattr(entity, self.setter)))

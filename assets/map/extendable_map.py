@@ -7,7 +7,7 @@ class ExtendableMap(object):
     
     def __str__(self):
         s = ""
-        for row in self.map:
+        for row in zip(*self.map)[::-1]:
             for col in row:
                 if col == None: s+=" "
                 elif hasattr(col, "name"): s+=col.name[0]
@@ -58,6 +58,7 @@ class ExtendableMap(object):
         self._autocrop_dim()
         self.map = zip(*self.map) # Rotate the map
         self._autocrop_dim()
+        self.map = zip(*self.map) # Rotate the map
         self.get_map_size()
         
     def _autocrop_dim(self):

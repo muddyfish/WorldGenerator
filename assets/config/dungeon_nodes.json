@@ -79,7 +79,8 @@
             false
         ], 
         "returnchance": 0,
-        "entities": [],
+        "entities": [
+            [1, {"animated.collectable.bomb": 1}]],
         "door_id": 1,
         "locked": false
     }, 
@@ -90,7 +91,9 @@
             false
         ], 
         "returnchance": 0,
-        "entities": [],
+        "entities": [
+            [1.0, {"animated.collectable.dungeonmap": 1}]
+        ],
         "door_id": 1,
         "locked": false
     }, 

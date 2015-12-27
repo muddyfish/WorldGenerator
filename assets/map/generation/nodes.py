@@ -14,6 +14,7 @@ class Node(object):
         self.transversed = False
         self.seed = random.random()
         self.cleared = False
+        self.visited = False
         self.entity_list = []
         if hasattr(self, "entities"):
             self.entity_list = self.get_entities()

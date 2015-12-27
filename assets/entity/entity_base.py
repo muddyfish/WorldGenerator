@@ -18,7 +18,10 @@ class Entity(__main__.pygame.sprite.Sprite):
     self.x = x
     self.y = y
     self.update_collision()
-    
+  
+  def __repr__(self):
+    return "%s(%d,%d)"%(self.__class__.__name__, self.x, self.y)
+  
   def spawn(self):
     if self.no_spawn: return
     #Add this entity to it's parents groups
