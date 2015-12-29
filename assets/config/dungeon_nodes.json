@@ -115,6 +115,7 @@
             [0.3, {"animated.moveable.living.npc.neutral.spike_trap.wallhugger": 2}],
             [0.1, {"animated.moveable.living.npc.neutral.spike_trap.wallhugger": 5}]
         ],
+        "replace_on_room_clear": ["Nothing", "Nothing", "ItemBonus"],
         "door_id": 1,
         "locked": false
     }, 
@@ -132,6 +133,7 @@
             [0.2, {"animated.moveable.living.npc.neutral.spike_trap.wallhugger": 4}],
             [0.8, {"animated.moveable.living.npc.hostile.charger.snake": 2}]
         ],
+        "replace_on_room_clear": ["Nothing", "ItemBonus"],
         "door_id": 1,
         "locked": false
     },

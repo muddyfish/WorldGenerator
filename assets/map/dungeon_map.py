@@ -27,7 +27,7 @@ class DungeonMap(object):
       return None
     return self.map[coords[0]][coords[1]]
   
-  def replace_node(self, old_node, new_node_name):
+  def replace_node(self, old_node, new_node_name, carry_entities = []):
     coords = self.get_coords(old_node)
     node_class = generation.nodes.nodetypes[new_node_name]
     new_node = node_class(old_node.seed)
@@ -35,4 +35,15 @@ class DungeonMap(object):
     for conn in old_node.connections[:]:
       conn.disconnect(old_node)
       conn.connect(new_node)
+      
+    for entity in carry_entities:
+      if not entity.spawned:
+        new_node.entity_list.append(entity)
+        if "door" in entity.mro_groups:
+          entity.current_room = new_node
+    for conn in new_node.connections:
+      for entity in conn.entity_list:
+        if "door" in entity.mro_groups:
+          if entity.room is old_node:
+            entity.room = new_node
     return new_node

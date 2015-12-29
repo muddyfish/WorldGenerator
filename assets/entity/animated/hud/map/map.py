@@ -55,6 +55,7 @@ class Map(HUD):
     
   def blit_conns(self, cur_room, cur_room_colour):
     cur_pos = self.blit_coords(self.map.get_coords(cur_room), cur_room_colour)
+    if cur_pos is None: return
     cur_pos = [cur_pos[0]+7, cur_pos[1]+3]
     for conn in cur_room.connections:
       if conn.visited:
@@ -68,7 +69,9 @@ class Map(HUD):
     self.blit_coords(self.map.get_coords(cur_room), cur_room_colour)
     
   def blit_coords(self, coords, colour):
-    coords = [coords[0]+1, self.map_size[1]-coords[1]+1]
+    try:
+      coords = [coords[0]+1, self.map_size[1]-coords[1]+1]
+    except TypeError: return 
     pos = (coords[0]*16,coords[1]*8)
     self.internal_surf.fill(colour, (pos,(15,7)))
     return pos

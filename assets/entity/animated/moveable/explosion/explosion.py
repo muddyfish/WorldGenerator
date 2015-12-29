@@ -5,6 +5,7 @@ from ..moveable_base import Moveable
 class Explosion(Moveable):
   transparent_colour = (0,0,0)
   anim_speed = 1.0/12
+  no_respawn = True
   
   def __init__(self, x, y):
     self.pygame = self.get_pygame()

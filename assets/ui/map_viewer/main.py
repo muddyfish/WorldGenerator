@@ -68,13 +68,13 @@ class MapUI(UI):
       self.scrolling = (((0,1),(1,0),(0,-1),(-1,0)))[room_id]
     axis = 1-room_id%2
     setattr(self.player, "xy"[axis], self.screen.get_size()[axis]*(1-(room_id>>1))+52*cmp(room_id>>1, 0.5))
+    self.clean_entities()
     self._load_room(current_room)
   
   def _load_room(self, current_room):
     self.current_room = current_room
     random.seed(self.current_room.seed)
     self.backdrop_ui.load_current_room()
-    self.clean_entities()
     self.add_doors()
     self.load_entities()
     self.get_main().databin.entity_data.map.sprites()[0].update_room()
@@ -105,10 +105,15 @@ class MapUI(UI):
     except AttributeError:
       new_room_list = []
     if new_room_list:
+      entities = self.get_entities().sprites()[:]
       new_room_name = random.choice(new_room_list)
-      new_room = self.map.replace_node(self.current_room, new_room_name)
+      old_room = self.current_room
+      self.clean_entities()
+      new_room = self.map.replace_node(self.current_room, new_room_name, entities)
+      new_room.visited = True
       self._load_room(new_room)
       return
+    
     auto_cleared = True
     for entity in self.current_room.entity_list:
       if entity.must_kill:

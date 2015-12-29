@@ -13,8 +13,10 @@ class Entity(__main__.pygame.sprite.Sprite):
   
   def __init__(self, x,y):
     super(Entity, self).__init__()
+    self.mro_groups = [cls.__name__.lower() for cls in inspect.getmro(self.__class__)[:-2]]
     self.dirty = True
     self.ai_events = []
+    self.groups = []
     if not hasattr(self, "surf"):
       self.surf = self.load_surf(self.get_pygame().surface.Surface((32,32)))
     self.x = x
@@ -28,7 +30,7 @@ class Entity(__main__.pygame.sprite.Sprite):
     self.spawned = True
     if self.no_spawn: return
     #Add this entity to it's parents groups
-    self.groups = [cls.__name__.lower() for cls in inspect.getmro(self.__class__)[:-2]]
+    self.groups = self.mro_groups[:]
     for group in self.groups:
       attr = getattr(self.get_entity_data(), group)
       #If any of this entities parents haven't been added before, add them to to the databin
@@ -39,6 +41,7 @@ class Entity(__main__.pygame.sprite.Sprite):
   
   def despawn(self, killed = True):
     self.spawned = False
+    self.groups = []
     if self.no_respawn and killed: self.no_spawn = True
     self.kill()
   
