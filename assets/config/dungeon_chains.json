@@ -6,7 +6,6 @@
                 "Chain", 
                 "Gate", 
                 "BossMini", 
-                "ItemQuest", 
                 "TestItem", 
                 "ChainFinal", 
                 "Goal"
@@ -38,11 +37,7 @@
                             "Chain": [
                                 {
                                     "Gate": [
-                                        {
-                                            "BossMini": [
-                                                "ItemQuest"
-                                            ]
-                                        }
+                                            "BossMini"
                                     ]
                                 }
                             ]

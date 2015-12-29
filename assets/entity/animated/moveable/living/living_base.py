@@ -12,8 +12,11 @@ class Living(Moveable):
   use_random = True
   
   def __init__(self, x,y):
-    super(Living, self).__init__(x,y)
     self.life = random.randrange(self.min_life, self.max_life+1)  
+    self.screen = self.get_main().screen
+    self.x_pos, self.y_pos = x, y
+    self.x, self.y = x, y
+    super(Living, self).__init__(x,y)
   
   @classmethod
   def spawn_group(cls, amount):

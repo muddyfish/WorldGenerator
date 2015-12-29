@@ -1,83 +1,48 @@
 {
     "Start": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
     }, 
     "Chain": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
     }, 
     "ChainFinal": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
     }, 
     "ChainLinear": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
     }, 
     "ChainParallel": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
     }, 
     "Fork": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
     }, 
     "Gate": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
     }, 
     "Hook": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "locked": false
-    }, 
+    },
+    
 
     "ItemBonus": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [
             [1, {"animated.collectable.bomb": 1}]],
@@ -86,10 +51,6 @@
     }, 
     "ItemQuest": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [
             [1.0, {"animated.collectable.dungeonmap": 1}]
@@ -99,10 +60,6 @@
     }, 
     "Key": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0.5,
         "entities": [
             [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.key": 1}],
@@ -114,10 +71,6 @@
     }, 
     "KeyFinal": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [
             [1, {"animated.collectable.bosskey": 1}]
@@ -127,10 +80,6 @@
     }, 
     "KeyMulti": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0.4,
         "entities": [],
         "door_id": 1,
@@ -138,21 +87,14 @@
     }, 
     "Lock": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
-        "entities": "Test",
+        "entities": [],
+        "replace_on_room_clear": ["Test", "TestSecret", "Nothing"],
         "door_id": 1,
         "locked": "keys"
     }, 
     "LockMulti": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": "Test",
         "door_id": 1,
@@ -160,10 +102,6 @@
     }, 
     "Nothing": {
         "backtrackable": true, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [],
         "door_id": 1,
@@ -171,10 +109,6 @@
     }, 
     "Test": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [
             [0.4, {"animated.moveable.living.npc.hostile.charger.snake": 4}],
@@ -187,10 +121,6 @@
     }, 
     "TestItem": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [],
         "door_id": 1,
@@ -198,10 +128,6 @@
     }, 
     "TestSecret": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [
             [0.2, {"animated.moveable.living.npc.neutral.spike_trap.wallhugger": 4}],
@@ -212,10 +138,6 @@
     },
     "BossLevel": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [],
         "door_id": 9,
@@ -223,21 +145,14 @@
     }, 
     "BossMini": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [],
+        "replace_on_room_clear": ["ItemQuest"],
         "door_id": 3,
         "locked": false
     }, 
     "Entrance": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [
         ],
@@ -246,10 +161,6 @@
     }, 
     "Goal": {
         "backtrackable": false, 
-        "forceconnect": [
-            false, 
-            false
-        ], 
         "returnchance": 0,
         "entities": [
             [1, {"animated.warpdown": 1}]

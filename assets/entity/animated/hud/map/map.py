@@ -4,7 +4,7 @@ from ..hud import HUD
 
 class Map(HUD):
   transparency = 128
-  path_colour = (254,254,254)
+  path_colour = (128,128,128)
   cur_room_colour = (0,0,255)
   visited_room_colour = (0,0,0)
   unvisited_room_colour = (128,128,128)
@@ -18,6 +18,9 @@ class Map(HUD):
     #print self.map.nodes.map
     self.setup_surf()
     #self.show_whole_dungeon()
+    
+  def __repr__(self):
+    return "\n"+str(self.map.nodes.map)+"\n"
     
   def setup_surf(self):
     self.internal_surf = self.pygame.Surface(((self.map_size[0]+3)*16, (self.map_size[1]+3)*8))

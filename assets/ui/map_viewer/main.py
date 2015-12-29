@@ -17,7 +17,6 @@ class MapUI(UI):
     self.map = DungeonMap(self.config_manager)
     self.draw_rects = False
     self.draw_debug = self.config_manager.config_data["subscription_config"]["draw_debug"]
-    self.dirty = True
     self.speedup = self.config_manager.config_data["video_config"]["speedup"]
     self.scrolling = []
     self.shaking = 0
@@ -45,7 +44,6 @@ class MapUI(UI):
     for k,v in self.entity_manager.get_persistant_entities().iteritems():
       if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud", "animated.hud.map"]:
         v().spawn()
-    self.door = self.entity_list["animated.door"]
     self.clock = Clock()
     self.load_dungeon()
     
@@ -71,32 +69,45 @@ class MapUI(UI):
     axis = 1-room_id%2
     setattr(self.player, "xy"[axis], self.screen.get_size()[axis]*(1-(room_id>>1))+52*cmp(room_id>>1, 0.5))
     self.current_room = current_room
-    self.current_room.visited = True
     random.seed(self.current_room.seed)
     self.backdrop_ui.load_current_room()
     self.clean_entities()
-    self.load_entities()
     self.add_doors()
+    self.load_entities()
     self.get_main().databin.entity_data.map.sprites()[0].update_room()
+    self.current_room.visited = True
     self.clock.tick()
 
   def add_doors(self):
-    coords = self.map.get_coords(self.current_room)
-    for pos_id, d_coord in enumerate(((0,1),(-1,0),(0,-1),(1,0))):
-      room = self.map.get_room(map(int.__add__, coords, d_coord))
-      if room and room in self.current_room.connections:
-        d = self.door(pos_id, room, self.current_room)
-        d.spawn()
-        d.run_anim(0)
+    if not self.current_room.visited:
+      coords = self.map.get_coords(self.current_room)
+      for pos_id, d_coord in enumerate(((0,1),(-1,0),(0,-1),(1,0))):
+        room = self.map.get_room(map(int.__add__, coords, d_coord))
+        if room and room in self.current_room.connections:
+          door = self.entity_list["animated.door"](pos_id, room, self.current_room)
+          self.current_room.entity_list.append(door)
 
   def clean_entities(self):
     for entity in self.get_entities():
       if not entity.persistant:
-          entity.despawn()
+          entity.despawn(killed = False)
   
   def load_entities(self):
     for entity in self.current_room.entity_list:
       entity.spawn()
+  
+  def room_cleared(self):
+    auto_cleared = True
+    for entity in self.current_room.entity_list:
+      if entity.must_kill:
+        auto_cleared = False
+    if auto_cleared:
+      for door in self.get_main().databin.entity_data.door:
+        if not door.locked:
+          door.open = True
+          door.current_anim = "Opened"
+    else:
+      self.open_doors()
   
   def call_key_event(self, event_name):
     for event in event_name:
@@ -112,27 +123,23 @@ class MapUI(UI):
   def open_doors(self, all_ = False):
     for door in self.get_main().databin.entity_data.door:
       if (not door.locked) or all_:
-        door.auto_update = False
         door.locked = False
         door.open = True
-        door.current_anim = "Open"
-        door.auto_update = True
-        door.load_animation()
         
   def toggle_draw_rects(self):
     self.draw_rects = not self.draw_rects
 
-  def calc_scroll(self, x_mod, y_mod):
-    x_mod += self.scrolling[0]
-    y_mod += self.scrolling[1]
+  def calc_scroll(self, in_x_mod, in_y_mod):
+    x_mod = self.scrolling[0]
+    y_mod = self.scrolling[1]
     sign = map(lambda i: cmp(i, 0), self.scrolling)
     self.scrolling = [i+sign[j]*(200*self.d_time) for j, i in enumerate(self.scrolling)]
-    self.screen.blit(self.bg_image, (x_mod,y_mod))
+    self.screen.blit(self.bg_image, (in_x_mod+x_mod,in_y_mod+y_mod))
     x_mod -= cmp(x_mod, 0)*self.screen.get_size()[0]
     y_mod -= cmp(y_mod, 0)*self.screen.get_size()[1]
     if [cmp(x_mod, 0), cmp(y_mod, 0)] == sign:
       self.scrolling = []
-    return x_mod, y_mod
+    return in_x_mod+x_mod, in_y_mod+y_mod
       
   def draw(self):
     x_mod = 0
@@ -142,6 +149,7 @@ class MapUI(UI):
       x_mod += random.randrange(-rs,rs)
       y_mod += random.randrange(-rs,rs)
       self.shaking -= self.d_time
+      if self.shaking < 0: self.shaking = 0
     if self.scrolling:
       x_mod, y_mod = self.calc_scroll(x_mod, y_mod)
     for entity in self.get_entities():
@@ -161,8 +169,8 @@ class MapUI(UI):
   def draw_debug_text(self):
     cur_room = self.debug_font.render("Current room: %s"%self.current_room, True, (255,255,255))
     self.screen.blit(cur_room, (10,50))
-    cur_room = self.debug_font.render("Keys: %d"%self.player.keys, True, (255,255,255))
-    self.screen.blit(cur_room, (10,70))
+    #cur_room = self.debug_font.render("Keys: %d"%self.player.keys, True, (255,255,255))
+    #self.screen.blit(cur_room, (10,70))
     
   def print_databin(self, databin = None, no_tabs = 0):
     if databin is None: databin = self.get_main().databin
@@ -176,17 +184,24 @@ class MapUI(UI):
       else:
         print "%s%s: %s"%(" "*no_tabs, k,v)
     
-    
   def run(self):
     self.d_time = self.clock.tick()
     self.d_time *= self.speedup
     if self.scrolling: return
+    room_cleared = True
     for entity in self.get_entities():
-      try:
-        entity.run(self.d_time)
-      except:
-        print "Exception raised in %r whilst running"%entity
-        raise
+      if entity.must_kill:
+        room_cleared = False
+      if entity.spawned:
+        try:
+          entity.run(self.d_time)
+        except:
+          print "Exception raised in %r whilst running"%entity
+          raise
+    if room_cleared and not self.current_room.cleared and not self.scrolling:
+      self.current_room.cleared = True
+      self.room_cleared()
+    
     #print d_time
   
   def get_blit(self, dirty):

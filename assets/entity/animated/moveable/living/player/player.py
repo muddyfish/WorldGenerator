@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from ..living_base import Living
-from ...bomb.bomb import Bomb
 
 class Player(Living):
   persistant = True
@@ -11,11 +10,16 @@ class Player(Living):
   
   def __init__(self, parent):
     self.parent = parent
-    super(Player, self).__init__(0,0)
-    self.screen = self.get_main().screen
+    super(Player, self).__init__(*parent.screen.get_center())
     self.config_manager = self.get_main().config_manager
     self.load_animation_sheet("player.anm2")
     self.current_anim = "WalkUp"
+    self.run_anim(0)
+    self.center()
+    del self.x_pos
+    del self.y_pos
+    self.x -= self.surf.get_width()
+    self.y -= self.surf.get_height()
     self.keys = 0
     self.multi_keys = 0
     self.boss_key = 0
@@ -23,7 +27,6 @@ class Player(Living):
     self.cooldown_timers = {
       "bomb": [0,0.5]
     }
-    self.run_anim(0)
 
   def run(self, d_time):
     super(Player, self).run(d_time)
@@ -46,7 +49,7 @@ class Player(Living):
           self.dy = 0
           self.ddx = 0
           self.ddy = 0
-        elif door and door.current_anim == "Opened":
+        elif door and door.current_anim in ["Opened", "BrokenOpen"]:
           self.parent.load_room(door.room, door.pos_id)
   
   def door_collide(self, s, door):
@@ -57,5 +60,4 @@ class Player(Living):
     if self.bombs != 0 and self.cooldown_timers["bomb"][0] == 0:
       self.cooldown_timers["bomb"][0] = self.cooldown_timers["bomb"][1]
       self.bombs -= 1
-      bomb = Bomb(self.x, self.y)
-      bomb.spawn()
+      self.spawn_entity("animated.moveable.bomb", self.x+self.surf.get_width()/4, self.y+self.surf.get_height()/4)

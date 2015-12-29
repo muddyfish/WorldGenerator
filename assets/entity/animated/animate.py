@@ -148,7 +148,6 @@ class AnimationXML(object):
   def __contains__(self, value):
     return value in [i.tag for i in self.xml_tree.getchildren()]
   
-  
   def __repr__(self):
     return self.tag+":\t"+str(self.xml_tree.attrib)+"\t["+", ".join([e.tag for e in self.xml_tree.getchildren()])+"]"
 
@@ -162,18 +161,17 @@ class AnimationFrame(object):
       self.__dict__ = AnimationFrame.hashes[self.hash]
     else:
       self.attributes = {k:ast.literal_eval(v) for k,v in frame_xml.xml_tree.attrib.iteritems()}
-      self.parent = parent
       self.layer_id = layer_id
       self.transparent_colour = parent.transparent_colour
-      self.setup_frame()
+      self.setup_frame(parent)
       AnimationFrame.hashes[self.hash] = self.__dict__
   
-  def setup_frame(self):
-    pygame = self.parent.get_pygame()
-    self.spritesheet = self.parent.spritesheets[self.parent.layers[self.layer_id][1]]
-    self.layer_name = self.parent.layers[self.layer_id][0]
+  def setup_frame(self, parent):
+    pygame = parent.get_pygame()
+    spritesheet = parent.spritesheets[parent.layers[self.layer_id][1]]
+    self.layer_name = parent.layers[self.layer_id][0]
     if self.attributes["Visible"]:
-      self.surf = self.spritesheet.subsurface(((self.attributes["XCrop"]*2,
+      self.surf = spritesheet.subsurface(((self.attributes["XCrop"]*2,
                                                    self.attributes["YCrop"]*2),
                                                   (self.attributes["Width"]*2,
                                                    self.attributes["Height"]*2))).copy()      
@@ -196,7 +194,7 @@ class AnimationFrame(object):
         if -1 in map(cmp, scale, (0,0)):
           self.surf = pygame.transform.flip(self.surf, scale[0]<0, scale[1]<0)
     else:
-      self.surf = self.spritesheet.subsurface((0,0,0,0))
+      self.surf = spritesheet.subsurface((0,0,0,0))
     self.blit_pos = (self.attributes["XPosition"]*2-self.surf.get_width()/2,
                      self.attributes["YPosition"]*2-self.surf.get_height()/2)
     

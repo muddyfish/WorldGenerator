@@ -11,7 +11,6 @@ class Door(Animation):
     self.room = room
     self.door_id = max(self.room.door_id, cur_room.door_id)
     if self.door_id in [26]: self.transparent_colour = None
-    self.auto_update = True
     super(Door, self).__init__(0,0)
     self.rotate_amount = 90*self.pos_id
     self.old_anim = ""
@@ -26,20 +25,23 @@ class Door(Animation):
     self.load_door_surfs()
     self.locked = bool(self.room.locked)
     self.keytype = room.locked
-    self.open = not self.room.locked
+    self.open = cur_room.cleared and not self.locked
     self.set_pos()
-    self.current_anim = "Opened"
     if self.locked: self.current_anim = "KeyClosed"
+    self.broken = False
     self.first_tick = True
+    self.run_anim(0)
   
   def __setattr__(self, attr, val):
+    if attr in ["open", "locked"]:
+      if attr == "locked":
+        if val == False:
+          self.room.locked = val
+      else:
+        try:
+          self.get_anim_state(val, getattr(self, attr))
+        except AttributeError: pass
     super(Door, self).__setattr__(attr, val)
-    if attr in ["open", "locked"] and self.auto_update:
-      if attr == "locked" and val == False:
-        self.room.locked = val
-      try:
-        self.get_anim_state()
-      except AttributeError: pass
   
   def set_pos(self):
     pos = [0,0]
@@ -54,23 +56,27 @@ class Door(Animation):
     self.x, self.y = pos
     #print self.x, self.y, pos_id>>1, pos_id%2
 
-  def get_anim_state(self):
-    anim = ""
-    if self.locked:
-      anim += "Key"
-    if self.open:
-      anim += "Open"
-      if self.current_anim == "Opened": anim += "ed"
+  def get_anim_state(self, opened, old_opened):
+    if self.broken:
+      self.current_anim = "BrokenOpen"
+    elif self.locked:
+      self.current_anim = "KeyClosed"
+    elif opened:
+      if old_opened:
+        self.current_anim = "Opened"
+      else:
+        self.current_anim = "Open"
     else:
-      anim += "Close"
-      if self.locked: anim += "d"
-    self.current_anim = anim
+      if old_opened:
+        self.current_anim = "Close"
+      else:
+        self.current_anim = "Closed"
     
   def run(self, d_time):
-    self.run_anim(d_time)
     if self.first_tick:
       self.first_tick = False
-      self.get_anim_state()
+      self.get_anim_state(self.open, True)
+    self.run_anim(d_time)
       
   def unlockable(self):
     player = self.get_databin().entity_data.player.get_sprite(0)
@@ -100,7 +106,6 @@ class Door(Animation):
     #print self.pos_id, self.pos_id%2, self.rect
     
   def load_door_surfs(self):
-    im_path = glob.glob(os.path.join(self.get_path(), "gfx", "door_%02d*.png"%self.door_id))[0]
     anm_filename = glob.glob(os.path.join(self.get_path(), "anm", "door_%02d_*.anm2"%self.door_id))[0]
     self.load_animation_sheet(anm_filename)
     

@@ -3,4 +3,5 @@
 from ..npc_base import NPC
 
 class NPCHostile(NPC):
-  pass
+  must_kill = True
+  no_respawn = True

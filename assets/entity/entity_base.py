@@ -8,6 +8,8 @@ class Entity(__main__.pygame.sprite.Sprite):
   no_spawn = False
   no_respawn = False
   update_bounding_box = True
+  spawned = False
+  must_kill = False
   
   def __init__(self, x,y):
     super(Entity, self).__init__()
@@ -23,6 +25,7 @@ class Entity(__main__.pygame.sprite.Sprite):
     return "%s(%d,%d)"%(self.__class__.__name__, self.x, self.y)
   
   def spawn(self):
+    self.spawned = True
     if self.no_spawn: return
     #Add this entity to it's parents groups
     self.groups = [cls.__name__.lower() for cls in inspect.getmro(self.__class__)[:-2]]
@@ -34,8 +37,9 @@ class Entity(__main__.pygame.sprite.Sprite):
         setattr(self.get_entity_data(), group, attr)
       attr.add(self)
   
-  def despawn(self):
-    if self.no_respawn: self.no_spawn = True
+  def despawn(self, killed = True):
+    self.spawned = False
+    if self.no_respawn and killed: self.no_spawn = True
     self.kill()
   
   def register_event(self, event, *args, **kwargs):
@@ -105,6 +109,11 @@ class Entity(__main__.pygame.sprite.Sprite):
       collide.remove(self)
     except ValueError: pass
     return collide
+  
+  def spawn_entity(self, entity_name, x=None,y=None):
+    entity = self.get_main().entity_manager.entities[entity_name](x,y)
+    entity.spawn()
+    return entity
 
   @staticmethod
   def memoize(func):
