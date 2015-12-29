@@ -32,17 +32,6 @@ class Main(object):
     if not self.show_fps:
       self.blit_fps = lambda: None
   
-  def init_event_manager(self):
-    self.event_manager = assets.events.event_manager.EventManager()
-    self.event_manager.add_events()
-    
-  def init_ai_event_manager(self):
-    self.ai_event_manager = assets.events.ai_event_manager.AiEventManager()
-    self.ai_event_manager.add_events()
-  
-  def init_keyboard_injector(self):
-    self.keyboard_injector = assets.ui.keyboard_injector.KeyboardInjector()
-  
   def init_screen(self):
     pygame.init()
     self.screen = assets.ui.screen.Screen(pygame.display.set_mode(*self.config_manager.get_screen_properties()), pygame)
@@ -52,6 +41,17 @@ class Main(object):
     self.screen.blit(self.screen.old_im_load(os.path.join("assets", "loading.png")), (0,0))
     self.update_screen()
     self.clock = pygame.time.Clock()
+    
+  def init_event_manager(self):
+    self.event_manager = assets.events.event_manager.EventManager()
+    self.event_manager.add_events()
+    
+  def init_keyboard_injector(self):
+    self.keyboard_injector = assets.ui.keyboard_injector.KeyboardInjector()
+  
+  def init_ai_event_manager(self):
+    self.ai_event_manager = assets.events.ai_event_manager.AiEventManager()
+    self.ai_event_manager.add_events()
   
   def init_entity_manager(self):
     self.entity_manager = assets.entity.entity_manager.EntityManager()
