@@ -8,11 +8,14 @@ def id_generator():
         i+=1
 
 class Node(object):
-    def __init__(self):
+    def __init__(self, seed = None):
+        if seed is None:
+            self.seed = random.random()
+        else:
+            self.seed = seed
         self.connections = []
         self.id = id_gen.next()
         self.transversed = False
-        self.seed = random.random()
         self.cleared = False
         self.visited = False
         self.entity_list = []

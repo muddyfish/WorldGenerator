@@ -9,6 +9,7 @@ class Door(Animation):
     self.config_manager = self.get_main().config_manager
     self.pos_id = pos_id
     self.room = room
+    self.current_room = cur_room
     self.door_id = max(self.room.door_id, cur_room.door_id)
     if self.door_id in [26]: self.transparent_colour = None
     super(Door, self).__init__(0,0)
@@ -79,6 +80,8 @@ class Door(Animation):
     self.run_anim(d_time)
       
   def unlockable(self):
+    if not self.current_room.cleared:
+      return False
     player = self.get_databin().entity_data.player.get_sprite(0)
     required = 1
     if self.keytype == "multi_keys":

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from generation.node_grammer import Nodes
+import generation.nodes
 
 class DungeonMap(object):
   def __init__(self, config_manager):
@@ -25,3 +26,13 @@ class DungeonMap(object):
        coords[1] == d_size[1]+1:
       return None
     return self.map[coords[0]][coords[1]]
+  
+  def replace_node(self, old_node, new_node_name):
+    coords = self.get_coords(old_node)
+    node_class = generation.nodes.nodetypes[new_node_name]
+    new_node = node_class(old_node.seed)
+    self.map[coords[0]][coords[1]] = new_node
+    for conn in old_node.connections[:]:
+      conn.disconnect(old_node)
+      conn.connect(new_node)
+    return new_node

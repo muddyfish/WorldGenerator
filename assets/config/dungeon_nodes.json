@@ -41,20 +41,19 @@
     },
     
 
+    "Entrance": {
+        "backtrackable": false, 
+        "returnchance": 0,
+        "entities": [
+        ],
+        "door_id": 1,
+        "locked": false
+    }, 
     "ItemBonus": {
         "backtrackable": true, 
         "returnchance": 0,
         "entities": [
             [1, {"animated.collectable.bomb": 1}]],
-        "door_id": 1,
-        "locked": false
-    }, 
-    "ItemQuest": {
-        "backtrackable": false, 
-        "returnchance": 0,
-        "entities": [
-            [1.0, {"animated.collectable.dungeonmap": 1}]
-        ],
         "door_id": 1,
         "locked": false
     }, 
@@ -140,9 +139,19 @@
         "backtrackable": false, 
         "returnchance": 0,
         "entities": [],
+        "replace_on_room_clear": ["Goal"],
         "door_id": 9,
         "locked": "boss_key"
     }, 
+    "Goal": {
+        "backtrackable": false, 
+        "returnchance": 0,
+        "entities": [
+            [1, {"animated.warpdown": 1}]
+        ],
+        "door_id": 9,
+        "locked": false
+    },
     "BossMini": {
         "backtrackable": false, 
         "returnchance": 0,
@@ -151,21 +160,13 @@
         "door_id": 3,
         "locked": false
     }, 
-    "Entrance": {
+    "ItemQuest": {
         "backtrackable": false, 
         "returnchance": 0,
         "entities": [
+            [1.0, {"animated.collectable.dungeonmap": 1}]
         ],
-        "door_id": 1,
-        "locked": false
-    }, 
-    "Goal": {
-        "backtrackable": false, 
-        "returnchance": 0,
-        "entities": [
-            [1, {"animated.warpdown": 1}]
-        ],
-        "door_id": 26,
+        "door_id": 3,
         "locked": false
     }
 }
