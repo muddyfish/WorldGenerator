@@ -11,9 +11,11 @@ class SpikeTrap(NPCNeutral):
                 "DOWN": ( 0, 1),
                 "LEFT": (-1, 0),
                 "RIGHT":( 1, 0)}
+  damage_dealt = 1
   
   def __init__(self, x,y):
     super(SpikeTrap, self).__init__(x,y)
+    self.register_event("collide_player", self.hurt_player)
     self.spiked = False
     self.cur_time = 0
     
@@ -32,3 +34,7 @@ class SpikeTrap(NPCNeutral):
     movement = SpikeTrap.directions[self.direction]
     self.dx = movement[0]*self.speed
     self.dy = movement[1]*self.speed
+    
+  def hurt_player(self):
+    if self.spiked:
+      self.get_player().take_damage(self.damage_dealt)

@@ -51,7 +51,14 @@ class Player(Living):
           self.ddy = 0
         elif door and door.current_anim in ["Opened", "BrokenOpen"]:
           self.parent.load_room(door.room, door.pos_id)
-  
+
+  def take_damage(self, amount):
+    if self.invincible: return
+    self.life -= amount
+    if self.life <= 0:
+      return
+    self.invincible = True
+    
   def door_collide(self, s, door):
     #print s.rect.clip(door.rect).size[door.pos_id%2]
     return s.rect.clip(door.rect).size[door.pos_id%2]>=8

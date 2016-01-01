@@ -85,6 +85,7 @@ class Moveable(Animation):
           else:                             wall_id = 3
         self.get_databin().ai_events.collide_wall.is_called(self, wall_id)
     self.get_databin().ai_events.player_xy.is_called(self)
+    self.get_databin().ai_events.collide_player.is_called(self)
   
   def clamp(self, clamp, val):
     h = hash((clamp, val))

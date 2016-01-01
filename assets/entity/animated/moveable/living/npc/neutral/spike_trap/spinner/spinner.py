@@ -38,6 +38,7 @@ class Spinner(SpikeTrap):
     self.x_pos = self.screen.get_center()[0] + self.circle_radius * math.sin(2*math.pi*self.spawn_id/float(self.total_spinners)+self.offset)+self.bounding_rect.width/4
     self.y_pos = self.screen.get_center()[1] + self.circle_radius * math.cos(2*math.pi*self.spawn_id/float(self.total_spinners)+self.offset)+self.bounding_rect.height/4
     self.center(self.x_pos,self.y_pos)
+    self.get_databin().ai_events.collide_player.is_called(self)
 
   def setup_first_run(self):
     self.total_spinners = len(self.get_databin().entity_data.spinner)

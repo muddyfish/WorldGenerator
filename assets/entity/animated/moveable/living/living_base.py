@@ -9,6 +9,7 @@ class Living(Moveable):
   ineffective = []
   immune = []
   invincible = False
+  invincible_time = 0.5
   use_random = True
   
   def __init__(self, x,y):
@@ -17,6 +18,28 @@ class Living(Moveable):
     self.x_pos, self.y_pos = x, y
     self.x, self.y = x, y
     super(Living, self).__init__(x,y)
+  
+  def take_damage(self, amount):
+    if self.invincible: return
+    self.life -= amount
+    if self.life <= 0:
+      self.despawn()
+      return
+    self.invincible = True
+    
+  def run(self, d_time):
+    super(Living, self).run(d_time)
+    if self.invincible and not self.__class__.invincible:
+      self.invincible_time -= d_time
+      if self.invincible_time <= 0:
+        self.invincible_time = self.__class__.invincible_time
+        self.invincible = False
+  
+  def get_blit(self):
+    if self.invincible and not self.__class__.invincible:
+      if int(self.invincible_time*10)%2:
+        return lambda x,y:0
+    return self.get_subscription().get_blit(self.dirty)
   
   @classmethod
   def spawn_group(cls, amount):

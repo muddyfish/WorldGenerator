@@ -69,6 +69,7 @@ class MapUI(UI):
     axis = 1-room_id%2
     setattr(self.player, "xy"[axis], self.screen.get_size()[axis]*(1-(room_id>>1))+52*cmp(room_id>>1, 0.5))
     self.clean_entities()
+    self.player.invincible = True
     self._load_room(current_room)
   
   def _load_room(self, current_room):
