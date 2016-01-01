@@ -6,6 +6,7 @@ class Explosion(Moveable):
   transparent_colour = (0,0,0)
   anim_speed = 1.0/12
   no_respawn = True
+  damage_dealt = 4
   
   def __init__(self, x, y):
     self.pygame = self.get_pygame()
@@ -22,9 +23,9 @@ class Explosion(Moveable):
     self.run_anim(d_time)
     self.bounding_rect = self.surf.get_bounding_rect()
     self.update_collision()
-    hurtable = [entity for entity in self.get_entity_data().living if not entity.invincible and entity is not self.get_player()] 
+    hurtable = self.get_entity_data().living
     for entity in self.get_collide(hurtable):
-      entity.despawn()
+      entity.take_damage(self.damage_dealt)
     doors = self.get_entity_data().door
     for door in self.get_collide(doors):
       if not door.locked:

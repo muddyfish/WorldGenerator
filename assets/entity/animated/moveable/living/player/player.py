@@ -23,7 +23,7 @@ class Player(Living):
     self.keys = 0
     self.multi_keys = 0
     self.boss_key = 0
-    self.bombs = 2
+    self.bombs = 200
     self.cooldown_timers = {
       "bomb": [0,0.5]
     }

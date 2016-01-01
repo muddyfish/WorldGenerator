@@ -1,11 +1,13 @@
 {
-  "move_up": "up",
-  "move_down": "down",
-  "move_left": "left",
-  "move_right": "right",
+  "move_up": "w",
+  "move_down": "s",
+  "move_left": "a",
+  "move_right": "d",
+  "place_bomb": "r",
+  "use_sword": "e",
+  
   "open_doors": "o",
-  "toggle_rects": "t",
-  "place_bomb": "space",
-  "shake": "s",
-  "show_databin": "q"
+  "shake": "z",
+  "show_databin": "x",
+  "toggle_rects": "t"
 }
