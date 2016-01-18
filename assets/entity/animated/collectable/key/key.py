@@ -12,7 +12,7 @@ class Key(Collectable):
       "Collect": self.despawn
     }
     self.load_animation_sheet("key.anm2")
-    self.current_anim = "Appear"
+    self.load_animation("Appear")
     self.run_anim(0)
     self.pygame = self.get_pygame()
     self.x_pos = self.screen.get_width()/4

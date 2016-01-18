@@ -13,7 +13,7 @@ class SubscriptionManager(ManagerBase):
     
   def load_subscription(self):
     self.current_subscription = self.subscriptions[self.current_subscription_id]()
-    self.get_main_class().databin.current_subscription = self.current_subscription
+    self.get_databin().current_subscription = self.current_subscription
     
   def get_default_subscription_id(self):
     return self.get_config_manager()["subscription_config", "default"]

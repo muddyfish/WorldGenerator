@@ -35,10 +35,11 @@ class MapUI(UI):
       "move_down":   [self.move, (0,1)],
       "move_left":   [self.move, (-1,0)],
       "move_right":  [self.move, (1,0)],
-      "open_doors":  [self.open_doors, True],
-      "toggle_rects":[self.toggle_draw_rects],
+      "use_sword":   [self.player.use_sword],
       "place_bomb":  [self.player.place_bomb],
+      "open_doors":  [self.open_doors, True],
       "shake":       [lambda:setattr(self, "shaking", 1)],
+      "toggle_rects":[self.toggle_draw_rects],
       "show_databin":[self.print_databin]
     }
     for k,v in self.entity_manager.get_persistant_entities().iteritems():
@@ -60,6 +61,12 @@ class MapUI(UI):
     self.player.x, self.player.y = self.screen.get_center()
     
   def load_room(self, current_room, room_id, no_scroll = False):
+    try:
+      no_sword = len(self.get_main().databin.entity_data.sword.sprites()) == 0
+    except TypeError:
+      no_sword = True
+    if not no_sword:
+      self.get_main().databin.entity_data.sword.sprites()[0].despawn()
     if not no_scroll:
       self.init_scrolling = True
       self.bg_image = self.get_pygame().surface.Surface(self.screen.size)

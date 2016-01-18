@@ -113,8 +113,8 @@ class Entity(__main__.pygame.sprite.Sprite):
     except ValueError: pass
     return collide
   
-  def spawn_entity(self, entity_name, x=None,y=None):
-    entity = self.get_main().entity_manager.entities[entity_name](x,y)
+  def spawn_entity(self, entity_name, *args, **kwargs):
+    entity = self.get_main().entity_manager.entities[entity_name](*args, **kwargs)
     entity.spawn()
     return entity
 
