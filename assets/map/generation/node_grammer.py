@@ -18,13 +18,26 @@ class Nodes(object):
         self.start = nodes.nodetypes["Start"]() # The first node
 
     def save_nodes(self, filename="graph"):
+        print "Saving graph..."
         from graphviz import Digraph
         dot = Digraph(comment='Dungeon Example')
-        for node in self.nodes: dot.node(str(node.id), node.name+" "+str(node.id))
-        for node in self.nodes:
+        nodes = self.linear_nodes(self.nodes)
+        for node in nodes: dot.node(str(node.id), node.name+" "+str(node.id))
+        for node in nodes:
             for edge in node.connections:
                 dot.edge(str(node.id), str(edge.id))
         dot.render(filename)
+        print "Graph saved"
+    
+    def linear_nodes(self, nodes):
+        node_list = []
+        for node in nodes:
+            if isinstance(node, dict):
+                node_list.append(node.keys()[0])
+                node_list.extend(self.linear_nodes(node.values()[0]))
+            else:
+                node_list.append(node)
+        return node_list
     
     def prettyprint(self, nodes, indent = 0):
         for node in nodes:

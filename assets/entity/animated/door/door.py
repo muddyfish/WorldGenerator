@@ -10,6 +10,8 @@ class Door(Animation):
     self.pos_id = pos_id
     self.room = room
     self.current_room = cur_room
+    #Set the door id so that both sides of the door have the same graphic
+    #The id's are ordered in suvh a way that higher priority id's are higher
     self.door_id = max(self.room.door_id, cur_room.door_id)
     if self.door_id in [26]: self.transparent_colour = None
     super(Door, self).__init__(0,0)
@@ -75,18 +77,23 @@ class Door(Animation):
     
   def run(self, d_time):
     if self.first_tick:
+      #Only update the animation state of the door after the scrolling is finished
       self.first_tick = False
       self.get_anim_state(self.open, True)
     self.run_anim(d_time)
       
   def unlockable(self):
+    """Is a door unlockable"""
     if not self.current_room.cleared:
+      #Rooms must be cleared before any doors can be unlocked
       return False
-    player = self.get_databin().entity_data.player.get_sprite(0)
+    player = self.get_player()
+    #How many keys are required to open the door
     required = 1
+    #Multi-keys need 3 to open a door
     if self.keytype == "multi_keys":
       required = 3
-    amount = getattr(player,self.keytype)
+    amount = getattr(player, self.keytype)
     if amount >= required:
       setattr(player, self.keytype, amount-required)
       self.unlock()
@@ -94,11 +101,13 @@ class Door(Animation):
     return False
       
   def unlock(self):
+    """Unlock a door"""
     self.locked = False
     self.open = True
     self.current_anim = "KeyOpen"
     
   def update_collision(self):
+    """Update the collision detection for a door"""
     if not hasattr(self, "frames"): return
     self.rect = self.frames[3][0].surf.get_bounding_rect()
     self.rect.width, self.rect.height = (self.rect.width/2-14, self.rect.height/2-14)[::cmp(self.pos_id%2,0.5)]
@@ -109,6 +118,7 @@ class Door(Animation):
     #print self.pos_id, self.pos_id%2, self.rect
     
   def load_door_surfs(self):
+    """Load the correct animation file for a door"""
     anm_filename = glob.glob(os.path.join(self.get_path(), "anm", "door_%02d_*.anm2"%self.door_id))[0]
     self.load_animation_sheet(anm_filename)
     

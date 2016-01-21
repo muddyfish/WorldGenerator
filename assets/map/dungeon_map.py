@@ -12,6 +12,9 @@ class DungeonMap(object):
   def load_dungeon(self):
     self.nodes = Nodes(self.chains_json, self.nodes_json)
     self.nodes.create_dungeon()
+    if self.config_manager.get_main_class().debug:
+      self.nodes.prettyprint(self.nodes.nodes)
+      self.nodes.save_nodes()
     self.map = self.nodes.map.map
     self.start_node = self.nodes.entrance
     self.end_node = self.nodes.exit

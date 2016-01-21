@@ -72,6 +72,17 @@
         }, 
         {
             "Chain_Gate": [
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear", 
+                "ChainLinear"
+            ]
+        }, 
+        {
+            "Chain_Gate": [
                 "ChainParallel", 
                 "Gate"
             ]
@@ -84,8 +95,7 @@
         {
             "ChainLinear": [
                 "Test", 
-                "Test", 
-                "ItemBonus"
+                "Test"
             ]
         }, 
         {
@@ -180,6 +190,26 @@
                         {
                             "Test": [
                                 "KeyFinal", 
+                                "Hook"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "ChainFinal_Goal": [
+                {
+                    "Chain": [
+                        "Hook", 
+                        {
+                            "Gate": [
+                                "KeyFinal"
+                            ]
+                        }, 
+                        {
+                            "Test": [
+                                "BossLevel",
                                 "Hook"
                             ]
                         }
