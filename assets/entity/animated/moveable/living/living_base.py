@@ -13,7 +13,8 @@ class Living(Moveable):
   use_random = True
   
   def __init__(self, x,y):
-    self.life = random.randrange(self.min_life, self.max_life+1)  
+    print self.__class__, self.__class__.min_life, self.__class__.max_life
+    self.life = random.randrange(self.__class__.min_life, self.__class__.max_life+1)  
     self.screen = self.get_main().screen
     self.x_pos, self.y_pos = x, y
     self.x, self.y = x, y
@@ -21,6 +22,8 @@ class Living(Moveable):
   
   def take_damage(self, amount):
     if self.invincible: return
+    if self.get_main().debug:
+      print "OLDLIFE:", self.life, "DAMAGE TAKEN:", amount
     self.life -= amount
     if self.life <= 0:
       self.despawn()

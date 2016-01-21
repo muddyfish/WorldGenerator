@@ -61,7 +61,9 @@ class Main(object):
     self.fonts.register_font("fps", "verdana", 12)
   
   def init_subscription_manager(self):
+    debug("Creating subscription manager...")
     self.subscription_manager = assets.ui.subscription_manager.SubscriptionManager()
+    debug("Loading subscription...")
     self.subscription_manager.load_subscription()
     
   def run(self):
@@ -86,19 +88,34 @@ class Main(object):
     pygame.display.update(self.screen.blit_rects)
     self.screen.blit_rects_old = self.screen.blit_rects
     self.screen.blit_rects = []
-    
+
+def debug(txt):
+  if "debug" in sys.argv:
+    print txt
+
 def main():
   global main_class
+  debug("Creating main...")
   main_class = Main()
+  debug("Initialising databin...")
   main_class.init_databin()
+  debug("Initialising config manager...")
   main_class.init_config_manager()
+  debug("Initialising screen...")
   main_class.init_screen()
+  debug("Initialising event manager...")
   main_class.init_event_manager()
+  debug("Initialising keyboard injector...")
   main_class.init_keyboard_injector()
+  debug("Initialising ai event manager...")
   main_class.init_ai_event_manager()
+  debug("Initialising entity manager...")
   main_class.init_entity_manager()
+  debug("Initialising font manager...")
   main_class.init_font_manager()
+  debug("Initialising subscription manager...")
   main_class.init_subscription_manager()
+  debug("Starting the mainloop...")
   main_class.run()
 
 

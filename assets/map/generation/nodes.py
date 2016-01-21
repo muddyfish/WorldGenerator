@@ -17,13 +17,17 @@ class Node(object):
         self.id = id_gen.next()
         self.transversed = False
         self.cleared = False
-        self.visited = False
+        self.been_visited = False
         self.entity_list = []
-        if hasattr(self, "entities"):
-            self.entity_list = self.get_entities()
         
     def __str__(self):
         return "%s (%s): %s"%(self.id, self.name, ", ".join(["(%d: %s)"%(conn.id, conn.name) for conn in self.connections]))
+
+    def visited(self):
+        if self.been_visited: return
+        self.been_visited = True
+        if hasattr(self, "entities"):
+            self.entity_list.extend(self.get_entities())
 
     def connect(self, node):
         if node not in self.connections:

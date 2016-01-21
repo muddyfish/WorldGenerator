@@ -57,7 +57,7 @@ class MapUI(UI):
     self.map.load_dungeon()
     self.backdrop_ui.load_new_backdrop()
     self.entity_list["animated.hud.map"](self).spawn()
-    self.load_room(self.map.start_node, 0, no_scroll = True)
+    self._load_room(self.map.start_node)
     self.player.x, self.player.y = self.screen.get_center()
     
   def load_room(self, current_room, room_id, no_scroll = False):
@@ -84,13 +84,13 @@ class MapUI(UI):
     random.seed(self.current_room.seed)
     self.backdrop_ui.load_current_room()
     self.add_doors()
+    self.current_room.visited()
     self.load_entities()
     self.get_main().databin.entity_data.map.sprites()[0].update_room()
-    self.current_room.visited = True
     self.clock.tick()
 
   def add_doors(self):
-    if not self.current_room.visited:
+    if not self.current_room.been_visited:
       coords = self.map.get_coords(self.current_room)
       for pos_id, d_coord in enumerate(((0,1),(-1,0),(0,-1),(1,0))):
         room = self.map.get_room(map(int.__add__, coords, d_coord))
@@ -118,7 +118,6 @@ class MapUI(UI):
       old_room = self.current_room
       self.clean_entities()
       new_room = self.map.replace_node(self.current_room, new_room_name, entities)
-      new_room.visited = True
       self._load_room(new_room)
       return
     

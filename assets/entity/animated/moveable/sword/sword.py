@@ -8,6 +8,7 @@ class Sword(Moveable):
   circle_radius = 30
   damage_dealt = 2
   update_bounding_box = False
+  no_respawn = True
   
   def __init__(self):
     self.screen = self.get_main().screen

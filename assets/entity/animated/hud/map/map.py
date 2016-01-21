@@ -58,7 +58,7 @@ class Map(HUD):
     if cur_pos is None: return
     cur_pos = [cur_pos[0]+7, cur_pos[1]+3]
     for conn in cur_room.connections:
-      if conn.visited:
+      if conn.been_visited:
         old_room_colour = Map.visited_room_colour
       else:
         old_room_colour = (128,128,128)

@@ -4,7 +4,7 @@
   "move_left": "a",
   "move_right": "d",
   "place_bomb": "r",
-  "use_sword": "e",
+  "use_sword": "space",
   
   "open_doors": "o",
   "shake": "z",

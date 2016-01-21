@@ -78,5 +78,5 @@ class Player(Living):
       no_sword = len(self.get_entity_data().sword.sprites()) == 0
     except TypeError:
       no_sword = True
-    if no_sword:
+    if no_sword and not self.parent.scrolling:
       self.spawn_entity("animated.moveable.sword")
