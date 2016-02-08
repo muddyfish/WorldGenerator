@@ -35,6 +35,7 @@ class Sword(Moveable):
                    ( 1, 1):-0.5,
                    ( 1,-1):-1.5,#NE
                    }[(dx,dy)]
+    self.run(0)
       
   def run(self, d_time):
     self.offset -= d_time * self.speed

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, sys, inspect
+import os, sys, inspect, math
 import __main__
 
 class Entity(__main__.pygame.sprite.Sprite):
@@ -75,6 +75,13 @@ class Entity(__main__.pygame.sprite.Sprite):
   
   def get_player(self):
     return self.get_entity_data().player.sprites()[0]
+  
+  def get_distance(self, entity = None):
+    if entity == None: entity = self.get_player()
+    x_y = zip(self.rect.center, entity.rect.center)
+    distance = math.sqrt((x_y[0][0]-x_y[0][1])**2 +
+                         (x_y[1][0]-x_y[1][1])**2)
+    return distance
   
   def touching_player(self):
     return self.get_collide([self.get_player()])

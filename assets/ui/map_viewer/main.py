@@ -56,6 +56,7 @@ class MapUI(UI):
       map_entity.despawn()
     self.map.load_dungeon()
     self.backdrop_ui.load_new_backdrop()
+    self.clean_entities()
     self.entity_list["animated.hud.map"](self).spawn()
     self._load_room(self.map.start_node)
     self.player.x, self.player.y = self.screen.get_center()
@@ -116,7 +117,6 @@ class MapUI(UI):
     if new_room_list:
       entities = self.get_entities().sprites()[:]
       new_room_name = random.choice(new_room_list)
-      old_room = self.current_room
       self.clean_entities()
       new_room = self.map.replace_node(self.current_room, new_room_name, entities)
       self._load_room(new_room, no_doors = True)
@@ -150,6 +150,8 @@ class MapUI(UI):
       if (not door.locked) or all_:
         door.locked = False
         door.open = True
+        if not all_:
+          door.current_anim = "Open"
         
   def toggle_draw_rects(self):
     self.draw_rects = not self.draw_rects
