@@ -2,7 +2,8 @@
     [
         {
             "Start": [
-                "Entrance", 
+                "Entrance",
+                "Test",
                 "Chain", 
                 "Gate", 
                 "BossMini", 

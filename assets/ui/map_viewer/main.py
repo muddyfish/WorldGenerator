@@ -80,13 +80,13 @@ class MapUI(UI):
     self.player.invincible = True
     self._load_room(current_room)
   
-  def _load_room(self, current_room, no_doors = False):
+  def _load_room(self, current_room, no_doors = False, replaced = False):
     self.current_room = current_room
     random.seed(self.current_room.seed)
     self.backdrop_ui.load_current_room()
     if not no_doors:
       self.add_doors()
-    self.current_room.visited()
+    self.current_room.visited(replaced)
     self.load_entities()
     self.get_main().databin.entity_data.map.sprites()[0].update_room()
     self.clock.tick()
@@ -119,7 +119,7 @@ class MapUI(UI):
       new_room_name = random.choice(new_room_list)
       self.clean_entities()
       new_room = self.map.replace_node(self.current_room, new_room_name, entities)
-      self._load_room(new_room, no_doors = True)
+      self._load_room(new_room, no_doors = True, replaced = True)
       return
     
     auto_cleared = True

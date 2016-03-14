@@ -13,6 +13,7 @@ class Charger(NPCHostile):
   ignore_player_time = 2
   reconsider_direction_time_min = 3
   reconsider_direction_time_max = 5
+  speed_adj = 20
   
   def __init__(self,x,y):
     super(Charger, self).__init__(x,y)
@@ -30,14 +31,16 @@ class Charger(NPCHostile):
     elif self.mode != "attack":
       self.update_reconsider_time()
       self.choose_direction(None)
+    else:
+      self.update_reconsider_time()
     super(Charger, self).run(d_time)
     
   def choose_direction(self, wall_id):
     self.direction = random.choice(Charger.directions.keys())
     self.mode = "move"
-    self.speed = self.speed_normal
-    self.max_dx = self.speed_normal
-    self.max_dy = self.speed_normal
+    self.speed = self.speed_normal+self.adjust_speed()
+    self.max_dx = self.speed_normal+self.adjust_speed()
+    self.max_dy = self.speed_normal+self.adjust_speed()
     self.set_direction()
     
   def player_direction(self, face):
@@ -53,9 +56,9 @@ class Charger(NPCHostile):
     if no_charge: return
     self.direction = new_direction
     self.mode = "attack"
-    self.speed = self.speed_attack
-    self.max_dx = self.speed_attack
-    self.max_dy = self.speed_attack
+    self.speed = self.speed_attack+self.adjust_speed()
+    self.max_dx = self.speed_attack+self.adjust_speed()
+    self.max_dy = self.speed_attack+self.adjust_speed()
     self.set_direction()
     
   def set_direction(self):
@@ -67,4 +70,7 @@ class Charger(NPCHostile):
   def update_reconsider_time(self):
       self.reconsider_time = random.randint(
         self.__class__.reconsider_direction_time_min,
-        self.__class__.reconsider_direction_time_max)    
+        self.__class__.reconsider_direction_time_max)
+      
+  def adjust_speed(self):
+    return random.randint(-self.speed_adj, self.speed_adj)

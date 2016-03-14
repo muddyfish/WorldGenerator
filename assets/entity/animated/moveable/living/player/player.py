@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
 from ..living_base import Living
+import time
 
 class Player(Living):
   persistant = True
   door_d = 6
   max_life = 20
   min_life = 20
+  max_d = 128
+  dd = 256
   
   def __init__(self, parent):
     self.parent = parent
@@ -25,7 +28,7 @@ class Player(Living):
     self.keys = 0
     self.multi_keys = 0
     self.boss_key = 0
-    self.bombs = 200
+    self.bombs = 0
     self.cooldown_timers = {
       "bomb": [0,0.5]
     }
@@ -60,6 +63,17 @@ class Player(Living):
     if self.invincible: return
     self.life -= amount
     if self.life <= 0:
+      if self.get_main().is_demo:        
+        dies = self.get_main().fonts["demo"].render("Oh dear. You died.", True, (255,255,255))
+        self.screen.blit(dies, (200,10))
+        self.get_main().update_screen()
+        time.sleep(2)
+        self.life = self.max_life
+        self.bombs = 0
+        self.keys = 0
+        self.boss_key = False
+        self.multi_keys = 0
+        self.get_databin().current_subscription.load_dungeon()
       return
     self.invincible = True
     

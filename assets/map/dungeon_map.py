@@ -30,10 +30,13 @@ class DungeonMap(object):
       return None
     return self.map[coords[0]][coords[1]]
   
-  def replace_node(self, old_node, new_node_name, carry_entities = []):
+  def replace_node(self, old_node, new_node, carry_entities = []):
     coords = self.get_coords(old_node)
-    node_class = generation.nodes.nodetypes[new_node_name]
-    new_node = node_class(old_node.seed)
+    if isinstance(new_node, basestring):
+      node_class = generation.nodes.nodetypes[new_node]
+      new_node = node_class(old_node.seed)
+    else:
+      new_node.seed = old_node.seed
     self.map[coords[0]][coords[1]] = new_node
     for conn in old_node.connections[:]:
       conn.disconnect(old_node)

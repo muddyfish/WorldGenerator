@@ -53,29 +53,41 @@
         "backtrackable": true, 
         "returnchance": 0,
         "entities": [
-            [1, {"animated.collectable.bomb": 1}]],
+            [0.4, {"animated.collectable.bomb": 1}],
+            [0.6, {"animated.collectable.heart": 1}]
+        ],
         "door_id": 1,
         "locked": false
     }, 
     "Key": {
         "backtrackable": true, 
-        "returnchance": 0.5,
+        "returnchance": 0.7,
         "entities": [
             [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.key": 1}],
             [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 3, "animated.collectable.key": 1}],
             [0.2, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 1, "animated.collectable.key": 1}]
         ],
+        "replaced_entities": [
+            [1, {"animated.collectable.key": 1}]
+        ],
         "door_id": 1,
-        "locked": false
+        "locked": false,
+        "absorbable": true
     }, 
     "KeyFinal": {
         "backtrackable": true, 
         "returnchance": 0,
         "entities": [
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.bosskey": 1}],
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 3, "animated.collectable.bosskey": 1}],
+            [0.2, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 1, "animated.collectable.bosskey": 1}]
+        ],
+        "replaced_entities": [
             [1, {"animated.collectable.bosskey": 1}]
         ],
         "door_id": 1,
-        "locked": false
+        "locked": false,
+        "absorbable": true
     }, 
     "KeyMulti": {
         "backtrackable": true, 
@@ -87,8 +99,7 @@
     "Lock": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": [],
-        "replace_on_room_clear": ["Test", "TestSecret", "Nothing"],
+        "entities": "Test",
         "door_id": 1,
         "locked": "keys"
     }, 

@@ -79,7 +79,9 @@ class Nodes(object):
         self.core_grammer()
         self.entrance = filter(lambda x: x.name == "Entrance", self.nodes)[0]
         self.exit = filter(lambda x: x.name == "BossLevel", self.nodes)[0]
-        self.nodes = self.shuffle_nodes([self.entrance])[0]
+        self.shuffle_nodes([self.entrance])
+        self.entrance.untransverse()
+        self.nodes = self.absorb_nodes([self.entrance])
         self.entrance.untransverse()
         self.entrance.kill_conns()
         self.connect_nodes(self.nodes)
@@ -162,6 +164,36 @@ class Nodes(object):
                 self.connect_nodes(node.values()[0], node.keys()[0])
             else:
                 cur_node.connect(node)
+                
+    def absorb_nodes(self, node_list, cur_node = None):
+        nodes = []
+        for conn in node_list:
+            if not conn.transversed:
+                conn.transversed = True
+                connnodes = self.absorb_nodes(conn.connections, conn)
+                absorbable = hasattr(conn, "absorbable") and conn.absorbable                
+                absorbed = False
+                if absorbable:
+                    assert(cur_node)
+                    try:
+                        absorbed = isinstance(cur_node.replace_on_room_clear[0], basestring)
+                    except AttributeError:
+                        absorbed = True
+                if absorbed:
+                    cur_node.replace_on_room_clear = [conn]
+                    for node in conn.connections[:]:
+                        conn.disconnect(node)
+                        if node is not cur_node:
+                            cur_node.connect(node)
+                    nodes.extend(connnodes)
+                elif conn.backtrackable:
+                    nodes.append(conn)
+                    nodes.extend(connnodes)
+                elif connnodes:
+                    nodes.append({conn: connnodes})
+                else:
+                    nodes.append(conn)
+        return nodes
 
     def flatten_nodes(self, nodelist):
         nodes = []
