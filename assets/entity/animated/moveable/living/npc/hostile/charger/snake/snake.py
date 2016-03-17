@@ -8,6 +8,7 @@ class Snake(Charger):
   anim_speed = 1.0/30
   max_life = 6
   min_life = 2
+  difficulty = 5
   speed_normal = SNAKE_NORMAL_SPEED
   speed_attack = SNAKE_NORMAL_SPEED*3
   circle_radius = 80

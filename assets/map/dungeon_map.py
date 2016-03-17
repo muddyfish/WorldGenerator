@@ -10,8 +10,12 @@ class DungeonMap(object):
     self.nodes_json = self.config_manager["dungeon_nodes"]
   
   def load_dungeon(self):
+    try:
+      difficulty = self.end_node.difficulty
+    except AttributeError:
+      difficulty = 0
     self.nodes = Nodes(self.chains_json, self.nodes_json)
-    self.nodes.create_dungeon()
+    self.nodes.create_dungeon(difficulty)
     if self.config_manager.get_main_class().debug:
       self.nodes.prettyprint(self.nodes.nodes)
       self.nodes.save_nodes()
@@ -37,6 +41,7 @@ class DungeonMap(object):
       new_node = node_class(old_node.seed)
     else:
       new_node.seed = old_node.seed
+    new_node.difficulty = old_node.difficulty
     self.map[coords[0]][coords[1]] = new_node
     for conn in old_node.connections[:]:
       conn.disconnect(old_node)

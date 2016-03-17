@@ -75,7 +75,7 @@ class Nodes(object):
                     self.create_nodes(node, True, cur_node)
         return chain_nodes[0].get_connected()
     
-    def create_dungeon(self):
+    def create_dungeon(self, start_difficulty):
         self.core_grammer()
         self.entrance = filter(lambda x: x.name == "Entrance", self.nodes)[0]
         self.exit = filter(lambda x: x.name == "BossLevel", self.nodes)[0]
@@ -85,6 +85,8 @@ class Nodes(object):
         self.entrance.untransverse()
         self.entrance.kill_conns()
         self.connect_nodes(self.nodes)
+        self.entrance.difficulty = start_difficulty
+        self.add_difficulty(self.entrance)
         done = False
         repeats = 0
         while (not done) and repeats != 10:
@@ -93,7 +95,7 @@ class Nodes(object):
             count = filter(None, [filter(None, i) for i in self.map.map])
             done = sum([len(i) for i in count]) == self.count_nodes(self.entrance)
             repeats += 1
-        if repeats == 10: self.create_dungeon()
+        if repeats == 10: self.create_dungeon(start_difficulty)
         else:
             self.map.autocrop()
                 
@@ -194,6 +196,19 @@ class Nodes(object):
                 else:
                     nodes.append(conn)
         return nodes
+    
+    def add_difficulty(self, node):
+        for conn in node.connections:
+            if not hasattr(conn, "difficulty"):
+                conn.difficulty = node.difficulty + 1
+                self.add_difficulty(conn)
+                if hasattr(conn, "challenge"):
+                    conn.difficulty *= conn.challenge
+                try:
+                    conn.difficulty *= conn.replace_on_room_clear[0].challenge
+                except AttributeError:
+                    pass
+                conn.difficulty = int(conn.difficulty)
 
     def flatten_nodes(self, nodelist):
         nodes = []
@@ -211,6 +226,7 @@ class Nodes(object):
         dir = 0
         if len(cur_node.connections) > 4:
             addnode = nodes.nodetypes["Nothing"]()
+            addnode.difficulty = cur_node
             cur_node.connect(addnode)
             while len(cur_node.connections) > 4:
                 conn = cur_node.connections[-2]

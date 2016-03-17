@@ -83,20 +83,16 @@
             ]
         }, 
         {
-            "Chain_Gate": [
-                "ChainParallel", 
-                "Gate"
-            ]
-        }, 
-        {
             "ChainLinear": [
-                "Test"
+                "Test",
+                "Hook"
             ]
         }, 
         {
             "ChainLinear": [
                 "Test", 
-                "Test"
+                "Test", 
+                "ItemBonus"
             ]
         }, 
         {
@@ -107,16 +103,18 @@
         {
             "ChainLinear_ChainLinear": [
                 "Key", 
+                "Test",
                 "Lock"
             ]
         }, 
         {
             "ChainLinear_ChainLinear": [
                 "Key", 
+                "Test",
                 "Lock", 
                 "ChainLinear"
             ]
-        }, 
+        },
         {
             "Hook": [
                 "Nothing"
@@ -125,7 +123,8 @@
         {
             "Hook": [
                 "Hook",
-                "Hook"
+                "Hook", 
+                "ItemBonus"
             ]
         }, 
         {
@@ -138,42 +137,6 @@
             "Hook": [
                 "TestSecret", 
                 "ItemBonus"
-            ]
-        }, 
-        {
-            "Fork_KeyMulti": [
-                "Fork", 
-                "Test", 
-                "KeyMulti"
-            ]
-        },
-        {
-            "Fork_KeyMulti": [
-                "Fork",
-                "ChainLinear",
-                "ChainLinear",
-                "KeyMulti"
-            ]
-        }, 
-        {
-            "Fork_KeyMulti": [
-                "Fork", 
-                "TestSecret", 
-                "KeyMulti"
-            ]
-        }, 
-        {
-            "Fork_Key": [
-                "Fork", 
-                "Test", 
-                "Key"
-            ]
-        }, 
-        {
-            "Fork_Key": [
-                "Fork", 
-                "TestSecret", 
-                "Key"
             ]
         }
     ], 
@@ -190,6 +153,7 @@
                         }, 
                         {
                             "Test": [
+                                "Test",
                                 "KeyFinal", 
                                 "Hook"
                             ]
@@ -214,51 +178,6 @@
                                 "Hook"
                             ]
                         }
-                    ]
-                }
-            ]
-        }, 
-        {
-            "ChainParallel_Gate": [
-                {
-                    "Fork": [
-                        "KeyMulti", 
-                        "KeyMulti", 
-                        {
-                            "KeyMulti": [
-                                "LockMulti"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }, 
-        {
-            "Fork": [
-                {
-                    "Nothing": [
-                        "Hook", 
-                        "Hook"
-                    ]
-                }
-            ]
-        }, 
-        {
-            "Fork": [
-                {
-                    "Nothing": [
-                        "Hook", 
-                        "Hook", 
-                        "Hook"
-                    ]
-                }
-            ]
-        }, 
-        {
-            "Fork": [
-                {
-                    "Nothing": [
-                        "Hook"
                     ]
                 }
             ]

@@ -19,11 +19,6 @@
         "returnchance": 0,
         "locked": false
     }, 
-    "ChainParallel": {
-        "backtrackable": true, 
-        "returnchance": 0,
-        "locked": false
-    }, 
     "Fork": {
         "backtrackable": true, 
         "returnchance": 0,
@@ -44,24 +39,27 @@
     "Entrance": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": [
-        ],
+        "has_monsters": false,
         "door_id": 1,
         "locked": false
     }, 
     "ItemBonus": {
         "backtrackable": true, 
         "returnchance": 0,
+        "has_monsters": false,
         "entities": [
             [0.4, {"animated.collectable.bomb": 1}],
             [0.6, {"animated.collectable.heart": 1}]
         ],
         "door_id": 1,
-        "locked": false
+        "locked": false,
+        "absorbable": true,
+        "challenge": 0.75
     }, 
     "Key": {
         "backtrackable": true, 
         "returnchance": 0.7,
+        "has_monsters": false,
         "entities": [
             [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.key": 1}],
             [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 3, "animated.collectable.key": 1}],
@@ -72,11 +70,13 @@
         ],
         "door_id": 1,
         "locked": false,
-        "absorbable": true
+        "absorbable": true,
+        "challenge": 1.25
     }, 
     "KeyFinal": {
         "backtrackable": true, 
         "returnchance": 0,
+        "has_monsters": false,
         "entities": [
             [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.bosskey": 1}],
             [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 3, "animated.collectable.bosskey": 1}],
@@ -87,71 +87,48 @@
         ],
         "door_id": 1,
         "locked": false,
-        "absorbable": true
-    }, 
-    "KeyMulti": {
-        "backtrackable": true, 
-        "returnchance": 0.4,
-        "entities": [],
-        "door_id": 1,
-        "locked": false
+        "absorbable": true,
+        "challenge": 1.5
     }, 
     "Lock": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": "Test",
+        "has_monsters": true,
         "door_id": 1,
         "locked": "keys"
-    }, 
-    "LockMulti": {
-        "backtrackable": false, 
-        "returnchance": 0,
-        "entities": "Test",
-        "door_id": 1,
-        "locked": false
     }, 
     "Nothing": {
         "backtrackable": true, 
         "returnchance": 0,
-        "entities": [],
+        "has_monsters": false,
         "door_id": 1,
         "locked": false
     }, 
     "Test": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": [
-            [0.4, {"animated.moveable.living.npc.hostile.charger.snake": 4}],
-            [0.2, {"animated.moveable.living.npc.hostile.charger.snake": 7}],
-            [0.3, {"animated.moveable.living.npc.neutral.spike_trap.wallhugger": 2}],
-            [0.1, {"animated.moveable.living.npc.neutral.spike_trap.wallhugger": 5}]
-        ],
-        "replace_on_room_clear": ["Nothing", "Nothing", "ItemBonus"],
+        "has_monsters": true,
         "door_id": 1,
         "locked": false
     }, 
     "TestItem": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": [],
+        "has_monsters": false,
         "door_id": 1,
         "locked": false
     }, 
     "TestSecret": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": [
-            [0.2, {"animated.moveable.living.npc.neutral.spike_trap.wallhugger": 4}],
-            [0.8, {"animated.moveable.living.npc.hostile.charger.snake": 2}]
-        ],
-        "replace_on_room_clear": ["Nothing", "ItemBonus"],
+        "has_monsters": true,
         "door_id": 1,
         "locked": false
     },
     "BossLevel": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": [],
+        "has_monsters": false,
         "replace_on_room_clear": ["Goal"],
         "door_id": 9,
         "locked": "boss_key"
@@ -159,6 +136,7 @@
     "Goal": {
         "backtrackable": false, 
         "returnchance": 0,
+        "has_monsters": false,
         "entities": [
             [1, {"animated.warpdown": 1}]
         ],
@@ -168,14 +146,16 @@
     "BossMini": {
         "backtrackable": false, 
         "returnchance": 0,
-        "entities": [],
+        "has_monsters": true,
         "replace_on_room_clear": ["ItemQuest"],
         "door_id": 3,
-        "locked": false
+        "locked": false,
+        "challenge": 2
     }, 
     "ItemQuest": {
         "backtrackable": false, 
         "returnchance": 0,
+        "has_monsters": false,
         "entities": [
             [1.0, {"animated.collectable.dungeonmap": 1}]
         ],

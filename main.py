@@ -132,7 +132,9 @@ def main():
   main_class = Main()
   debug("Checking if demo version")
   if IS_DEMO:
-    main_class.init_self_destruct()
+    print "This version is a demo."
+    print "SELF DESTRUCT DISABLED"
+    #main_class.init_self_destruct()
   debug("Initialising databin...")
   main_class.init_databin()
   debug("Initialising config manager...")

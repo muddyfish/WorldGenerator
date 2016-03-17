@@ -6,6 +6,7 @@ class WallHugger(SpikeTrap):
   invincible = True
   speed = 128
   max_d = 128
+  difficulty = 1
   auto_clamp = False
   update_bounding_box = False
   spawn_method = staticmethod(lambda: WallHugger.spawn_wall)

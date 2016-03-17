@@ -196,6 +196,8 @@ class MapUI(UI):
   def draw_debug_text(self):
     cur_room = self.debug_font.render("Current room: %s"%self.current_room, True, (255,255,255))
     self.screen.blit(cur_room, (10,50))
+    cur_room = self.debug_font.render("Difficulty: %s"%self.current_room.difficulty, True, (255,255,255))
+    self.screen.blit(cur_room, (10,70))
     #cur_room = self.debug_font.render("Keys: %d"%self.player.keys, True, (255,255,255))
     #self.screen.blit(cur_room, (10,70))
     

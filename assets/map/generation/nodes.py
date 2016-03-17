@@ -26,8 +26,7 @@ class Node(object):
     def visited(self, replaced = False):
         if self.been_visited: return
         self.been_visited = True
-        if hasattr(self, "entities"):
-            self.entity_list.extend(self.get_entities(replaced))
+        self.entity_list.extend(self.get_entities(replaced))
 
     def connect(self, node):
         if node not in self.connections:
@@ -57,32 +56,57 @@ class Node(object):
             self.disconnect(conn)
             conn.kill_conns()
 
-    @classmethod
-    def get_entities(cls, replaced = False):
-        if issubclass(cls.entities.__class__, basestring):
-            return nodetypes[cls.entities].get_entities()
+    def get_entities(self, replaced = False):
         entities = []
         seed = random.random()
+        entity_list = {}
+        if hasattr(self, "entities"):
+            entity_list.update(self.get_entity_list(replaced, seed))
+        if self.has_monsters:
+            entity_list.update(self.get_monster_list(seed))
+        print entity_list
+        for entity, amount in entity_list.iteritems():
+            ent_cls = __main__.main_class.entity_manager.entities[entity]
+            if hasattr(ent_cls, "spawn_group"):
+                entities.extend(ent_cls.spawn_group(amount))    
+            else:
+                for i in range(amount):
+                    entities.append(ent_cls())
+        return entities
+    
+    def get_entity_list(self, replaced, seed):
+        entity_list = {}
+        cls_entities = self.entities
+        if issubclass(cls_entities.__class__, basestring):
+            return nodetypes[self.entities].get_entities()
         # Get the probability for a group to spawn
-        cls_entities = cls.entities
-        if replaced and hasattr(cls, "replaced_entities"):
-            cls_entities = cls.replaced_entities
+        if replaced and hasattr(self, "replaced_entities"):
+            cls_entities = self.replaced_entities
         chances = [group[0]for group in cls_entities]
         # Which groups have a toatl probability above the seed chosen?
         groups = [sum(chances[:i+1]) > seed for i in range(len(chances))]
         # If none, no entities
-        if groups == []: return []
-        # The group chosen is the one with the lowest total chance that got chosen
-        group_id = groups.index(True)
-        for entity, amount in cls_entities[group_id][1].iteritems():
-            cls = __main__.main_class.entity_manager.entities[entity]
-            if hasattr(cls, "spawn_group"):
-                entities.extend(cls.spawn_group(amount))    
-            else:
-                for i in range(amount):
-                    entities.append(cls())
-        return entities
+        if groups != []:
+            # The group chosen is the one with the lowest total chance that got chosen
+            group_id = groups.index(True)
+            entity_list = cls_entities[group_id][1]
+        return entity_list
 
+    def get_monster_list(self, seed):
+        entity_list = {}
+        max_entities = 7
+        entities = __main__.main_class.entity_manager.entities
+        possible_entities = []
+        for name, entity in entities.iteritems():
+            if hasattr(entity, "difficulty") and entity.difficulty != 0:
+                possible_entities.append([entity.difficulty, name])
+        print possible_entities
+        entity_list["animated.moveable.living.npc.hostile.charger.snake"] = int(self.difficulty**(1/2.))
+        #entity_list["animated.moveable.living.npc.neutral.spike_trap.wallhugger"] = 10
+        #entity_list["animated.moveable.living.npc.neutral.spike_trap.spinner"] = 1
+        print entity_list
+        return entity_list
+        
 def print_nodes(nodelist):
     for node in nodelist: print node
 
