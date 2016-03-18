@@ -73,6 +73,40 @@
         "absorbable": true,
         "challenge": 1.25
     }, 
+    "Map": {
+        "backtrackable": true, 
+        "returnchance": 0.7,
+        "has_monsters": false,
+        "entities": [
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.key": 1}],
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 3, "animated.collectable.key": 1}],
+            [0.2, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 1, "animated.collectable.key": 1}]
+        ],
+        "replaced_entities": [
+            [1, {"animated.collectable.dungeonmap": 1}]
+        ],
+        "door_id": 1,
+        "locked": false,
+        "absorbable": true,
+        "challenge": 1.25
+    }, 
+    "Compass": {
+        "backtrackable": true, 
+        "returnchance": 0.7,
+        "has_monsters": false,
+        "entities": [
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 4, "animated.collectable.key": 1}],
+            [0.4, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 3, "animated.collectable.key": 1}],
+            [0.2, {"animated.moveable.living.npc.neutral.spike_trap.spinner": 1, "animated.collectable.key": 1}]
+        ],
+        "replaced_entities": [
+            [1, {"animated.collectable.compass": 1}]
+        ],
+        "door_id": 1,
+        "locked": false,
+        "absorbable": true,
+        "challenge": 1.25
+    }, 
     "KeyFinal": {
         "backtrackable": true, 
         "returnchance": 0,
@@ -156,10 +190,10 @@
         "backtrackable": false, 
         "returnchance": 0,
         "has_monsters": false,
-        "entities": [
-            [1.0, {"animated.collectable.dungeonmap": 1}]
-        ],
         "door_id": 3,
+        "entities": [
+            [1.0, {"animated.collectable.heartcontainer": 1}]
+         ],
         "locked": false
     }
 }

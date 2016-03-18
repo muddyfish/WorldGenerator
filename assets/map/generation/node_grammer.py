@@ -4,6 +4,9 @@ import json, random
 from ..extendable_map import ExtendableMap
 import nodes
 
+MAP_DIFFICULTY = 0.25
+COMPASS_DIFFICULTY = 0.75
+
 class Nodes(object):
     def __init__(self, chains_json, nodes_json):
         nodes.load_nodes(nodes_json)
@@ -87,6 +90,7 @@ class Nodes(object):
         self.connect_nodes(self.nodes)
         self.entrance.difficulty = start_difficulty
         self.add_difficulty(self.entrance)
+        self.add_rewards()
         done = False
         repeats = 0
         while (not done) and repeats != 10:
@@ -209,6 +213,31 @@ class Nodes(object):
                 except AttributeError:
                     pass
                 conn.difficulty = int(conn.difficulty)
+                
+    def add_rewards(self):
+        test_nodes = [node for node in self.flatten_nodes(self.nodes) if
+                        node.__class__ is nodes.nodetypes["Test"]]
+        random.shuffle(test_nodes)
+        added_compass = False
+        added_map = False
+        start_difficulty = self.entrance.difficulty
+        end_difficulty = self.exit.difficulty
+        delta_difficulty = end_difficulty - start_difficulty
+        map_difficulty_min = delta_difficulty*MAP_DIFFICULTY
+        compass_difficulty_min = delta_difficulty*COMPASS_DIFFICULTY
+        for node in test_nodes:
+            if hasattr(node, "replace_on_room_clear"): continue
+            node_delta = node.difficulty-start_difficulty
+            addnode = None
+            if node_delta >= compass_difficulty_min and not added_compass:
+                added_compass = True
+                addnode = nodes.nodetypes["Compass"]()
+            elif node_delta >= map_difficulty_min and not added_map:
+                added_map = True
+                addnode = nodes.nodetypes["Map"]()
+            if addnode is not None:
+                node.difficulty *= addnode.challenge
+                node.replace_on_room_clear = [addnode]
 
     def flatten_nodes(self, nodelist):
         nodes = []

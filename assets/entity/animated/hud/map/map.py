@@ -7,7 +7,9 @@ class Map(HUD):
   path_colour = (128,128,128)
   cur_room_colour = (0,0,255)
   visited_room_colour = (0,0,0)
-  unvisited_room_colour = (128,128,128)
+  unvisited_room_colour = (
+    128,128,128)
+  reward_room_colour = (255,128,0)
   
   def __init__(self, main):
     self.pygame = self.get_pygame()
@@ -15,9 +17,11 @@ class Map(HUD):
     self.main_sub = main
     self.map = main.map
     self.map_size = self.map.nodes.map.map_size
+    self.has_compass = False
     #print self.map.nodes.map
     self.setup_surf()
     #self.show_whole_dungeon()
+    #self.draw_compass()
     
   def __repr__(self):
     return "\n"+str(self.map.nodes.map)+"\n"
@@ -42,10 +46,20 @@ class Map(HUD):
       for x in range(self.map_size[1]+1):
         room = self.map.map[y][x]
         if room:
+          if room and hasattr(room, "replace_on_room_clear"): continue
           self.blit_conns(room, Map.unvisited_room_colour)
     self.internal_surf.blit(old_surf, (0,0), None, self.pygame.BLEND_RGB_MIN)
     cur_room = self.main_sub.current_room
     self.blit_coords(self.map.get_coords(cur_room), Map.cur_room_colour)
+    self.scale_surf()
+    
+  def draw_compass(self):
+    self.has_compass = True
+    for y in range(self.map_size[0]+1):
+      for x in range(self.map_size[1]+1):
+        room = self.map.map[y][x]
+        if room and hasattr(room, "replace_on_room_clear"):
+          self.blit_coords((y,x), Map.reward_room_colour)
     self.scale_surf()
   
   def update_room(self):
@@ -58,7 +72,9 @@ class Map(HUD):
     if cur_pos is None: return
     cur_pos = [cur_pos[0]+7, cur_pos[1]+3]
     for conn in cur_room.connections:
-      if conn.been_visited:
+      if self.has_compass and hasattr(conn, "replace_on_room_clear"):
+        old_room_colour = Map.reward_room_colour
+      elif conn.been_visited:
         old_room_colour = Map.visited_room_colour
       else:
         old_room_colour = (128,128,128)
