@@ -4,7 +4,8 @@
     "fullscreen": false
   },
   "fps_limit": 0,
-  "show_fps": true,
+  "show_fps": false,
+  "demo_mode": false,
   "speedup": 1.0,
   "timer": "clock"
 }

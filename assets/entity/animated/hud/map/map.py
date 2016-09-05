@@ -6,9 +6,8 @@ class Map(HUD):
   transparency = 128
   path_colour = (128,128,128)
   cur_room_colour = (0,0,255)
-  visited_room_colour = (0,0,0)
-  unvisited_room_colour = (
-    128,128,128)
+  visited_room_colour = (64,64,64)
+  unvisited_room_colour = (128,128,128)
   reward_room_colour = (255,128,0)
   
   def __init__(self, main):
@@ -34,7 +33,7 @@ class Map(HUD):
     self.x = self.get_main().screen.get_width()/2-self.internal_surf.get_width()
     self.y = 0
     
-  def run(self, d_time): pass
+  def run(self, d_time):pass
   
   def scale_surf(self):
     self.surf = self.pygame.transform.scale2x(self.internal_surf)
@@ -46,8 +45,10 @@ class Map(HUD):
       for x in range(self.map_size[1]+1):
         room = self.map.map[y][x]
         if room:
-          if room and hasattr(room, "replace_on_room_clear"): continue
-          self.blit_conns(room, Map.unvisited_room_colour)
+          colour = Map.unvisited_room_colour
+          if room and self.has_compass and hasattr(room, "replace_on_room_clear"):
+            colour = Map.reward_room_colour
+          self.blit_conns(room, colour)
     self.internal_surf.blit(old_surf, (0,0), None, self.pygame.BLEND_RGB_MIN)
     cur_room = self.main_sub.current_room
     self.blit_coords(self.map.get_coords(cur_room), Map.cur_room_colour)

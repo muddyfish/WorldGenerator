@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 class ExtendableMap(object):
-    def __init__(self, centre):
-        self.map = [[centre]]
+    def __init__(self, centre, repeats):
+        self.map = [[None for i in range(6)] for j in range(11)]
+        self.map[7][2] = centre
+        #self.map = [[centre]]
         self.get_map_size()
+        self.printer = 0#repeats == 1
     
     def __str__(self):
         s = ""

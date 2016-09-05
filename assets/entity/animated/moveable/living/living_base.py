@@ -63,6 +63,14 @@ class Living(Moveable):
     return entities
   
   @classmethod
+  def spawn_central(cls, amount):
+    assert amount == 1
+    screen = __main__.main_class.screen
+    center = screen.get_center()
+    entities = [cls(center[0],center[1])]
+    return entities
+  
+  @classmethod
   def spawn_wall(cls, amount):
     entities = []
     x_length = Living.RIGHT_BOUND - Living.LEFT_BOUND

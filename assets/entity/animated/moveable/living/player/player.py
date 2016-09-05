@@ -11,12 +11,17 @@ class Player(Living):
   max_d = 128
   dd = 256
   
+  directions = {( 0,-1): "Up",
+                ( 0, 1): "Down",
+                (-1, 0): "Left",
+                ( 1, 0): "Right"}
+  
   def __init__(self, parent):
     self.parent = parent
     super(Player, self).__init__(*parent.screen.get_center())
     self.config_manager = self.get_main().config_manager
     self.load_animation_sheet("player.anm2")
-    self.current_anim = "WalkUp"
+    self.current_anim = "WalkDown"
     self.run_anim(0)
     self.center()
     del self.x_pos
@@ -28,7 +33,7 @@ class Player(Living):
     self.keys = 0
     self.multi_keys = 0
     self.boss_key = 0
-    self.bombs = 0
+    self.bombs = 100
     self.cooldown_timers = {
       "bomb": [0,0.5]
     }
@@ -77,6 +82,15 @@ class Player(Living):
       return
     self.invincible = True
     
+  def control(self, delta_offset):
+    if delta_offset[0]:
+      self.cddx = delta_offset[0]*self.dd
+    if delta_offset[1]:
+      self.cddy = delta_offset[1]*self.dd
+    new_anim = "Walk" + self.directions[delta_offset]
+    if new_anim != self.current_anim and not (self.ddx != 0 != self.ddy):
+      self.load_animation(new_anim)
+      
   def door_collide(self, s, door):
     #print s.rect.clip(door.rect).size[door.pos_id%2]
     return s.rect.clip(door.rect).size[door.pos_id%2]>=8

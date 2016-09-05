@@ -55,10 +55,10 @@ class Moveable(Animation):
       #x_pos and y_pos are the center of the image so take that into account
       
       x,y = self.x_pos+self.dx*d_time, self.y_pos+self.dy*d_time
-      max_x = Moveable.LEFT_BOUND+self.rect.width *1.25 + self.bounding_rect.x/2
-      min_x = Moveable.RIGHT_BOUND+self.rect.width/4 + self.bounding_rect.x/2
-      max_y = Moveable.UP_BOUND  +self.rect.height*1.25 + self.bounding_rect.y/2
-      min_y = Moveable.DOWN_BOUND +self.rect.height/4+ self.bounding_rect.y/2
+      max_x = self.LEFT_BOUND+self.rect.width *1.25 + self.bounding_rect.x/2
+      min_x = self.RIGHT_BOUND+self.rect.width/4 + self.bounding_rect.x/2
+      max_y = self.UP_BOUND  +self.rect.height*1.25 + self.bounding_rect.y/2
+      min_y = self.DOWN_BOUND +self.rect.height/4+ self.bounding_rect.y/2
       self.x_pos=max(max_x, min(min_x,  x))
       self.y_pos=max(max_y, min(min_y, y))
       #self.surf = self.subsurf.at(self.x_pos, self.y_pos)
@@ -73,15 +73,15 @@ class Moveable(Animation):
     else:
       #Otherwise just do a straight transformation on x and y which are based on (0,0) coords
       x,y = self.x+self.dx*d_time, self.y+self.dy*d_time
-      self.x=max(Moveable.LEFT_BOUND, min(Moveable.RIGHT_BOUND-self.rect.width,  x))
-      self.y=max(Moveable.UP_BOUND,   min(Moveable.DOWN_BOUND- self.rect.height, y))
+      self.x=max(self.LEFT_BOUND, min(self.RIGHT_BOUND-self.rect.width,  x))
+      self.y=max(self.UP_BOUND,   min(self.DOWN_BOUND- self.rect.height, y))
       #self.surf = self.subsurf.at(self.x, self.y)
       if x!=self.x or y!=self.y:
         if y!=self.y:
-          if self.y == Moveable.UP_BOUND:   wall_id = 0
+          if self.y == self.UP_BOUND:   wall_id = 0
           else:                             wall_id = 1
         else:
-          if self.x == Moveable.LEFT_BOUND: wall_id = 2
+          if self.x == self.LEFT_BOUND: wall_id = 2
           else:                             wall_id = 3
         self.get_databin().ai_events.collide_wall.is_called(self, wall_id)
     self.get_databin().ai_events.player_xy.is_called(self)

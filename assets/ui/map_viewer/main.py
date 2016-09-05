@@ -18,6 +18,7 @@ class MapUI(UI):
     self.draw_rects = False
     self.draw_debug = self.config_manager.config_data["subscription_config"]["draw_debug"]
     self.speedup = self.config_manager.config_data["video_config"]["speedup"]
+    self.demo_mode = self.config_manager.config_data["video_config"]["demo_mode"]
     self.scrolling = []
     self.shaking = 0
     self.init_scrolling = False
@@ -40,7 +41,8 @@ class MapUI(UI):
       "open_doors":  [self.open_doors, True],
       "shake":       [lambda:setattr(self, "shaking", 1)],
       "toggle_rects":[self.toggle_draw_rects],
-      "show_databin":[self.print_databin]
+      "show_databin":[self.print_databin],
+      "export_dungeon":[self.export_dungeon]
     }
     for k,v in self.entity_manager.get_persistant_entities().iteritems():
       if k not in ["animated.backdrop", "animated.moveable.living.player", "animated.hud", "animated.hud.map"]:
@@ -60,6 +62,37 @@ class MapUI(UI):
     self.entity_list["animated.hud.map"](self).spawn()
     self._load_room(self.map.start_node)
     self.player.x, self.player.y = self.screen.get_center()
+    if self.demo_mode:
+      self.remove_hud()
+      
+  def export_dungeon(self):
+    print "Exporting entire dungeon..."
+    map_size = self.map.nodes.map.map_size
+    for y in range(map_size[0]+1):
+      for x in range(map_size[1]+1):
+        room = self.map.map[y][x]
+        if room:
+          print room
+          self.clean_entities()
+          self._load_room(room)
+          self.init_scrolling = True
+          self.bg_image = self.get_pygame().surface.Surface(self.screen.size)
+          self.draw()
+          self.init_scrolling = False
+        else:
+          self.bg_image = self.get_pygame().surface.Surface(self.screen.size)
+          self.bg_image.fill((0,0,0))
+          
+        screenshot_path = self.config_manager["path_config", "screenshot_path"]
+        alphabet = "abcdefghijklmnopqrstuvwxyz"
+        path = self.config_manager.get_path(screenshot_path, "dungeon_%s_%s.png" %(alphabet[map_size[1]-x],alphabet[y]))
+        self.get_pygame().image.save(self.bg_image, path)
+    print "montage -mode concatenate -tile %ix%i screenshots/dungeon_*.png dungeon.png"%(map_size[0]+1, map_size[1]+1)
+      
+  def remove_hud(self):
+    for entity in self.get_main().databin.entity_data.hud:
+      entity.despawn()
+    self.player.despawn()
     
   def load_room(self, current_room, room_id, no_scroll = False):
     try:
@@ -88,7 +121,8 @@ class MapUI(UI):
       self.add_doors()
     self.current_room.visited(replaced)
     self.load_entities()
-    self.get_main().databin.entity_data.map.sprites()[0].update_room()
+    if not self.demo_mode:
+      self.get_main().databin.entity_data.map.sprites()[0].update_room()
     self.clock.tick()
 
   def add_doors(self):
@@ -140,10 +174,7 @@ class MapUI(UI):
       self.event_funcs[event][0](*self.event_funcs[event][1:])
     
   def move(self, delta_offset):
-    if delta_offset[0]:
-      self.player.cddx = delta_offset[0]*self.player.dd
-    if delta_offset[1]:
-      self.player.cddy = delta_offset[1]*self.player.dd
+    self.player.control(delta_offset)
     
   def open_doors(self, all_ = False):
     for door in self.get_main().databin.entity_data.door:

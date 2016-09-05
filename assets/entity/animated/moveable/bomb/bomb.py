@@ -15,14 +15,14 @@ class Bomb(Moveable):
       }
     self.current_anim = "Pulse"
     self.run_anim(0)
-    self.x_pos, self.y_pos = x, y
-    self.center(self.x_pos, self.y_pos)
+    self.x_pos, self.y_pos = self.x + 16, self.y + 16
     
   def run(self, d_time):
     self.run_anim(d_time)
     self.center(self.x_pos, self.y_pos)
     
   def explode(self):
-    self.get_main().databin.current_subscription.shaking += 1
-    self.load_animation("Explode")
-    self.spawn_entity("animated.moveable.explosion", self.x_pos, self.y_pos)
+    if self.current_anim != "Explode":
+      self.get_main().databin.current_subscription.shaking += 1
+      self.load_animation("Explode")
+      self.spawn_entity("animated.moveable.explosion", self.x_pos, self.y_pos)

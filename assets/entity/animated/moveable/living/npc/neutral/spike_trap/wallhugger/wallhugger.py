@@ -2,6 +2,8 @@
 
 from ..spike_trap_base import SpikeTrap
 
+import random
+
 class WallHugger(SpikeTrap):
   invincible = True
   speed = 128
@@ -23,6 +25,7 @@ class WallHugger(SpikeTrap):
     self.y_pos += self.surf.get_height()*1.5
     self.start_direction(wall_id)
     self.center(self.x_pos, self.y_pos)
+    self.cur_time = random.randrange(4)
     self.run(0)
     
   def run(self, d_time):

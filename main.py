@@ -100,9 +100,9 @@ class Main(object):
       self.keyboard_injector.run()
       self.event_manager.parse_events(pygame.event.get())
       self.subscription_manager.run_subscription()
-      self.clock.tick(self.fps_limit)
       self.blit_fps()
       self.blit_demo()
+      self.clock.tick(self.fps_limit)
       self.update_screen()
 
   def blit_fps(self):

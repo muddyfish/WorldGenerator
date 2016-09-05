@@ -74,7 +74,10 @@ class Entity(__main__.pygame.sprite.Sprite):
     return self.get_databin().entity_data
   
   def get_player(self):
-    return self.get_entity_data().player.sprites()[0]
+    try:
+      return self.get_entity_data().player.sprites()[0]
+    except IndexError:
+      return self
   
   def get_distance(self, entity = None):
     if entity == None: entity = self.get_player()

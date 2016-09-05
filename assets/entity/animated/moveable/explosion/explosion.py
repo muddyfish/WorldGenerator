@@ -32,3 +32,6 @@ class Explosion(Moveable):
         door.open = True
         door.broken = True
         door.current_anim = "BrokenOpen"
+    bombs = self.get_entity_data().bomb
+    for bomb in self.get_collide(bombs):
+      bomb.explode()

@@ -68,7 +68,8 @@ class Node(object):
         for entity, amount in entity_list.iteritems():
             ent_cls = __main__.main_class.entity_manager.entities[entity]
             if hasattr(ent_cls, "spawn_group"):
-                entities.extend(ent_cls.spawn_group(amount))    
+                entities.extend(ent_cls.spawn_group(amount))   
+                print ent_cls, entities 
             else:
                 for i in range(amount):
                     entities.append(ent_cls())
@@ -100,11 +101,11 @@ class Node(object):
         for name, entity in entities.iteritems():
             if hasattr(entity, "difficulty") and entity.difficulty != 0:
                 possible_entities.append([entity.difficulty, name])
-        print possible_entities
+        #print possible_entities
         entity_list["animated.moveable.living.npc.hostile.charger.snake"] = int(self.difficulty**(1/2.))
-        #entity_list["animated.moveable.living.npc.neutral.spike_trap.wallhugger"] = 10
+        entity_list["animated.moveable.living.npc.neutral.spike_trap.wallhugger"] = random.choice([0,0,0,0,1,2,4])
         #entity_list["animated.moveable.living.npc.neutral.spike_trap.spinner"] = 1
-        print entity_list
+        #print entity_list
         return entity_list
         
 def print_nodes(nodelist):

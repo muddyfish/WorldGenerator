@@ -80,6 +80,7 @@ class Door(Animation):
       #Only update the animation state of the door after the scrolling is finished
       self.first_tick = False
       self.get_anim_state(self.open, True)
+    self.load_animation("KeyClosed")
     self.run_anim(d_time)
       
   def unlockable(self):

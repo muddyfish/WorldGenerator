@@ -9,5 +9,6 @@
   "open_doors": "o",
   "shake": "z",
   "show_databin": "x",
-  "toggle_rects": "t"
+  "toggle_rects": "t",
+  "export_dungeon": "]"
 }

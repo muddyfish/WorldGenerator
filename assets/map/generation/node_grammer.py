@@ -4,9 +4,19 @@ import json, random
 from ..extendable_map import ExtendableMap
 import nodes
 
+
 MAP_DIFFICULTY = 0.25
 COMPASS_DIFFICULTY = 0.75
 
+def id_generator():
+    i = 0
+    while 1:
+        yield i
+        i+=1
+
+gen = id_generator()
+appeared = {}
+        
 class Nodes(object):
     def __init__(self, chains_json, nodes_json):
         nodes.load_nodes(nodes_json)
@@ -20,15 +30,43 @@ class Nodes(object):
             self.start_keys.append(self.keys[-1][0]) # Add the start key to the list
         self.start = nodes.nodetypes["Start"]() # The first node
 
-    def save_nodes(self, filename="graph"):
+    def save_nodes(self, filename="graph", nodes = None):
         print "Saving graph..."
-        from graphviz import Digraph
-        dot = Digraph(comment='Dungeon Example')
-        nodes = self.linear_nodes(self.nodes)
-        for node in nodes: dot.node(str(node.id), node.name+" "+str(node.id))
+        from graphviz import Graph
+        dot = Graph(comment='Dungeon Example')
+        if nodes == None:
+            nodes = self.linear_nodes(self.nodes)
+        #else:
+            #max_appeared = appeared.values()
+            #if max_appeared == []: start = 0
+            #else: start = max(max_appeared) + 1
+            #print start
+            #for node in nodes:
+            #    if node.id not in appeared:
+            #        appeared[node.id] = start
+        for node in nodes:
+            name = node.name
+            if hasattr(node, "replace_on_room_clear"):
+                replace = node.replace_on_room_clear[0]
+                name += "\n"
+                try:
+                    name += replace.name
+                except AttributeError:
+                    name += replace
+            amount = 255 #60+(appeared[node.id]*64)
+            fill = "#%02x%02xFF"%(amount, amount)
+            #print fill
+            shape = "oval"
+            if node is self.entrance:
+                shape = "box"
+            dot.node(str(node.id), name, style="filled", fillcolor=fill, shape=shape)
+        done_edges = []
         for node in nodes:
             for edge in node.connections:
+                if sorted([node.id, edge.id]) in done_edges: continue
                 dot.edge(str(node.id), str(edge.id))
+                done_edges.append(sorted([node.id, edge.id]))
+        
         dot.render(filename)
         print "Graph saved"
     
@@ -83,20 +121,24 @@ class Nodes(object):
         self.entrance = filter(lambda x: x.name == "Entrance", self.nodes)[0]
         self.exit = filter(lambda x: x.name == "BossLevel", self.nodes)[0]
         self.shuffle_nodes([self.entrance])
+        #self.save_nodes("shuffled")
         self.entrance.untransverse()
         self.nodes = self.absorb_nodes([self.entrance])
+        #self.save_nodes("absorbed")
         self.entrance.untransverse()
         self.entrance.kill_conns()
         self.connect_nodes(self.nodes)
         self.entrance.difficulty = start_difficulty
         self.add_difficulty(self.entrance)
         self.add_rewards()
+        #self.save_nodes("rewards")
         done = False
         repeats = 0
         while (not done) and repeats != 10:
-            self.map = ExtendableMap(self.entrance)
+            self.map = ExtendableMap(self.entrance, repeats)
             self.add_map(self.entrance)
             count = filter(None, [filter(None, i) for i in self.map.map])
+            self.entrance.untransverse()
             done = sum([len(i) for i in count]) == self.count_nodes(self.entrance)
             repeats += 1
         if repeats == 10: self.create_dungeon(start_difficulty)
@@ -106,12 +148,12 @@ class Nodes(object):
     
     def core_grammer(self):
         connections = self.start.get_connected()
-        done = True
-        while done:
-            done = False
+        done = False
+        while not done:
+            done = True
             for node in connections:
                 if node.name in self.start_keys:
-                    done = True
+                    done = False
                     valid_keys = [self.keys[i] for i, val in enumerate(self.start_keys)
                                   if val == node.name and
                                   ((len(self.keys[i]) == 2 and
@@ -131,6 +173,7 @@ class Nodes(object):
                             conn.connect(replace[-1])
                             conn.disconnect(replace_node)
                     connections = replace[0].get_connected()
+                    #self.save_nodes("generation_%s"%gen.next(), connections)
                     break
         self.nodes = connections
     
@@ -172,7 +215,7 @@ class Nodes(object):
                 cur_node.connect(node)
                 
     def absorb_nodes(self, node_list, cur_node = None):
-        nodes = []
+        out_nodes = []
         for conn in node_list:
             if not conn.transversed:
                 conn.transversed = True
@@ -185,21 +228,23 @@ class Nodes(object):
                         absorbed = isinstance(cur_node.replace_on_room_clear[0], basestring)
                     except AttributeError:
                         absorbed = True
+                if isinstance(cur_node, nodes.nodetypes["Entrance"]):
+                    absorbed = False
                 if absorbed:
                     cur_node.replace_on_room_clear = [conn]
                     for node in conn.connections[:]:
                         conn.disconnect(node)
                         if node is not cur_node:
                             cur_node.connect(node)
-                    nodes.extend(connnodes)
+                    out_nodes.extend(connnodes)
                 elif conn.backtrackable:
-                    nodes.append(conn)
-                    nodes.extend(connnodes)
+                    out_nodes.append(conn)
+                    out_nodes.extend(connnodes)
                 elif connnodes:
-                    nodes.append({conn: connnodes})
+                    out_nodes.append({conn: connnodes})
                 else:
-                    nodes.append(conn)
-        return nodes
+                    out_nodes.append(conn)
+        return out_nodes
     
     def add_difficulty(self, node):
         for conn in node.connections:
@@ -255,14 +300,17 @@ class Nodes(object):
         dir = 0
         if len(cur_node.connections) > 4:
             addnode = nodes.nodetypes["Nothing"]()
-            addnode.difficulty = cur_node
-            cur_node.connect(addnode)
+            addnode.difficulty = cur_node.difficulty
+            addnode.connect(cur_node)
             while len(cur_node.connections) > 4:
                 conn = cur_node.connections[-2]
                 conn.disconnect(cur_node)
                 conn.connect(addnode)
         #print "START NODE", cur_node
         for node in cur_node.connections:
+            if self.map.printer:
+                print self.map
+                print "---"
             if node is not ignore:
                 success = False
                 while (not success):

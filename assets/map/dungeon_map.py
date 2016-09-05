@@ -17,8 +17,17 @@ class DungeonMap(object):
     self.nodes = Nodes(self.chains_json, self.nodes_json)
     self.nodes.create_dungeon(difficulty)
     if self.config_manager.get_main_class().debug:
-      self.nodes.prettyprint(self.nodes.nodes)
-      self.nodes.save_nodes()
+      if 1:
+        i=1
+        print "Creating dungeon", i
+        size = (0,0)
+        while size != (7,7):
+          print("Retrying")
+          self.nodes.create_dungeon(difficulty)
+          map = self.nodes.map.map
+          size = len(map[0]), len(map)
+          print size
+        self.nodes.save_nodes("graph_%s"%i)
     self.map = self.nodes.map.map
     self.start_node = self.nodes.entrance
     self.end_node = self.nodes.exit

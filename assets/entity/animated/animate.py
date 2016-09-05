@@ -180,14 +180,13 @@ class AnimationFrame(object):
       if (  self.attributes["RedTint"],
             self.attributes["GreenTint"],
             self.attributes["BlueTint"],
-            self.attributes["AlphaTint"],
-            scale) != \
-         (255, 255, 255, 255, (100,100)):
-        self.surf = self.surf.convert_alpha()
+            self.attributes["AlphaTint"]) != \
+         (255, 255, 255, 255):
         self.surf.fill((self.attributes["RedTint"],
                         self.attributes["GreenTint"],
                         self.attributes["BlueTint"],
                         self.attributes["AlphaTint"]), None, pygame.BLEND_RGBA_MULT)
+        self.surf = self.surf.convert_alpha()
       if scale != (100, 100):
         self.surf = pygame.transform.smoothscale(self.surf,
                                              [abs(int(i[1]/100.0*i[0])) for i in zip(scale, self.surf.get_size())])

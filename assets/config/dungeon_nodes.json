@@ -40,6 +40,8 @@
         "backtrackable": false, 
         "returnchance": 0,
         "has_monsters": false,
+        "entities": [
+        ],
         "door_id": 1,
         "locked": false
     }, 
@@ -163,6 +165,9 @@
         "backtrackable": false, 
         "returnchance": 0,
         "has_monsters": false,
+        "entities": [
+           
+        ],
         "replace_on_room_clear": ["Goal"],
         "door_id": 9,
         "locked": "boss_key"
