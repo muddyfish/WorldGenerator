@@ -20,9 +20,11 @@ class Player(Living):
     self.parent = parent
     super(Player, self).__init__(*parent.screen.get_center())
     self.config_manager = self.get_main().config_manager
+    self.auto_resize = False
     self.load_animation_sheet("player.anm2")
-    self.current_anim = "WalkDown"
+    self.load_animation("WalkLeft")
     self.run_anim(0)
+    self.DOWN_BOUND = 254
     self.center()
     del self.x_pos
     del self.y_pos
@@ -33,7 +35,7 @@ class Player(Living):
     self.keys = 0
     self.multi_keys = 0
     self.boss_key = 0
-    self.bombs = 100
+    self.bombs = 0
     self.cooldown_timers = {
       "bomb": [0,0.5]
     }

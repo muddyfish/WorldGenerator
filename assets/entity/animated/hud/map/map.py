@@ -6,7 +6,7 @@ class Map(HUD):
   transparency = 128
   path_colour = (128,128,128)
   cur_room_colour = (0,0,255)
-  visited_room_colour = (64,64,64)
+  visited_room_colour = (64,128,64)
   unvisited_room_colour = (128,128,128)
   reward_room_colour = (255,128,0)
   

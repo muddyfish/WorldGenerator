@@ -196,4 +196,3 @@ class AnimationFrame(object):
       self.surf = spritesheet.subsurface((0,0,0,0))
     self.blit_pos = (self.attributes["XPosition"]*2-self.surf.get_width()/2,
                      self.attributes["YPosition"]*2-self.surf.get_height()/2)
-    

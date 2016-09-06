@@ -211,13 +211,12 @@ class MapUI(UI):
     if self.scrolling:
       x_mod, y_mod = self.calc_scroll(x_mod, y_mod)
     for entity in self.get_entities():
-      if (entity not in self.get_main().databin.entity_data.hud) and (\
-           (not (self.scrolling or self.init_scrolling)) or \
-           (self.scrolling and entity is not self.player) or \
-           (self.init_scrolling and entity is not self.player)
-          ):
+      if (entity not in self.get_main().databin.entity_data.hud) and entity is not self.player:
         if self.draw_rects and entity is not self.backdrop_ui: self.draw_rect(entity.rect)
         else:entity.blit(x_mod,y_mod)
+    if not (self.scrolling or self.init_scrolling):
+        if self.draw_rects and entity is not self.backdrop_ui: self.draw_rect(self.player.rect)
+        else:self.player.blit(x_mod,y_mod)
     if not self.init_scrolling:
       for entity in self.get_main().databin.entity_data.hud:
         entity.blit()

@@ -80,7 +80,6 @@ class Door(Animation):
       #Only update the animation state of the door after the scrolling is finished
       self.first_tick = False
       self.get_anim_state(self.open, True)
-    self.load_animation("KeyClosed")
     self.run_anim(d_time)
       
   def unlockable(self):
@@ -113,9 +112,9 @@ class Door(Animation):
     self.rect = self.frames[3][0].surf.get_bounding_rect()
     self.rect.width, self.rect.height = (self.rect.width/2-14, self.rect.height/2-14)[::cmp(self.pos_id%2,0.5)]
     if self.pos_id%2:
-      self.rect.x, self.rect.y = self.x+7, self.y+23
+      self.rect.x, self.rect.y = self.x, self.y+16
     else:
-      self.rect.x, self.rect.y = self.x+23, self.y+7
+      self.rect.x, self.rect.y = self.x+16, self.y
     #print self.pos_id, self.pos_id%2, self.rect
     
   def load_door_surfs(self):
